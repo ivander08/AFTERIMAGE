@@ -15,6 +15,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected NavMeshAgent _agent;
     protected Transform _player;
     protected bool _isDead = false;
+    protected bool _isStunned = false;
 
     protected virtual void Awake()
     {
@@ -30,7 +31,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        if (_isDead || _player == null) return;
+        if (_isDead || _player == null || _isStunned) return;
         HandleBehavior();
     }
 
@@ -78,6 +79,33 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             rend.material.color = Color.white;
             yield return new WaitForSeconds(0.1f);
             rend.material.color = prev;
+        }
+    }
+
+    public void Stun(float duration)
+    {
+        if (_isDead) return;
+        StartCoroutine(StunRoutine(duration));
+    }
+
+    IEnumerator StunRoutine(float duration)
+    {
+        _isStunned = true;
+        _agent.isStopped = true;
+        
+        if (rend != null)
+        {
+            rend.material.color = Color.blue;
+        }
+        
+        yield return new WaitForSeconds(duration);
+        
+        _isStunned = false;
+        _agent.isStopped = false;
+        
+        if (rend != null && !_isDead)
+        {
+            rend.material.color = _originalColor;
         }
     }
 }
