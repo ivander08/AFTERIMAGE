@@ -24,15 +24,18 @@ public class ThrowableObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_hasBeenThrown) return;
+        if (_hasBeenThrown)
+        {
+            if (other.TryGetComponent(out EnemyBase enemy))
+            {
+                HitEnemy(enemy);
+            }
+            return;
+        }
         
         if (other.CompareTag("Player"))
         {
             ThrowAtNearestEnemy();
-        }
-        else if (_hasBeenThrown && other.GetComponent<EnemyBase>() != null)
-        {
-            HitEnemy(other.GetComponent<EnemyBase>());
         }
     }
 
@@ -70,8 +73,7 @@ public class ThrowableObject : MonoBehaviour
 
         foreach (var enemyCollider in enemiesInRange)
         {
-            EnemyBase enemy = enemyCollider.GetComponent<EnemyBase>();
-            if (enemy == null) continue;
+            if (!enemyCollider.TryGetComponent(out EnemyBase enemy)) continue;
 
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             

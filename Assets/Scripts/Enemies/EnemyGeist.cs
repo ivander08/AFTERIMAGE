@@ -25,7 +25,7 @@ public class EnemyGeist : EnemyBase
 
     protected override void HandleBehavior()
     {
-        if (_player == null || _isAttacking) return;
+        if (_player == null || _isAttacking || !IsPlayerInMyRoom()) return;
 
         _agent.SetDestination(_player.position);
 
@@ -48,7 +48,10 @@ public class EnemyGeist : EnemyBase
 
         if (_player != null && Vector3.Distance(transform.position, _player.position) <= attackRange + 0.5f)
         {
-            _player.GetComponent<IDamageable>()?.TakeDamage(damage);
+            if (_player.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
         }
 
         rend.material.color = _originalColor;
@@ -79,7 +82,7 @@ public class EnemyGeist : EnemyBase
         rend.material.color = state ? new Color(_originalColor.r, _originalColor.g, _originalColor.b, 0.3f) : _originalColor;
     }
 
-    public new void TakeDamage(int damageAmount)
+    public override void TakeDamage(int damageAmount)
     {
         if (_isEthereal) return;
         base.TakeDamage(damageAmount);

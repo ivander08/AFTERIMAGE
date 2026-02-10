@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Rigidbody))]
@@ -16,6 +17,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected Transform _player;
     protected bool _isDead = false;
     protected bool _isStunned = false;
+
+    public event Action OnDeath;
 
     protected virtual void Awake()
     {
@@ -37,7 +40,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected abstract void HandleBehavior();
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         if (_isDead) return;
         health -= damage;
@@ -52,6 +55,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         StopAllCoroutines();
         if (rend) rend.material.color = Color.black;
         GetComponent<Collider>().enabled = false;
+        OnDeath?.Invoke();
         Destroy(gameObject, 1f);
     }
 
@@ -107,5 +111,16 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             rend.material.color = _originalColor;
         }
+    }
+
+    protected bool IsPlayerInMyRoom()
+    {
+        if (_player == null || RoomManager.Instance == null) return false;
+
+        Room myRoom = GetComponentInParent<Room>();
+        Room playerRoom = RoomManager.Instance.GetCurrentRoom();
+
+        if (myRoom == null || playerRoom == null) return false;
+        return myRoom == playerRoom;
     }
 }

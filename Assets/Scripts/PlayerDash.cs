@@ -117,25 +117,46 @@ public class PlayerDash : MonoBehaviour
         float distance = GetClampedDistance();
         transform.rotation = Quaternion.LookRotation(dashDir);
 
-        bool hitSuccess = false;
-        if (isAttack)
+        Door doorInPath = GetDoorInDashPath(dashDir, distance);
+        if (doorInPath != null && isAttack && !doorInPath.IsLocked())
         {
-            List<RaycastHit> targets = GetSortedTargets(dashDir, distance);
-            if (targets.Count > 0)
+            DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+            if (zone != null)
             {
-                hitSuccess = true;
-                _lastDodgeTime = -99f;
-                StartCoroutine(DealSequentialDamage(targets));
+                zone.OnPlayerDashThrough();
+                Vector3 landingPos = zone.GetLandingPosition();
+                _cc.enabled = false;
+                transform.position = landingPos;
+                _cc.enabled = true;
             }
         }
-
-        float traveled = 0f;
-        while (traveled < distance)
+        else
         {
-            float step = dashSpeed * Time.deltaTime; 
-            _cc.Move(dashDir * step);
-            traveled += step;
-            yield return null;
+            bool hitSuccess = false;
+            if (isAttack)
+            {
+                List<RaycastHit> targets = GetSortedTargets(dashDir, distance);
+                if (targets.Count > 0)
+                {
+                    hitSuccess = true;
+                    _lastDodgeTime = -99f;
+                    StartCoroutine(DealSequentialDamage(targets));
+                }
+            }
+
+            float traveled = 0f;
+            while (traveled < distance)
+            {
+                float step = dashSpeed * Time.deltaTime; 
+                _cc.Move(dashDir * step);
+                traveled += step;
+                yield return null;
+            }
+
+            if (isAttack && !hitSuccess)
+            {
+                StartCoroutine(RecoveryRoutine());
+            }
         }
 
         Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, false);
@@ -143,11 +164,6 @@ public class PlayerDash : MonoBehaviour
         if (trail != null) trail.emitting = false;
         _movement.isMovementLocked = false;
         _isDashing = false;
-
-        if (isAttack && !hitSuccess)
-        {
-            StartCoroutine(RecoveryRoutine());
-        }
     }
 
     IEnumerator DealSequentialDamage(List<RaycastHit> targets)
@@ -155,10 +171,9 @@ public class PlayerDash : MonoBehaviour
         foreach (var hit in targets)
         {
             GameObject victim = hit.collider.gameObject;
-            if (victim != null)
+            if (victim != null && victim.TryGetComponent(out IDamageable damageable))
             {
-                IDamageable damageable = victim.GetComponent<IDamageable>();
-                if (damageable != null) damageable.TakeDamage(damageAmount);
+                damageable.TakeDamage(damageAmount);
             }
             yield return new WaitForSeconds(damageDelay);
         }
@@ -203,8 +218,7 @@ public class PlayerDash : MonoBehaviour
         var hits = Physics.SphereCastAll(transform.position, hitRadius, dir, dist, hitLayer);
         foreach (var hit in hits)
         {
-            EnemyBase enemy = hit.collider.GetComponent<EnemyBase>();
-            if (enemy != null)
+            if (hit.collider.TryGetComponent(out EnemyBase enemy))
             {
                 enemy.SetHighlight(true);
                 _highlightedEnemies.Add(enemy);
@@ -238,6 +252,19 @@ public class PlayerDash : MonoBehaviour
             return (dir == Vector3.zero) ? transform.forward : dir;
         }
         return transform.forward;
+    }
+
+    Door GetDoorInDashPath(Vector3 dir, float dist)
+    {
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, hitRadius, dir, Mathf.Max(dist, 2f));
+        foreach (var hit in hits)
+        {
+            if (hit.collider.TryGetComponent(out Door door))
+            {
+                return door;
+            }
+        }
+        return null;
     }
 
     void SetColor(Color c) { if (playerRenderer != null) playerRenderer.material.color = c; }

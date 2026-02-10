@@ -36,6 +36,35 @@ public class ReticleController : MonoBehaviour
 
             if (clampedCursor != null)
             {
+                Vector3 dashDir = (hitPoint - player.position).normalized;
+                dashDir.y = 0;
+                
+                RaycastHit[] hits = Physics.SphereCastAll(player.position, 1f, dashDir, Mathf.Max(maxDashDistance, 2f));
+                Door doorInPath = null;
+                
+                foreach (var rayHit in hits)
+                {
+                    if (rayHit.collider.TryGetComponent(out Door door))
+                    {
+                        if (!door.IsLocked())
+                        {
+                            doorInPath = door;
+                            break;
+                        }
+                    }
+                }
+                
+                if (doorInPath != null)
+                {
+                    DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+                    if (zone != null)
+                    {
+                        Vector3 landingPos = zone.GetLandingPosition();
+                        clampedCursor.position = new Vector3(landingPos.x, hit.point.y, landingPos.z);
+                        return;
+                    }
+                }
+                
                 Vector3 dir = hitPoint - player.position;
                 float dist = dir.magnitude;
                 

@@ -16,7 +16,7 @@ public class EnemyDash : EnemyBase
     protected override void Awake()
     {
         base.Awake();
-        if (_player != null) _playerCC = _player.GetComponent<CharacterController>();
+        if (_player != null) _player.TryGetComponent(out _playerCC);
     }
 
     protected override void HandleBehavior()
@@ -25,12 +25,12 @@ public class EnemyDash : EnemyBase
 
         float dist = Vector3.Distance(transform.position, _player.position);
 
-        if (dist <= dashRange)
+        if (dist <= dashRange && IsPlayerInMyRoom())
         {
             _agent.ResetPath();
             StartCoroutine(DashAttack());
         }
-        else if (dist < detectRange)
+        else if (dist < detectRange && IsPlayerInMyRoom())
         {
             _agent.SetDestination(_player.position);
         }
@@ -63,7 +63,10 @@ public class EnemyDash : EnemyBase
 
             if (Vector3.Distance(transform.position, _player.position) < 2.0f)
             {
-                _player.GetComponent<IDamageable>()?.TakeDamage(damage);
+                if (_player.TryGetComponent(out IDamageable damageable))
+                {
+                    damageable.TakeDamage(damage);
+                }
             }
 
             dashTimer += Time.deltaTime;

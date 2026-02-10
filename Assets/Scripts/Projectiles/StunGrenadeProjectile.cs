@@ -44,8 +44,7 @@ public class StunGrenadeProjectile : BaseProjectile
         
         foreach (var hitCollider in hitColliders)
         {
-            EnemyBase enemy = hitCollider.GetComponent<EnemyBase>();
-            if (enemy != null)
+            if (hitCollider.TryGetComponent(out EnemyBase enemy))
             {
                 enemy.Stun(stunDuration);
             }

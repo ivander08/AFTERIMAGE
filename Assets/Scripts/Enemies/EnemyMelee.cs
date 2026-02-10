@@ -16,7 +16,7 @@ public class EnemyMelee : EnemyBase
 
         float dist = Vector3.Distance(transform.position, _player.position);
 
-        if (dist <= detectRange)
+        if (dist <= detectRange && IsPlayerInMyRoom())
         {
             _agent.SetDestination(_player.position);
 
@@ -42,7 +42,10 @@ public class EnemyMelee : EnemyBase
 
         if (_player != null && Vector3.Distance(transform.position, _player.position) <= attackRange + 0.5f)
         {
-            _player.GetComponent<IDamageable>()?.TakeDamage(damage);
+            if (_player.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
         }
 
         rend.material.color = _originalColor;

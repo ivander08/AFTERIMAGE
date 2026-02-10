@@ -9,9 +9,7 @@ public class KunaiProjectile : BaseProjectile
     {
         Debug.Log($"Kunai hit: {other.name} on Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
 
-        IDamageable damageable = other.GetComponent<IDamageable>();
-        
-        if (damageable != null)
+        if (other.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage(damageAmount);
             Destroy(gameObject);
