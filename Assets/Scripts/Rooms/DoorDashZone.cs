@@ -21,6 +21,7 @@ public class DoorDashZone : MonoBehaviour
         if (destinationRoom != null)
         {
             destinationRoom.SetEntryDoor(GetComponent<Door>());
+            destinationRoom.PlayerEntered();
         }
     }
 }

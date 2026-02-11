@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class Room : MonoBehaviour
 {
     public string roomName;
-    [SerializeField] private Transform environment;
 
     private List<EnemyBase> enemies = new();
     private int enemiesAlive;
@@ -14,11 +13,6 @@ public class Room : MonoBehaviour
     private void Start()
     {
         RoomManager.Instance.RegisterRoom(this);
-
-        if (environment != null)
-        {
-            SetupEnvironmentTrigger(environment);
-        }
 
         enemies.AddRange(GetComponentsInChildren<EnemyBase>());
         doors.AddRange(GetComponentsInChildren<Door>());
@@ -33,40 +27,6 @@ public class Room : MonoBehaviour
         foreach (var enemy in enemies)
         {
             enemy.OnDeath += HandleEnemyDeath;
-        }
-    }
-
-    private void SetupEnvironmentTrigger(Transform environment)
-    {
-        BoxCollider collider = environment.GetComponent<BoxCollider>();
-        if (collider == null)
-        {
-            collider = environment.gameObject.AddComponent<BoxCollider>();
-        }
-        collider.isTrigger = true;
-
-        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
-        bool hasGeometry = false;
-
-        Renderer[] renderers = environment.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
-        {
-            if (!hasGeometry)
-            {
-                bounds = renderer.bounds;
-                hasGeometry = true;
-            }
-            else
-            {
-                bounds.Encapsulate(renderer.bounds);
-            }
-        }
-
-        if (hasGeometry)
-        {
-            Vector3 center = bounds.center - environment.position;
-            collider.center = center;
-            collider.size = bounds.size;
         }
     }
 
