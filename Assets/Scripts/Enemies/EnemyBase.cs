@@ -17,7 +17,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected Transform _player;
     protected bool _isDead = false;
     protected bool _isStunned = false;
+    protected Room _myRoom;
 
+    public bool IsDead => _isDead;
     public event Action OnDeath;
 
     protected virtual void Awake()
@@ -30,6 +32,16 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (rend != null) _originalColor = rend.material.color;
         
         GetComponent<Rigidbody>().isKinematic = true;
+    }
+
+    public void AssignRoom(Room room)
+    {
+        _myRoom = room;
+    }
+
+    protected bool CanAggro()
+    {
+        return _myRoom != null && RoomManager.Instance.CurrentRoom == _myRoom;
     }
 
     protected virtual void Update()
@@ -111,16 +123,5 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             rend.material.color = _originalColor;
         }
-    }
-
-    protected bool IsPlayerInMyRoom()
-    {
-        if (_player == null || RoomManager.Instance == null) return false;
-
-        Room myRoom = GetComponentInParent<Room>();
-        Room playerRoom = RoomManager.Instance.GetCurrentRoom();
-
-        if (myRoom == null || playerRoom == null) return false;
-        return myRoom == playerRoom;
     }
 }

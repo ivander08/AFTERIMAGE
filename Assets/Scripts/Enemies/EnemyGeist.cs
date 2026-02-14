@@ -25,7 +25,7 @@ public class EnemyGeist : EnemyBase
 
     protected override void HandleBehavior()
     {
-        if (_player == null || _isAttacking || !IsPlayerInMyRoom()) return;
+        if (_player == null || _isAttacking || !CanAggro()) return;
 
         _agent.SetDestination(_player.position);
 
@@ -67,9 +67,13 @@ public class EnemyGeist : EnemyBase
     {
         while (!_isDead)
         {
+            while (_isStunned) yield return null;
+
             SetEthereal(false);
             yield return new WaitForSeconds(Random.Range(minSolidTime, maxSolidTime));
             
+            while (_isStunned) yield return null;
+
             SetEthereal(true);
             yield return new WaitForSeconds(Random.Range(minEtherealTime, maxEtherealTime));
         }

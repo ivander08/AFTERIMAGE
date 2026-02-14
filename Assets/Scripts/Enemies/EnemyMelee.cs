@@ -16,7 +16,7 @@ public class EnemyMelee : EnemyBase
 
         float dist = Vector3.Distance(transform.position, _player.position);
 
-        if (dist <= detectRange && IsPlayerInMyRoom())
+        if (dist <= detectRange && CanAggro())
         {
             _agent.SetDestination(_player.position);
 

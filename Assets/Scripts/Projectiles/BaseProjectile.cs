@@ -29,16 +29,27 @@ public abstract class BaseProjectile : MonoBehaviour
         if (_rb != null)
         {
             _rb.useGravity = false;
-            _rb.isKinematic = true;
-            
-            if (_rb.collisionDetectionMode == CollisionDetectionMode.Discrete)
-                _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            _rb.isKinematic = true; 
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         }
     }
 
     protected virtual void Move()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        float moveDistance = speed * Time.deltaTime;
+
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, moveDistance, ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (!hit.collider.CompareTag("Player"))
+            {
+                transform.position = hit.point; 
+                OnHit(hit.collider);
+                return; // Stop moving
+            }
+        }
+
+        transform.Translate(Vector3.forward * moveDistance);
     }
 
     protected virtual void OnTriggerEnter(Collider other)

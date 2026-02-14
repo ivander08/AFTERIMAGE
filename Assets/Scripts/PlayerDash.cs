@@ -36,6 +36,10 @@ public class PlayerDash : MonoBehaviour
     private bool _isDashing = false;
     private bool _isPenaltyActive = false;
     
+    private Vector3 _aimPoint;
+    private Vector3 _dashDirection;
+    private float _dashDistance;
+    
     private CharacterController _cc;
     private PlayerMovement _movement;
     private Camera _mainCam;
@@ -74,6 +78,7 @@ public class PlayerDash : MonoBehaviour
 
     void Update()
     {
+        CalculateDashData();
         HandleCameraZoom();
 
         if (Mouse.current == null || _isDashing) return;
@@ -95,6 +100,27 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
+    void CalculateDashData()
+    {
+        Ray ray = _mainCam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Plane ground = new Plane(Vector3.up, transform.position);
+        
+        if (ground.Raycast(ray, out float enter))
+        {
+            _aimPoint = ray.GetPoint(enter);
+            Vector3 rawDir = _aimPoint - transform.position;
+            rawDir.y = 0;
+            
+            _dashDirection = rawDir.sqrMagnitude > 0.01f ? rawDir.normalized : transform.forward;
+            _dashDistance = Mathf.Clamp(rawDir.magnitude, 0f, maxDashDistance);
+        }
+        else
+        {
+            _dashDirection = transform.forward;
+            _dashDistance = maxDashDistance;
+        }
+    }
+
     void HandleCameraZoom()
     {
         if (_posComposer == null) return;
@@ -111,55 +137,67 @@ public class PlayerDash : MonoBehaviour
         ClearHighlights();
         if (trail != null) trail.emitting = true;
 
-        Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, true); 
+        Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, true);
+        Vector3 dashDir = _dashDirection;
+        float currentDashDistance = _dashDistance;
+        
+        Door doorInPath = GetDoorInDashPath(dashDir, currentDashDistance);
+        Collider doorCollider = null;
 
-        Vector3 dashDir = GetDashDirection();
-        float distance = GetClampedDistance();
-        transform.rotation = Quaternion.LookRotation(dashDir);
-
-        Door doorInPath = GetDoorInDashPath(dashDir, distance);
         if (doorInPath != null && isAttack && !doorInPath.IsLocked())
         {
             DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
             if (zone != null)
             {
                 zone.OnPlayerDashThrough();
+                
                 Vector3 landingPos = zone.GetLandingPosition();
-                _cc.enabled = false;
-                transform.position = landingPos;
-                _cc.enabled = true;
+                Vector3 distVector = landingPos - transform.position;
+                
+                dashDir = distVector.normalized;
+                currentDashDistance = distVector.magnitude;
+
+                doorCollider = doorInPath.GetComponent<Collider>();
+                if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, true);
             }
         }
-        else
+
+        transform.rotation = Quaternion.LookRotation(dashDir);
+
+        bool hitSuccess = false;
+        if (isAttack)
         {
-            bool hitSuccess = false;
-            if (isAttack)
+            List<RaycastHit> targets = GetSortedTargets(dashDir, currentDashDistance);
+            if (targets.Count > 0)
             {
-                List<RaycastHit> targets = GetSortedTargets(dashDir, distance);
-                if (targets.Count > 0)
-                {
-                    hitSuccess = true;
-                    _lastDodgeTime = -99f;
-                    StartCoroutine(DealSequentialDamage(targets));
-                }
-            }
-
-            float traveled = 0f;
-            while (traveled < distance)
-            {
-                float step = dashSpeed * Time.deltaTime; 
-                _cc.Move(dashDir * step);
-                traveled += step;
-                yield return null;
-            }
-
-            if (isAttack && !hitSuccess)
-            {
-                StartCoroutine(RecoveryRoutine());
+                hitSuccess = true;
+                _lastDodgeTime = -99f;
+                StartCoroutine(DealSequentialDamage(targets));
             }
         }
 
+        float traveled = 0f;
+        while (traveled < currentDashDistance)
+        {
+            float step = dashSpeed * Time.deltaTime; 
+            
+            if (traveled + step > currentDashDistance) 
+            {
+                step = currentDashDistance - traveled;
+            }
+
+            _cc.Move(dashDir * step);
+            traveled += step;
+            yield return null;
+        }
+
+        if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, false);
         Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, false);
+
+        if (isAttack && !hitSuccess && doorInPath == null)
+        {
+            StartCoroutine(RecoveryRoutine());
+        }
 
         if (trail != null) trail.emitting = false;
         _movement.isMovementLocked = false;
@@ -212,10 +250,8 @@ public class PlayerDash : MonoBehaviour
     void UpdateEnemyHighlights()
     {
         ClearHighlights();
-        Vector3 dir = GetDashDirection();
-        float dist = GetClampedDistance();
         
-        var hits = Physics.SphereCastAll(transform.position, hitRadius, dir, dist, hitLayer);
+        var hits = Physics.SphereCastAll(transform.position, hitRadius, _dashDirection, _dashDistance, hitLayer);
         foreach (var hit in hits)
         {
             if (hit.collider.TryGetComponent(out EnemyBase enemy))
@@ -230,28 +266,6 @@ public class PlayerDash : MonoBehaviour
     {
         foreach (var enemy in _highlightedEnemies) if (enemy != null) enemy.SetHighlight(false);
         _highlightedEnemies.Clear();
-    }
-
-    float GetClampedDistance()
-    {
-        Ray ray = _mainCam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane ground = new Plane(Vector3.up, transform.position);
-        if (ground.Raycast(ray, out float enter))
-             return Mathf.Clamp(Vector3.Distance(transform.position, ray.GetPoint(enter)), 0f, maxDashDistance);
-        return maxDashDistance;
-    }
-
-    Vector3 GetDashDirection()
-    {
-        Ray ray = _mainCam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane ground = new Plane(Vector3.up, transform.position);
-        if (ground.Raycast(ray, out float enter))
-        {
-            Vector3 dir = (ray.GetPoint(enter) - transform.position).normalized;
-            dir.y = 0;
-            return (dir == Vector3.zero) ? transform.forward : dir;
-        }
-        return transform.forward;
     }
 
     Door GetDoorInDashPath(Vector3 dir, float dist)

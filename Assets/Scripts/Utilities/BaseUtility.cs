@@ -2,7 +2,6 @@ using UnityEngine;
 
 public abstract class BaseUtility : MonoBehaviour
 {
-    public Transform spawnPoint;
     public float cooldown = 0.1f;
     public int maxUses = 3;
 
@@ -19,7 +18,7 @@ public abstract class BaseUtility : MonoBehaviour
         return Time.time >= _lastUseTime + cooldown && _currentUses > 0;
     }
 
-    public virtual bool TryUse()
+    public virtual bool TryUse(Transform origin)
     {
         if (!CanUse())
         {
@@ -29,11 +28,11 @@ public abstract class BaseUtility : MonoBehaviour
 
         _lastUseTime = Time.time;
         _currentUses--;
-        ExecuteUtility();
+        ExecuteUtility(origin);
         return true;
     }
 
-    protected abstract void ExecuteUtility();
+    protected abstract void ExecuteUtility(Transform origin);
     protected virtual void OnUsageFailed() { }
 
     public int CurrentUses => _currentUses;

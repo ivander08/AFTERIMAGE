@@ -25,12 +25,12 @@ public class EnemyDash : EnemyBase
 
         float dist = Vector3.Distance(transform.position, _player.position);
 
-        if (dist <= dashRange && IsPlayerInMyRoom())
+        if (dist <= dashRange && CanAggro())
         {
             _agent.ResetPath();
             StartCoroutine(DashAttack());
         }
-        else if (dist < detectRange && IsPlayerInMyRoom())
+        else if (dist < detectRange && CanAggro())
         {
             _agent.SetDestination(_player.position);
         }

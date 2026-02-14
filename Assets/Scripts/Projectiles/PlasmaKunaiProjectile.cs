@@ -1,17 +1,15 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class KunaiProjectile : BaseProjectile
+public class PlasmaKunaiProjectile : BaseProjectile
 {
-    public int damageAmount = 1;
-
     public override void OnHit(Collider other)
     {
-        Debug.Log($"Kunai hit: {other.name} on Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
+        Debug.Log($"Plasma Kunai hit: {other.name} on Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
 
         if (other.TryGetComponent(out IDamageable damageable))
         {
-            damageable.TakeDamage(damageAmount);
+            damageable.TakeDamage(1);
             Destroy(gameObject);
         }
         else if (!other.isTrigger) 

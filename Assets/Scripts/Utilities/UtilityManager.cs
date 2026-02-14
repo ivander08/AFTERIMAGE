@@ -45,24 +45,7 @@ public class UtilityManager : MonoBehaviour
     public bool UseCurrentUtility()
     {
         if (CurrentUtility == null) return false;
-        return CurrentUtility.TryUse();
-    }
-
-    void OnGUI()
-    {
-        if (CurrentUtility == null) return;
-
-        GUILayout.BeginArea(new Rect(10, 10, 300, 100));
-        GUILayout.Label($"Current Utility: {CurrentUtility.UtilityName}");
-        GUILayout.Label($"Uses: {CurrentUtility.CurrentUses}/{CurrentUtility.MaxUses}");
-        
-        if (CurrentUtility.IsOnCooldown)
-        {
-            GUILayout.Label($"Cooldown: {CurrentUtility.CooldownRemaining:F1}s");
-        }
-        
-        GUILayout.Label("Q - Switch Utility | Right Click - Use");
-        GUILayout.EndArea();
+        return CurrentUtility.TryUse(transform);
     }
 
     public BaseUtility GetCurrentUtility() => CurrentUtility;

@@ -1,11 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class StunGrenadeProjectile : BaseProjectile
+public class ThunderClapProjectile : BaseProjectile
 {
     public float explosionRadius = 4f;
-    public float stunDuration = 3f;
     public float maxRange = 8f;
+    public float stunDuration = 2.5f;
     public LayerMask enemyLayer;
 
     private Vector3 _startPosition;
@@ -15,6 +15,8 @@ public class StunGrenadeProjectile : BaseProjectile
     {
         base.Awake();
         _startPosition = transform.position;
+        
+        GetComponent<Collider>().isTrigger = true; 
     }
 
     protected override void Update()
@@ -26,30 +28,43 @@ public class StunGrenadeProjectile : BaseProjectile
         float distanceTraveled = Vector3.Distance(_startPosition, transform.position);
         if (distanceTraveled >= maxRange)
         {
-            Explode();
+            Explode(null);
         }
     }
 
     public override void OnHit(Collider other)
     {
         if (_hasExploded) return;
-        Explode();
+        
+        Explode(other.gameObject);
     }
 
-    void Explode()
+    void Explode(GameObject directHitObj)
     {
         _hasExploded = true;
         
+        if (directHitObj != null)
+        {
+            if (directHitObj.TryGetComponent(out IDamageable damageable))
+            {
+                // Deal damage to the guy we hit directly
+                damageable.TakeDamage(1); 
+            }
+        }
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius, enemyLayer);
         
         foreach (var hitCollider in hitColliders)
         {
+            if (directHitObj != null && hitCollider.gameObject == directHitObj) continue;
+
             if (hitCollider.TryGetComponent(out EnemyBase enemy))
             {
                 enemy.Stun(stunDuration);
             }
         }
 
+        
         Destroy(gameObject);
     }
 

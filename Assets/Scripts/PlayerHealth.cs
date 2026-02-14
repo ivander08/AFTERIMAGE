@@ -40,10 +40,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     void RestartLevel()
     {
-        if (RoomManager.Instance != null)
-        {
-            RoomManager.Instance.ResetAllRooms();
-        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

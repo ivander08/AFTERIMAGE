@@ -1,65 +1,61 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Room : MonoBehaviour
 {
     public string roomName;
 
-    private List<EnemyBase> enemies = new();
-    private int enemiesAlive;
-    private List<Door> doors = new();
-    private Door entryDoor;
+    private List<EnemyBase> _enemies = new();
+    private List<Door> _doors = new();
+    private Door _entryDoor;
+    private bool _isCleared;
 
     private void Start()
     {
-        RoomManager.Instance.RegisterRoom(this);
+        _enemies.AddRange(GetComponentsInChildren<EnemyBase>());
+        _doors.AddRange(GetComponentsInChildren<Door>());
 
-        enemies.AddRange(GetComponentsInChildren<EnemyBase>());
-        doors.AddRange(GetComponentsInChildren<Door>());
-
-        enemiesAlive = enemies.Count;
-
-        foreach (var door in doors)
+        foreach (var enemy in _enemies)
         {
-            door.SetRoom(this);
+            enemy.AssignRoom(this);
+            enemy.OnDeath += CheckClearCondition;
         }
 
-        foreach (var enemy in enemies)
+        foreach (var door in _doors)
         {
-            enemy.OnDeath += HandleEnemyDeath;
+            door.SetRoom(this);
         }
     }
 
     public void PlayerEntered()
     {
         RoomManager.Instance.SetCurrentRoom(this);
-        LockRoom();
+        if (!_isCleared && _enemies.Count > 0)
+        {
+            LockRoom();
+        }
     }
 
     public void SetEntryDoor(Door door)
     {
-        entryDoor = door;
+        _entryDoor = door;
 
-        if (enemiesAlive == 0)
+        if (_isCleared)
         {
             Destroy(door.gameObject);
-            entryDoor = null;
+            _entryDoor = null;
         }
     }
 
     private void LockRoom()
     {
-        if (enemiesAlive == 0)
-            return;
-
-        RoomManager.Instance.SetRoomLocked(this, true);
-        
-        if (entryDoor != null)
+        if (_entryDoor != null)
         {
-            entryDoor.Lock();
+            _entryDoor.Lock();
         }
         
-        foreach (var door in doors)
+        foreach (var door in _doors)
         {
             door.Lock();
         }
@@ -67,27 +63,23 @@ public class Room : MonoBehaviour
 
     private void UnlockRoom()
     {
-        RoomManager.Instance.SetRoomLocked(this, false);
-        
-        if (entryDoor != null)
+        if (_entryDoor != null)
         {
-            Destroy(entryDoor.gameObject);
+            Destroy(_entryDoor.gameObject);
         }
         
-        foreach (var door in doors)
+        foreach (var door in _doors)
         {
             if (door != null)
                 door.Unlock();
         }
     }
 
-    private void HandleEnemyDeath()
+    private void CheckClearCondition()
     {
-        enemiesAlive--;
-
-        if (enemiesAlive <= 0)
+        if (_enemies.All(e => e == null || e.IsDead))
         {
-            RoomManager.Instance.SetRoomCleared(this);
+            _isCleared = true;
             UnlockRoom();
         }
     }
