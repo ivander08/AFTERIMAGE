@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Door : MonoBehaviour, IDamageable
+public class Door : MonoBehaviour 
 {
     public string doorName;
 
@@ -9,10 +9,13 @@ public class Door : MonoBehaviour, IDamageable
     private Renderer doorRenderer;
     private Material doorMaterial;
     private Color originalColor;
+    private Collider _col;
 
     private void Start()
     {
         doorRenderer = GetComponent<Renderer>();
+        _col = GetComponent<Collider>();
+
         if (doorRenderer != null)
         {
             doorMaterial = doorRenderer.material;
@@ -20,54 +23,37 @@ public class Door : MonoBehaviour, IDamageable
         }
     }
 
-    public void SetRoom(Room targetRoom)
-    {
-        room = targetRoom;
-    }
+    public void SetRoom(Room targetRoom) => room = targetRoom;
 
-    public void TakeDamage(int damage)
+    public void Break()
     {
         if (isLocked) return;
 
-        if (doorMaterial != null)
-        {
-            doorMaterial.color = Color.white;
-        }
-
-        Break();
+        if (doorRenderer != null) doorRenderer.enabled = false;
+        if (_col != null) _col.enabled = false;
     }
 
     public void Lock()
     {
         isLocked = true;
-        if (doorMaterial != null)
+        if (doorRenderer != null) 
         {
+            doorRenderer.enabled = true;
             doorMaterial.color = Color.red;
         }
+        if (_col != null) _col.enabled = true;
     }
 
     public void Unlock()
     {
         isLocked = false;
-        if (doorMaterial != null)
+        if (doorRenderer != null) 
         {
+            doorRenderer.enabled = true;
             doorMaterial.color = originalColor;
         }
+        if (_col != null) _col.enabled = true;
     }
 
-    public bool IsLocked()
-    {
-        return isLocked;
-    }
-
-    private void Break()
-    {
-        if (doorMaterial != null)
-        {
-            doorMaterial.color = Color.black;
-        }
-        
-        GetComponent<Collider>().enabled = false;
-        gameObject.SetActive(false);
-    }
+    public bool IsLocked() => isLocked;
 }

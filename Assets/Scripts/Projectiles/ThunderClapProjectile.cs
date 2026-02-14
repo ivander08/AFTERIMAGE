@@ -36,6 +36,13 @@ public class ThunderClapProjectile : BaseProjectile
     {
         if (_hasExploded) return;
         
+        EnemyPhalanx phalanxParent = other.GetComponentInParent<EnemyPhalanx>();
+        if (phalanxParent != null && other.gameObject != phalanxParent.gameObject)
+        {
+            Debug.Log($"[ThunderClap] Hit shield!");
+            phalanxParent.BreakShield();
+        }
+        
         Explode(other.gameObject);
     }
 
@@ -47,7 +54,6 @@ public class ThunderClapProjectile : BaseProjectile
         {
             if (directHitObj.TryGetComponent(out IDamageable damageable))
             {
-                // Deal damage to the guy we hit directly
                 damageable.TakeDamage(1); 
             }
         }
@@ -57,6 +63,13 @@ public class ThunderClapProjectile : BaseProjectile
         foreach (var hitCollider in hitColliders)
         {
             if (directHitObj != null && hitCollider.gameObject == directHitObj) continue;
+
+            EnemyPhalanx phalanxParent = hitCollider.GetComponentInParent<EnemyPhalanx>();
+            if (phalanxParent != null && hitCollider.gameObject != phalanxParent.gameObject)
+            {
+                Debug.Log($"[ThunderClap-Explode] Hit shield!");
+                phalanxParent.BreakShield();
+            }
 
             if (hitCollider.TryGetComponent(out EnemyBase enemy))
             {

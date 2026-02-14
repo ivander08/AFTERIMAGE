@@ -25,30 +25,33 @@ public class EnemyGeist : EnemyBase
 
     protected override void HandleBehavior()
     {
-        if (_player == null || _isAttacking || !CanAggro()) return;
+        Transform target = GetTarget();
+        if (target == null || _isAttacking || !CanAggro()) return;
 
-        _agent.SetDestination(_player.position);
+        _agent.SetDestination(target.position);
 
-        float dist = Vector3.Distance(transform.position, _player.position);
+        float dist = Vector3.Distance(transform.position, target.position);
         if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
         {
-            StartCoroutine(AttackRoutine());
+            StartCoroutine(AttackRoutine(target));
         }
     }
 
-    IEnumerator AttackRoutine()
+    IEnumerator AttackRoutine(Transform target)
     {
         _isAttacking = true;
         _agent.isStopped = true;
 
-        transform.LookAt(new Vector3(_player.position.x, transform.position.y, _player.position.z));
+        if (target != null)
+            transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
+            
         rend.material.color = Color.red;
 
         yield return new WaitForSeconds(attackWindup);
 
-        if (_player != null && Vector3.Distance(transform.position, _player.position) <= attackRange + 0.5f)
+        if (target != null && Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
         {
-            if (_player.TryGetComponent(out IDamageable damageable))
+            if (target.TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(damage);
             }

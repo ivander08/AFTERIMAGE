@@ -14,9 +14,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] public bool showGizmos = false;
     protected Color _originalColor;
     protected NavMeshAgent _agent;
-    protected Transform _player;
+    protected Rigidbody _rb;
+    protected Transform _defaultTarget;
+    protected Transform _currentTarget;
     protected bool _isDead = false;
     protected bool _isStunned = false;
+    protected bool _isKnockedBack = false;
     protected Room _myRoom;
 
     public bool IsDead => _isDead;
@@ -25,13 +28,17 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _rb = GetComponent<Rigidbody>();
+        
         GameObject p = GameObject.FindGameObjectWithTag("Player");
-        if (p != null) _player = p.transform;
+        if (p != null) _defaultTarget = p.transform;
+        
+        _currentTarget = _defaultTarget;
 
         if (rend == null) rend = GetComponent<Renderer>();
         if (rend != null) _originalColor = rend.material.color;
         
-        GetComponent<Rigidbody>().isKinematic = true;
+        _rb.isKinematic = true;
     }
 
     public void AssignRoom(Room room)
@@ -44,9 +51,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         return _myRoom != null && RoomManager.Instance.CurrentRoom == _myRoom;
     }
 
+    public Transform GetTarget()
+    {
+        return _currentTarget != null ? _currentTarget : _defaultTarget;
+    }
+
+    public void SetTargetOverride(Transform newTarget)
+    {
+        _currentTarget = newTarget != null ? newTarget : _defaultTarget;
+    }
+
     protected virtual void Update()
     {
-        if (_isDead || _player == null || _isStunned) return;
+        if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null) return;
         HandleBehavior();
     }
 
@@ -63,7 +80,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         _isDead = true;
-        _agent.isStopped = true;
+        ResetPhysicsState(); 
+        _agent.enabled = false; 
         StopAllCoroutines();
         if (rend) rend.material.color = Color.black;
         GetComponent<Collider>().enabled = false;
@@ -100,28 +118,91 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public void Stun(float duration)
     {
-        if (_isDead) return;
+        if (_isKnockedBack) return; 
+        
+        StopAllCoroutines();
+        ResetPhysicsState(); 
         StartCoroutine(StunRoutine(duration));
+    }
+
+    public void Knockback(Vector3 dir, float force, float duration)
+    {
+        if (_isDead) return;
+        
+        StopAllCoroutines(); 
+        ResetPhysicsState(); 
+        
+        StartCoroutine(KnockbackRoutine(dir, force, duration));
+    }
+
+    private void ResetPhysicsState()
+    {
+        _isKnockedBack = false;
+        _isStunned = false;
+
+        if (_rb != null)
+        {
+            if (!_rb.isKinematic)
+            {
+                _rb.linearVelocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+            }
+            _rb.constraints = RigidbodyConstraints.None;
+            _rb.linearDamping = 0f;
+            _rb.isKinematic = true;
+        }
+
+        if (_agent != null && gameObject.activeSelf)
+        {
+            _agent.enabled = true;
+            if (!_isDead) _agent.isStopped = false;
+        }
+
+        if (rend != null && !_isDead) rend.material.color = _originalColor;
+    }
+
+    IEnumerator KnockbackRoutine(Vector3 dir, float force, float duration)
+    {
+        _isKnockedBack = true;
+        _isStunned = true;
+
+        if (_agent.isOnNavMesh) _agent.isStopped = true;
+        _agent.enabled = false;
+        
+        _rb.isKinematic = false;
+        _rb.linearVelocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
+        _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _rb.linearDamping = 10f;
+
+        Vector3 knockbackForce = dir.normalized * force;
+        _rb.AddForce(knockbackForce, ForceMode.Impulse);
+
+        if (rend != null) rend.material.color = Color.blue;
+
+        yield return new WaitForSeconds(duration);
+
+        if (!_isDead)
+        {
+            ResetPhysicsState();
+        }
     }
 
     IEnumerator StunRoutine(float duration)
     {
         _isStunned = true;
-        _agent.isStopped = true;
+        if (_agent.isOnNavMesh) _agent.isStopped = true;
         
-        if (rend != null)
-        {
-            rend.material.color = Color.blue;
-        }
+        if (rend != null) rend.material.color = Color.blue;
         
         yield return new WaitForSeconds(duration);
         
-        _isStunned = false;
-        _agent.isStopped = false;
-        
-        if (rend != null && !_isDead)
+        if (!_isDead)
         {
-            rend.material.color = _originalColor;
+            _isStunned = false;
+            if (_agent.isOnNavMesh) _agent.isStopped = false;
+            if (rend != null) rend.material.color = _originalColor;
         }
     }
 }

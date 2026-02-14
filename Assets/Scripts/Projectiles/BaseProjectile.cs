@@ -65,4 +65,18 @@ public abstract class BaseProjectile : MonoBehaviour
     }
 
     public abstract void OnHit(Collider other);
+
+    protected virtual void BreakPhalanxShield(Collider other)
+    {
+        if (other.TryGetComponent(out EnemyPhalanx phalanx))
+        {
+            Debug.Log($"[BaseProjectile] Shield broken (direct hit)!");
+            phalanx.BreakShield();
+        }
+        else if (other.GetComponentInParent<EnemyPhalanx>() is EnemyPhalanx parentPhalanx)
+        {
+            Debug.Log($"[BaseProjectile] Shield broken (parent search)!");
+            parentPhalanx.BreakShield();
+        }
+    }
 }

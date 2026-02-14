@@ -149,6 +149,7 @@ public class PlayerDash : MonoBehaviour
             DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
             if (zone != null)
             {
+                doorInPath.Break();
                 zone.OnPlayerDashThrough();
                 
                 Vector3 landingPos = zone.GetLandingPosition();
@@ -165,14 +166,31 @@ public class PlayerDash : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(dashDir);
 
         bool hitSuccess = false;
+        bool hitShield = false;
+        
         if (isAttack)
         {
             List<RaycastHit> targets = GetSortedTargets(dashDir, currentDashDistance);
             if (targets.Count > 0)
             {
-                hitSuccess = true;
-                _lastDodgeTime = -99f;
-                StartCoroutine(DealSequentialDamage(targets));
+                RaycastHit firstHit = targets[0];
+                EnemyPhalanx phalanxParent = firstHit.collider.GetComponentInParent<EnemyPhalanx>();
+                
+                if (phalanxParent != null && firstHit.collider.gameObject != phalanxParent.gameObject)
+                {
+                    hitShield = true;
+                    Debug.Log($"[PlayerDash] Hit shield! Breaking and knocking back...");
+                    phalanxParent.BreakShield();
+                    currentDashDistance = firstHit.distance;
+                    
+                    StartCoroutine(RecoveryRoutine());
+                }
+                else
+                {
+                    hitSuccess = true;
+                    _lastDodgeTime = -99f;
+                    StartCoroutine(DealSequentialDamage(targets, dashDir));
+                }
             }
         }
 
@@ -191,10 +209,28 @@ public class PlayerDash : MonoBehaviour
             yield return null;
         }
 
+        if (hitShield)
+        {
+            Vector3 knockbackDir = -dashDir.normalized;
+            float knockbackDuration = 0.15f;
+            float knockbackSpeed = 40f;
+            float elapsed = 0f;
+            
+            while (elapsed < knockbackDuration)
+            {
+                float t = elapsed / knockbackDuration;
+                float currentSpeed = Mathf.Lerp(knockbackSpeed, 0f, t);
+                _cc.Move(knockbackDir * currentSpeed * Time.deltaTime);
+                
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }
+
         if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, false);
         Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, false);
 
-        if (isAttack && !hitSuccess && doorInPath == null)
+        if (isAttack && !hitSuccess && !hitShield && doorInPath == null)
         {
             StartCoroutine(RecoveryRoutine());
         }
@@ -204,14 +240,18 @@ public class PlayerDash : MonoBehaviour
         _isDashing = false;
     }
 
-    IEnumerator DealSequentialDamage(List<RaycastHit> targets)
+    IEnumerator DealSequentialDamage(List<RaycastHit> targets, Vector3 attackDirection)
     {
         foreach (var hit in targets)
         {
             GameObject victim = hit.collider.gameObject;
-            if (victim != null && victim.TryGetComponent(out IDamageable damageable))
+            if (victim != null)
             {
-                damageable.TakeDamage(damageAmount);
+                if (victim.TryGetComponent(out IDamageable damageable))
+                {
+                    Debug.Log($"[PlayerDash] Damage dealt to {victim.name}");
+                    damageable.TakeDamage(damageAmount);
+                }
             }
             yield return new WaitForSeconds(damageDelay);
         }

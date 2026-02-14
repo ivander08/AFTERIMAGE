@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1303631987356443183}
   - component: {fileID: 2891512415796480541}
   - component: {fileID: 7708015746262212251}
-  - component: {fileID: 3704130800456599499}
-  - component: {fileID: 5593576748428668093}
+  - component: {fileID: -8313735219088726214}
+  - component: {fileID: 5104859610347169826}
   m_Layer: 0
-  m_Name: Thunderclap
+  m_Name: HoloLureProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 25f8cabf55f2ef24483f7d2ba8e7089d, type: 2}
+  - {fileID: 2100000, guid: db419a5f0ac022f4cb97ec14471ce576, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,7 +120,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &3704130800456599499
+--- !u!114 &-8313735219088726214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2842522608422121543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f4bec205b3efd48a5ea9a43684420f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoloLureProjectile
+  speed: 50
+  lifetime: 1
+  lureDevicePrefab: {fileID: 6155569945303488007, guid: 91316634ee945c944808e9acda890bb8, type: 3}
+--- !u!135 &5104859610347169826
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,23 +156,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5593576748428668093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2842522608422121543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9fce1cf4f77d6f4daa8a7d6563adebb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StunGrenadeProjectile
-  speed: 50
-  lifetime: 3
-  explosionRadius: 3
-  maxRange: 8
-  stunDuration: 1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
