@@ -90,7 +90,7 @@ public class PlayerDash : MonoBehaviour
         {
             if (!_isPenaltyActive) StartCoroutine(PerformDash(true));
         }
-        else if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        else if (Keyboard.current.leftCtrlKey.wasPressedThisFrame)
         {
             if (Time.time >= _lastDodgeTime + dodgeCooldown)
             {

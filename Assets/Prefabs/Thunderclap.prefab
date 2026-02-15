@@ -157,7 +157,7 @@ MonoBehaviour:
   lifetime: 3
   explosionRadius: 3
   maxRange: 8
-  stunDuration: 1
+  stunDuration: 0.8
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128

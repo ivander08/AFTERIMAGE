@@ -98,6 +98,15 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    public void SetFrozen(bool frozen)
+    {
+        _isStunned = frozen;
+        if (_agent != null && _agent.isOnNavMesh)
+        {
+            _agent.isStopped = frozen;
+        }
+    }
+
     protected virtual void OnDrawGizmosSelected()
     {
         if (!showGizmos) return;

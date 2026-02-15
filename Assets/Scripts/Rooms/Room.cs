@@ -83,4 +83,9 @@ public class Room : MonoBehaviour
             UnlockRoom();
         }
     }
+
+    public List<EnemyBase> GetEnemies()
+    {
+        return _enemies;
+    }
 }
