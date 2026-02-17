@@ -206,6 +206,12 @@ public class PlayerDash : MonoBehaviour
 
             _cc.Move(dashDir * step);
             traveled += step;
+
+            if (isAttack)
+            {
+                CheckAndDestroyProjectiles(transform.position, dashDir);
+            }
+
             yield return null;
         }
 
@@ -319,6 +325,18 @@ public class PlayerDash : MonoBehaviour
             }
         }
         return null;
+    }
+
+    void CheckAndDestroyProjectiles(Vector3 position, Vector3 dashDir)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, hitRadius);
+        foreach (var collider in colliders)
+        {
+            if (collider.TryGetComponent<ScatterProjectile>(out var projectile))
+            {
+                Destroy(projectile.gameObject);
+            }
+        }
     }
 
     void SetColor(Color c) { if (playerRenderer != null) playerRenderer.material.color = c; }

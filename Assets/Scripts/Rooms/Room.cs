@@ -28,6 +28,14 @@ public class Room : MonoBehaviour
         }
     }
 
+    public void RegisterEnemy(EnemyBase enemy)
+    {
+        if (enemy == null) return;
+        _enemies.Add(enemy);
+        enemy.AssignRoom(this);
+        enemy.OnDeath += CheckClearCondition;
+    }
+
     public void PlayerEntered()
     {
         RoomManager.Instance.SetCurrentRoom(this);
