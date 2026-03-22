@@ -33,6 +33,9 @@ public class PlayerDash : MonoBehaviour
     public Color normalColor = Color.cyan;
     public Color recoveryColor = Color.gray;
 
+    public GameObject katanaHip;
+    public GameObject katanaHand;
+
     private bool _isDashing = false;
     private bool _isPenaltyActive = false;
     
@@ -45,6 +48,7 @@ public class PlayerDash : MonoBehaviour
     private Camera _mainCam;
     private CinemachinePositionComposer _posComposer; 
     private float _targetCamDistance;
+    private Animator _animator;
 
     int _playerLayer;
     int _enemyLayer;
@@ -56,6 +60,7 @@ public class PlayerDash : MonoBehaviour
         _cc = GetComponent<CharacterController>();
         _movement = GetComponent<PlayerMovement>();
         _mainCam = Camera.main;
+        _animator = GetComponentInChildren<Animator>();
 
         if (trail != null) trail.emitting = false;
         if (playerRenderer == null) playerRenderer = GetComponentInChildren<Renderer>();
@@ -80,6 +85,8 @@ public class PlayerDash : MonoBehaviour
     {
         CalculateDashData();
         HandleCameraZoom();
+
+        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen)) return;
 
         if (Mouse.current == null || _isDashing) return;
 
@@ -124,6 +131,7 @@ public class PlayerDash : MonoBehaviour
     void HandleCameraZoom()
     {
         if (_posComposer == null) return;
+        if (CaptionCameraController.IsDriving) return;
         float currentDist = _posComposer.CameraDistance;
         if (Mathf.Abs(currentDist - _targetCamDistance) < 0.01f) return;
         float newDist = Mathf.Lerp(currentDist, _targetCamDistance, Time.unscaledDeltaTime * zoomSpeed);
@@ -133,7 +141,22 @@ public class PlayerDash : MonoBehaviour
     IEnumerator PerformDash(bool isAttack)
     {
         _isDashing = true;
-        _movement.isMovementLocked = true;
+
+        if (isAttack && katanaHip != null && katanaHand != null)
+        {
+            katanaHip.SetActive(false);
+            katanaHand.SetActive(true);
+        }
+
+        if (_animator != null) _animator.SetTrigger("dashTrigger");
+        
+        bool wasAlreadyLocked = _movement.isMovementLocked;//
+
+        if (!wasAlreadyLocked)
+        {
+            _movement.isMovementLocked = true;
+        }
+
         ClearHighlights();
         if (trail != null) trail.emitting = true;
 
@@ -215,6 +238,12 @@ public class PlayerDash : MonoBehaviour
             yield return null;
         }
 
+        // Let the animator animation finish independently without blocking recovery logic
+        if (_animator != null)
+        {
+            StartCoroutine(WaitForDashAnimationEnd());
+        }
+
         if (hitShield)
         {
             Vector3 knockbackDir = -dashDir.normalized;
@@ -242,7 +271,12 @@ public class PlayerDash : MonoBehaviour
         }
 
         if (trail != null) trail.emitting = false;
-        _movement.isMovementLocked = false;
+        
+        if (!wasAlreadyLocked)
+        {
+            _movement.isMovementLocked = false;
+        }
+        
         _isDashing = false;
     }
 
@@ -285,6 +319,23 @@ public class PlayerDash : MonoBehaviour
 
         SetColor(normalColor);
         _isPenaltyActive = false;
+    }
+
+    IEnumerator WaitForDashAnimationEnd()
+    {
+        yield return null;
+
+        while (_animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            yield return null;
+        }
+
+        // Animation finished, switch sword back
+        if (katanaHip != null && katanaHand != null)
+        {
+            katanaHip.SetActive(true);
+            katanaHand.SetActive(false);
+        }
     }
 
     List<RaycastHit> GetSortedTargets(Vector3 dir, float dist)

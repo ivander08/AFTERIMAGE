@@ -7,6 +7,7 @@ public class UtilityManager : MonoBehaviour
 
     [SerializeField] private int _currentUtilityIndex = 0;
     private PlayerHealth _playerHealth;
+    private PlayerMovement _playerMovement;
     
     private BaseUtility CurrentUtility => 
         availableUtilities != null && availableUtilities.Length > 0 
@@ -16,6 +17,7 @@ public class UtilityManager : MonoBehaviour
     private void Awake()
     {
         _playerHealth = GetComponent<PlayerHealth>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -35,6 +37,8 @@ public class UtilityManager : MonoBehaviour
     private void HandleUsage()
     {
         if (_playerHealth != null && _playerHealth.isDead) return;
+        if (_playerMovement != null && _playerMovement.isMovementLocked) return;
+        if (CaptionManager.IsFrozen) return;
         
         if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
         {

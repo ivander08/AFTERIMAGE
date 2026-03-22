@@ -16,9 +16,11 @@ public class PlayerMovement : MonoBehaviour
     public float camSmoothSpeed = 20f;
 
     [HideInInspector] public bool isMovementLocked = false;
+    [HideInInspector] public bool isAimingLocked = false;
 
     CharacterController _cc;
     Camera _cam;
+    private Animator _animator;
 
     private Vector3 _currentAimDirection; 
 
@@ -26,14 +28,14 @@ public class PlayerMovement : MonoBehaviour
     {
         _cc = GetComponent<CharacterController>();
         _cam = Camera.main;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
-        HandleInputAndRotation();
-
-        if (!isMovementLocked)
+        if (!isMovementLocked && !CaptionManager.IsFrozen)
         {
+            HandleInputAndRotation();
             HandleMovement();
         }
     }
@@ -45,22 +47,34 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleInputAndRotation()
     {
-        if (Mouse.current == null) return;
-        
+        if (Mouse.current == null || isAimingLocked || CaptionManager.IsFrozen) return;
+
         Ray ray = _cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Plane playerPlane = new Plane(Vector3.up, transform.position);
+
+        Vector3 target = Vector3.zero;
+        bool hasTarget = false;
 
         if (Physics.Raycast(ray, out RaycastHit hit, 999f, groundMask))
         {
-            Vector3 target = hit.point;
-            target.y = transform.position.y;
+            target = hit.point;
+            hasTarget = true;
+        }
+        else if (playerPlane.Raycast(ray, out float enter))
+        {
+            target = ray.GetPoint(enter);
+            hasTarget = true;
+        }
 
-            _currentAimDirection = target - transform.position;
+        if (!hasTarget) return;
 
-            if (_currentAimDirection.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(_currentAimDirection, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
-            }
+        target.y = transform.position.y;
+        _currentAimDirection = target - transform.position;
+
+        if (_currentAimDirection.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(_currentAimDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
         }
     }
 
@@ -80,11 +94,17 @@ public class PlayerMovement : MonoBehaviour
         finalMove.y = -9.8f; 
 
         _cc.Move(finalMove * Time.deltaTime);
+
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", move.sqrMagnitude > 0.01f);
+        }
     }
 
     void UpdateCameraTarget()
     {
         if (camTarget == null) return;
+        if (CaptionCameraController.IsDriving) return;
 
         float currentDist = _currentAimDirection.magnitude;
 

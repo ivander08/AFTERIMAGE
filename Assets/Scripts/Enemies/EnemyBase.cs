@@ -11,6 +11,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public float detectRange = 15f;
     public int damage = 1;
     public Renderer rend;
+    public bool isInvulnerable = false;
     [SerializeField] public bool showGizmos = false;
     protected Color _originalColor;
     protected NavMeshAgent _agent;
@@ -71,6 +72,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(int damage)
     {
+        if (isInvulnerable) return;
         if (_isDead) return;
         health -= damage;
         StartCoroutine(FlashWhite());

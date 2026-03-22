@@ -4,9 +4,9 @@ using System.Collections;
 public class EnemyShard : EnemyBase
 {
     public float attackRange = 1.5f;
-    public float attackWindup = 0.3f;
-    public float attackCooldown = 0.8f;
-    public float moveSpeed = 5f;
+    public float attackWindup = 0.1f;
+    public float attackCooldown = 0.5f;
+    public float moveSpeed = 12f;
 
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;

@@ -22,60 +22,87 @@ public class ReticleController : MonoBehaviour
     {
         if (player == null || Mouse.current == null) return;
 
+        if (CaptionManager.IsFrozen)
+        {
+            if (rawCursor != null) rawCursor.gameObject.SetActive(false);
+            if (clampedCursor != null) clampedCursor.gameObject.SetActive(false);
+            return;
+        }
+
+        if (rawCursor != null) rawCursor.gameObject.SetActive(true);
+        if (clampedCursor != null) clampedCursor.gameObject.SetActive(true);
+
         Ray ray = _cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         
-        if (Physics.Raycast(ray, out RaycastHit hit, 999f, groundMask))
+        // Create a plane at player's Y level to raycast against
+        Plane playerPlane = new Plane(Vector3.up, player.position.y);
+        
+        Vector3 hitPoint = player.position;
+        
+        // Try to hit ground first for accurate Y positioning
+        if (Physics.Raycast(ray, out RaycastHit groundHit, 999f, groundMask))
         {
-            Vector3 hitPoint = hit.point;
+            hitPoint = groundHit.point;
             hitPoint.y = player.position.y + 0.1f;
-
-            if (rawCursor != null)
+        }
+        else
+        {
+            // No ground found - project ray onto player's Y plane instead
+            if (playerPlane.Raycast(ray, out float enter))
             {
-                rawCursor.position = hitPoint;
+                hitPoint = ray.origin + ray.direction * enter;
+                hitPoint.y = player.position.y + 0.1f;
             }
+        }
 
-            if (clampedCursor != null)
+        // Update raw cursor - always follows mouse direction
+        if (rawCursor != null)
+        {
+            rawCursor.position = hitPoint;
+        }
+
+        // Update clamped cursor - shows max dash range
+        if (clampedCursor != null)
+        {
+            Vector3 dashDir = (hitPoint - player.position).normalized;
+            dashDir.y = 0;
+            
+            RaycastHit[] hits = Physics.SphereCastAll(player.position, 1f, dashDir, Mathf.Max(maxDashDistance, 2f));
+            Door doorInPath = null;
+            
+            foreach (var rayHit in hits)
             {
-                Vector3 dashDir = (hitPoint - player.position).normalized;
-                dashDir.y = 0;
-                
-                RaycastHit[] hits = Physics.SphereCastAll(player.position, 1f, dashDir, Mathf.Max(maxDashDistance, 2f));
-                Door doorInPath = null;
-                
-                foreach (var rayHit in hits)
+                if (rayHit.collider.TryGetComponent(out Door door))
                 {
-                    if (rayHit.collider.TryGetComponent(out Door door))
+                    if (!door.IsLocked())
                     {
-                        if (!door.IsLocked())
-                        {
-                            doorInPath = door;
-                            break;
-                        }
+                        doorInPath = door;
+                        break;
                     }
                 }
-                
-                if (doorInPath != null)
-                {
-                    DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
-                    if (zone != null)
-                    {
-                        Vector3 landingPos = zone.GetLandingPosition();
-                        clampedCursor.position = new Vector3(landingPos.x, hit.point.y, landingPos.z);
-                        return;
-                    }
-                }
-                
-                Vector3 dir = hitPoint - player.position;
-                float dist = dir.magnitude;
-                
-                if (dist > maxDashDistance)
-                {
-                    dir = dir.normalized * maxDashDistance;
-                }
-
-                clampedCursor.position = player.position + dir;
-                clampedCursor.position = new Vector3(clampedCursor.position.x, hitPoint.y, clampedCursor.position.z);
             }
+            
+            if (doorInPath != null)
+            {
+                DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+                if (zone != null)
+                {
+                    Vector3 landingPos = zone.GetLandingPosition();
+                    clampedCursor.position = new Vector3(landingPos.x, hitPoint.y, landingPos.z);
+                    return;
+                }
+            }
+            
+            Vector3 dir = hitPoint - player.position;
+            float dist = dir.magnitude;
+            
+            if (dist > maxDashDistance)
+            {
+                dir = dir.normalized * maxDashDistance;
+            }
+
+            clampedCursor.position = player.position + dir;
+            clampedCursor.position = new Vector3(clampedCursor.position.x, hitPoint.y, clampedCursor.position.z);
         }
     }
 }

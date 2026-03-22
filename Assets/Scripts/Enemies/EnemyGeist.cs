@@ -4,14 +4,14 @@ using System.Collections;
 
 public class EnemyGeist : EnemyBase
 {
-    public float minSolidTime = 3f;
-    public float maxSolidTime = 6f;
-    public float minEtherealTime = 2f;
-    public float maxEtherealTime = 4f;
+    public float minSolidTime = 0.5f;
+    public float maxSolidTime = 1.5f;
+    public float minEtherealTime = 0.5f;
+    public float maxEtherealTime = 1.5f;
 
     public float attackRange = 1.5f;
-    public float attackWindup = 0.3f;
-    public float attackCooldown = 1.5f;
+    public float attackWindup = 0.1f;
+    public float attackCooldown = 0.5f;
 
     private bool _isEthereal = false;
     private float _lastAttackTime = -99f;

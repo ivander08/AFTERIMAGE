@@ -10,11 +10,17 @@ public class Room : MonoBehaviour
     private List<Door> _doors = new();
     private Door _entryDoor;
     private bool _isCleared;
+    private bool _isCombatActive = false;
+    private bool _captionLocked = false;
+    private RoomCaption _roomCaption;
+
+    public bool IsCombatActive => _isCombatActive;
 
     private void Start()
     {
         _enemies.AddRange(GetComponentsInChildren<EnemyBase>());
         _doors.AddRange(GetComponentsInChildren<Door>());
+        _roomCaption = GetComponent<RoomCaption>();
 
         foreach (var enemy in _enemies)
         {
@@ -39,9 +45,18 @@ public class Room : MonoBehaviour
     public void PlayerEntered()
     {
         RoomManager.Instance.SetCurrentRoom(this);
-        if (!_isCleared && _enemies.Count > 0)
+        
+        // Check if caption should play
+        if (_roomCaption != null)
+        {
+            _roomCaption.OnPlayerEntered();
+        }
+
+        // Only lock for combat if no caption is playing and room has enemies
+        if (!_captionLocked && !_isCleared && _enemies.Count > 0)
         {
             LockRoom();
+            _isCombatActive = true;
         }
     }
 
@@ -69,6 +84,28 @@ public class Room : MonoBehaviour
         }
     }
 
+    public void LockRoomForCaption()
+    {
+        _captionLocked = true;
+        LockRoom();
+    }
+
+    public void UnlockRoomAfterCaption()
+    {
+        _captionLocked = false;
+        // Don't unlock fully - let combat lock take over if enemies are alive
+        if (_isCleared)
+        {
+            UnlockRoom();
+        }
+        else if (_enemies.Count > 0)
+        {
+            // Re-activate combat lock
+            LockRoom();
+            _isCombatActive = true;
+        }
+    }
+
     private void UnlockRoom()
     {
         if (_entryDoor != null)
@@ -89,6 +126,12 @@ public class Room : MonoBehaviour
         {
             _isCleared = true;
             UnlockRoom();
+            
+            // Play completion caption if available
+            if (_roomCaption != null)
+            {
+                _roomCaption.PlayCompletionCaption();
+            }
         }
     }
 

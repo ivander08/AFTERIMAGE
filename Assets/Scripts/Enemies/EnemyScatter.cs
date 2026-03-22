@@ -8,13 +8,13 @@ public class EnemyScatter : EnemyBase
     public GameObject projectilePrefab;
     public Transform firePoint;
     
-    public float maxRange = 10f;
-    public float attackCooldown = 2.5f;
-    public float attackWindup = 0.4f;
+    public float maxRange = 8f;
+    public float attackCooldown = 1.2f;
+    public float attackWindup = 0.25f;
     
     public int projectileCount = 5;
-    public float spreadAngle = 30f;
-    public float projectileSpeed = 50f;
+    public float spreadAngle = 45f;
+    public float projectileSpeed = 45f;
 
     private float _lastAttackTime = -999f;
     private bool _isAttacking = false;

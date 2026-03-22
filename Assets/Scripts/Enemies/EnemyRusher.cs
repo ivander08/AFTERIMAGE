@@ -3,23 +3,24 @@ using System.Collections;
 
 public class EnemyRusher : EnemyBase
 {
-    public float dashRange = 6f;
+    public float dashRange = 4f;
     public float dashSpeed = 40f;
-    public float chargeTime = 0.6f;
-    public float dashDuration = 0.2f;
-    public float cooldown = 2.5f;
+    public float chargeTime = 0.2f;
+    public float dashDuration = 0.15f;
+    public float cooldown = 0.8f;
 
     private float _lastDashTime = -99f;
 
     protected override void HandleBehavior()
     {
-        if (_lastDashTime + cooldown > Time.time) return;
         if (!CanAggro()) return;
 
         Transform target = GetTarget();
         float dist = Vector3.Distance(transform.position, target.position);
 
-        if (dist <= dashRange)
+        bool canDash = _lastDashTime + cooldown <= Time.time;
+
+        if (canDash && dist <= dashRange)
         {
             _agent.ResetPath();
             StartCoroutine(DashAttack(target));
@@ -33,30 +34,23 @@ public class EnemyRusher : EnemyBase
     IEnumerator DashAttack(Transform target)
     {
         _lastDashTime = Time.time;
-        rend.material.color = new Color(1f, 0.5f, 0f); // Orange warning
-
-        // Track target during charge
-        float trackTimer = 0f;
-        while (trackTimer < chargeTime)
-        {
-            if(target != null)
-                transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
-            
-            trackTimer += Time.deltaTime;
-            yield return null;
-        }
-
-        rend.material.color = Color.red; 
-        Vector3 dashDir = transform.forward;
         
-        // Execute Dash
+        _agent.isStopped = true;
+        
+        Vector3 targetPosition = target.position;
+        Vector3 dashDirection = (new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position).normalized;
+        transform.forward = dashDirection;
+        
+        rend.material.color = new Color(1f, 0.5f, 0f);
+        yield return new WaitForSeconds(chargeTime);
+        
+        rend.material.color = Color.red;
+        
         float dashTimer = 0f;
         while (dashTimer < dashDuration)
         {
-            // Manual movement since Agent is erratic at high speeds
-            transform.position += dashDir * dashSpeed * Time.deltaTime;
+            transform.position += dashDirection * dashSpeed * Time.deltaTime;
 
-            // Simple hitbox check
             Collider[] hits = Physics.OverlapSphere(transform.position, 1.0f);
             foreach(var hit in hits)
             {
@@ -70,8 +64,7 @@ public class EnemyRusher : EnemyBase
             yield return null;
         }
 
-        rend.material.color = Color.gray;
-        yield return new WaitForSeconds(1.0f); // Recovery
+        _agent.isStopped = false;
         rend.material.color = _originalColor;
     }
 }

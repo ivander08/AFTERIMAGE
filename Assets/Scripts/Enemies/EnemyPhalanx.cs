@@ -6,8 +6,8 @@ public class EnemyPhalanx : EnemyBase
     public float repulsorForceReduction = 0.7f;
     public float attackRange = 2f;
     // public int shieldKnockbackForce = 30;
-    public float attackCooldown = 1.5f;
-    public float attackWindup = 0.3f;
+    public float attackCooldown = 0.5f;
+    public float attackWindup = 0.1f;
 
     private GameObject _shieldInstance;
     private bool _shieldActive = true;

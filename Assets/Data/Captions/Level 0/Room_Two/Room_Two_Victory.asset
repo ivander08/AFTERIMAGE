@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 727470a594ef3874ba4aa565a9f4a504, type: 3}
+  m_Name: Room_Two_Victory
+  m_EditorClassIdentifier: Assembly-CSharp::CaptionSequenceAsset
+  sequences:
+  - speakerName: Mother
+    messages:
+    - text: '"Splendid. Move on."'
+      cameraTargetId: 
+      cameraZoom: 0
+    autoAdvanceDelay: 2
+  freezeInput: 0
+  freezeEnemies: 0

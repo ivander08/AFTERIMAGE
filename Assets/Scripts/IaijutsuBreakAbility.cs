@@ -46,6 +46,8 @@ public class IaijutsuBreakAbility : MonoBehaviour
 
     private bool CanUse()
     {
+        if (CaptionManager.IsFrozen) return false;
+        if (_playerMovement != null && _playerMovement.isMovementLocked) return false;
         if (_usedThisLevel) return false;
         if (_isExecuting) return false;
         if (RoomManager.Instance == null || RoomManager.Instance.CurrentRoom == null) return false;

@@ -4,8 +4,8 @@ using System.Collections;
 public class EnemyGrunt : EnemyBase
 {
     public float attackRange = 1.5f;
-    public float attackWindup = 0.3f;
-    public float attackCooldown = 1.5f;
+    public float attackWindup = 0.1f;
+    public float attackCooldown = 0.5f;
 
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;
