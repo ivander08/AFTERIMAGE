@@ -26,6 +26,7 @@ public class EnemyShard : EnemyBase
         if (!CanAggro()) return;
 
         Transform target = GetTarget();
+        if (target == null) return;
         float dist = Vector3.Distance(transform.position, target.position);
 
         if (dist <= detectRange)
@@ -45,11 +46,17 @@ public class EnemyShard : EnemyBase
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
-        rend.material.color = Color.red;
 
         yield return new WaitForSeconds(attackWindup);
 
-        if (target != null && Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
+        if (ShouldAbortAttack(target))
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            yield break;
+        }
+
+        if (Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
         {
             if (target.TryGetComponent(out IDamageable damageable))
             {
@@ -57,7 +64,6 @@ public class EnemyShard : EnemyBase
             }
         }
 
-        rend.material.color = Color.white;
         yield return new WaitForSeconds(0.5f);
 
         _lastAttackTime = Time.time;

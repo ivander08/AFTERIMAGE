@@ -10,35 +10,36 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public int health = 1;
     public float detectRange = 15f;
     public int damage = 1;
-    public Renderer rend;
     public bool isInvulnerable = false;
     [SerializeField] public bool showGizmos = false;
-    protected Color _originalColor;
     protected NavMeshAgent _agent;
     protected Rigidbody _rb;
+    protected Animator _animator;
     protected Transform _defaultTarget;
     protected Transform _currentTarget;
     protected bool _isDead = false;
     protected bool _isStunned = false;
     protected bool _isKnockedBack = false;
     protected Room _myRoom;
+    protected PlayerHealth _playerHealth;
 
     public bool IsDead => _isDead;
     public event Action OnDeath;
+
+    protected bool IsPlayerDead => _playerHealth != null && _playerHealth.isDead;
+    protected bool ShouldAbortAttack(Transform target) => target == null || IsPlayerDead;
 
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
         
         GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p != null) _defaultTarget = p.transform;
+        if (p != null) _playerHealth = p.GetComponent<PlayerHealth>();
         
         _currentTarget = _defaultTarget;
-
-        if (rend == null) rend = GetComponent<Renderer>();
-        if (rend != null) _originalColor = rend.material.color;
-        
         _rb.isKinematic = true;
     }
 
@@ -49,7 +50,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected bool CanAggro()
     {
-        return _myRoom != null && RoomManager.Instance.CurrentRoom == _myRoom;
+        return _myRoom != null && RoomManager.Instance.CurrentRoom == _myRoom && !IsPlayerDead;
     }
 
     public Transform GetTarget()
@@ -64,7 +65,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null) return;
+        if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null || IsPlayerDead) return;
         HandleBehavior();
     }
 
@@ -75,7 +76,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (isInvulnerable) return;
         if (_isDead) return;
         health -= damage;
-        StartCoroutine(FlashWhite());
         if (health <= 0) Die();
     }
 
@@ -85,18 +85,25 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         ResetPhysicsState(); 
         _agent.enabled = false; 
         StopAllCoroutines();
-        if (rend) rend.material.color = Color.black;
         GetComponent<Collider>().enabled = false;
+
+        if (_animator != null)
+        {
+            _animator.SetInteger("deathIndex", UnityEngine.Random.Range(0, 3));
+            _animator.SetTrigger("deathTrigger");
+        }
+
         OnDeath?.Invoke();
-        Destroy(gameObject, 1f);
+        // Destroy(gameObject, 3f); 
     }
 
     public void SetHighlight(bool active)
     {
-        if (_isDead || rend == null) return;
-        if (rend.material.color == _originalColor || rend.material.color == Color.yellow)
+        if (_isDead) return;
+        EnemyDetectionUI ui = GetComponentInChildren<EnemyDetectionUI>();
+        if (ui != null)
         {
-            rend.material.color = active ? Color.yellow : _originalColor;
+            ui.SetHighlightColor(active ? Color.yellow : Color.white);
         }
     }
 
@@ -114,17 +121,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (!showGizmos) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
-    }
-
-    IEnumerator FlashWhite()
-    {
-        if (rend != null)
-        {
-            Color prev = rend.material.color;
-            rend.material.color = Color.white;
-            yield return new WaitForSeconds(0.1f);
-            rend.material.color = prev;
-        }
     }
 
     public void Stun(float duration)
@@ -168,8 +164,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             _agent.enabled = true;
             if (!_isDead) _agent.isStopped = false;
         }
-
-        if (rend != null && !_isDead) rend.material.color = _originalColor;
     }
 
     IEnumerator KnockbackRoutine(Vector3 dir, float force, float duration)
@@ -190,8 +184,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         Vector3 knockbackForce = dir.normalized * force;
         _rb.AddForce(knockbackForce, ForceMode.Impulse);
 
-        if (rend != null) rend.material.color = Color.blue;
-
         yield return new WaitForSeconds(duration);
 
         if (!_isDead)
@@ -205,15 +197,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         _isStunned = true;
         if (_agent.isOnNavMesh) _agent.isStopped = true;
         
-        if (rend != null) rend.material.color = Color.blue;
-        
         yield return new WaitForSeconds(duration);
         
         if (!_isDead)
         {
             _isStunned = false;
             if (_agent.isOnNavMesh) _agent.isStopped = false;
-            if (rend != null) rend.material.color = _originalColor;
         }
     }
 }

@@ -44,12 +44,17 @@ public class EnemyGeist : EnemyBase
 
         if (target != null)
             transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
-            
-        rend.material.color = Color.red;
 
         yield return new WaitForSeconds(attackWindup);
 
-        if (target != null && Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
+        if (ShouldAbortAttack(target))
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            yield break;
+        }
+
+        if (Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
         {
             if (target.TryGetComponent(out IDamageable damageable))
             {
@@ -57,7 +62,6 @@ public class EnemyGeist : EnemyBase
             }
         }
 
-        rend.material.color = _originalColor;
         
         yield return new WaitForSeconds(0.5f);
         
@@ -86,7 +90,6 @@ public class EnemyGeist : EnemyBase
     {
         if (_isDead) return;
         _isEthereal = state;
-        rend.material.color = state ? new Color(_originalColor.r, _originalColor.g, _originalColor.b, 0.3f) : _originalColor;
     }
 
     public override void TakeDamage(int damageAmount)

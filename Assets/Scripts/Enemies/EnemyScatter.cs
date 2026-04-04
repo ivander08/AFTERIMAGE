@@ -62,22 +62,19 @@ public class EnemyScatter : EnemyBase
         transform.rotation = Quaternion.LookRotation(directionToTarget);
         
         Vector3 lockedAimDirection = (target.position - firePoint.position).normalized;
-
-        if (rend != null)
-        {
-            rend.material.color = Color.red;
-        }
         
         yield return new WaitForSeconds(attackWindup);
+
+        if (ShouldAbortAttack(target))
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            yield break;
+        }
 
         if (!_isDead)
         {
             FireSpreadProjectiles(lockedAimDirection);
-        }
-
-        if (rend != null)
-        {
-            rend.material.color = _originalColor;
         }
         
         yield return new WaitForSeconds(0.5f);

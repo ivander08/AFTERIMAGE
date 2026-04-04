@@ -5,12 +5,14 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public int maxHealth = 1;
     private int _currentHealth;
+    private Animator _animator;
 
     public bool isDead = false;
 
     void Awake()
     {
         _currentHealth = maxHealth;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     public void TakeDamage(int damage)
@@ -35,7 +37,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         GetComponentInChildren<Renderer>().material.color = Color.black;
 
-        Invoke(nameof(RestartLevel), 1f);
+        if (_animator != null)
+        {
+            _animator.SetInteger("deathIndex", UnityEngine.Random.Range(0, 3));
+            _animator.SetTrigger("deathTrigger");
+        }
+
+        Invoke(nameof(RestartLevel), 3f);
     }
 
     void RestartLevel()

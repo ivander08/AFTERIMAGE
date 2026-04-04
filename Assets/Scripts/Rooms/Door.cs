@@ -1,13 +1,26 @@
 using UnityEngine;
 
+public enum DoorMaterial
+{
+    Wood,
+    Metal
+}
+
 public class Door : MonoBehaviour 
 {
     public string doorName;
+    public DoorMaterial doorMaterial = DoorMaterial.Wood;
+
+    [Header("Effects")]
+    public AudioClip woodBreakSound;
+    public AudioClip metalBreakSound;
+    public GameObject woodBreakVfxPrefab;
+    public GameObject metalBreakVfxPrefab;
 
     private bool isLocked;
     private Room room;
     private Renderer doorRenderer;
-    private Material doorMaterial;
+    private Material doorMaterialInstance;
     private Color originalColor;
     private Collider _col;
 
@@ -18,8 +31,8 @@ public class Door : MonoBehaviour
 
         if (doorRenderer != null)
         {
-            doorMaterial = doorRenderer.material;
-            originalColor = doorMaterial.color;
+            doorMaterialInstance = doorRenderer.material;
+            originalColor = doorMaterialInstance.color;
         }
     }
 
@@ -31,6 +44,23 @@ public class Door : MonoBehaviour
 
         if (doorRenderer != null) doorRenderer.enabled = false;
         if (_col != null) _col.enabled = false;
+
+        PlayBreakEffects();
+    }
+
+    private void PlayBreakEffects()
+    {
+        AudioClip clipToPlay = doorMaterial == DoorMaterial.Wood ? woodBreakSound : metalBreakSound;
+        if (clipToPlay != null)
+        {
+            AudioSource.PlayClipAtPoint(clipToPlay, transform.position);
+        }
+
+        GameObject vfxToSpawn = doorMaterial == DoorMaterial.Wood ? woodBreakVfxPrefab : metalBreakVfxPrefab;
+        if (vfxToSpawn != null)
+        {
+            Instantiate(vfxToSpawn, transform.position, Quaternion.identity);
+        }
     }
 
     public void Lock()
@@ -39,7 +69,7 @@ public class Door : MonoBehaviour
         if (doorRenderer != null) 
         {
             doorRenderer.enabled = true;
-            doorMaterial.color = Color.red;
+            doorMaterialInstance.color = Color.red;
         }
         if (_col != null) _col.enabled = true;
     }
@@ -50,7 +80,7 @@ public class Door : MonoBehaviour
         if (doorRenderer != null) 
         {
             doorRenderer.enabled = true;
-            doorMaterial.color = originalColor;
+            doorMaterialInstance.color = originalColor;
         }
         if (_col != null) _col.enabled = true;
     }

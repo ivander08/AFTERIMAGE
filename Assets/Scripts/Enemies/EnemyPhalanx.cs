@@ -60,12 +60,18 @@ public class EnemyPhalanx : EnemyBase
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
-        rend.material.color = Color.red;
         Debug.Log($"[EnemyPhalanx] {name} attacking player!");
 
         yield return new WaitForSeconds(attackWindup);
 
-        if (target != null && Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
+        if (ShouldAbortAttack(target))
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            yield break;
+        }
+
+        if (Vector3.Distance(transform.position, target.position) <= attackRange + 0.5f)
         {
             if (target.TryGetComponent(out IDamageable damageable))
             {
@@ -74,7 +80,6 @@ public class EnemyPhalanx : EnemyBase
             }
         }
 
-        rend.material.color = _originalColor;
         yield return new WaitForSeconds(0.5f);
 
         _lastAttackTime = Time.time;

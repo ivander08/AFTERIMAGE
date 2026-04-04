@@ -41,10 +41,7 @@ public class EnemyRusher : EnemyBase
         Vector3 dashDirection = (new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position).normalized;
         transform.forward = dashDirection;
         
-        rend.material.color = new Color(1f, 0.5f, 0f);
         yield return new WaitForSeconds(chargeTime);
-        
-        rend.material.color = Color.red;
         
         float dashTimer = 0f;
         while (dashTimer < dashDuration)
@@ -65,6 +62,5 @@ public class EnemyRusher : EnemyBase
         }
 
         _agent.isStopped = false;
-        rend.material.color = _originalColor;
     }
 }

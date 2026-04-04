@@ -177,6 +177,8 @@ public class PlayerDash : MonoBehaviour
                 
                 Vector3 landingPos = zone.GetLandingPosition();
                 Vector3 distVector = landingPos - transform.position;
+
+                distVector.y = 0;
                 
                 dashDir = distVector.normalized;
                 currentDashDistance = distVector.magnitude;
