@@ -53,10 +53,22 @@ public class RoomCaption : MonoBehaviour
         CaptionManager.Instance.Play(captionAsset.Sequences, OnCaptionComplete, captionAsset.FreezeInput);
     }
 
-    private void OnCaptionComplete()
+     private void OnCaptionComplete()
     {
         if (_room == null) return;
 
+        if (captionConfig != null && captionConfig.TutorialData.showTutorial && TutorialUIManager.Instance != null)
+        {
+            TutorialUIManager.Instance.ShowTutorial(captionConfig.TutorialData, FinishRoomUnlock);
+        }
+        else
+        {
+            FinishRoomUnlock();
+        }
+    }
+
+    private void FinishRoomUnlock()
+    {
         if (_freezeEnemiesActive)
             SetRoomEnemiesFrozen(false);
 

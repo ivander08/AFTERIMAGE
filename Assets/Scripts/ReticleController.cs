@@ -15,19 +15,22 @@ public class ReticleController : MonoBehaviour
     void Awake()
     {
         _cam = Camera.main;
-        Cursor.visible = false; 
     }
 
     void Update()
     {
         if (player == null || Mouse.current == null) return;
 
-        if (CaptionManager.IsFrozen)
+        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen)
         {
             if (rawCursor != null) rawCursor.gameObject.SetActive(false);
             if (clampedCursor != null) clampedCursor.gameObject.SetActive(false);
+            
+            Cursor.visible = true; 
             return;
         }
+
+        Cursor.visible = false;
 
         if (rawCursor != null) rawCursor.gameObject.SetActive(true);
         if (clampedCursor != null) clampedCursor.gameObject.SetActive(true);

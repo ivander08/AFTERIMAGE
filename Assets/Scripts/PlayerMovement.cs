@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!isMovementLocked && !CaptionManager.IsFrozen)
+        if (!isMovementLocked && !CaptionManager.IsFrozen && !TutorialUIManager.IsOpen)
         {
             HandleInputAndRotation();
             HandleMovement();
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleInputAndRotation()
     {
-        if (Mouse.current == null || isAimingLocked || CaptionManager.IsFrozen) return;
+        if (Mouse.current == null || isAimingLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen) return;
 
         Ray ray = _cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane playerPlane = new Plane(Vector3.up, transform.position);

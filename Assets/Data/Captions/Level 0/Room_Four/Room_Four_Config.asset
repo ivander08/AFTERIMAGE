@@ -15,3 +15,9 @@ MonoBehaviour:
   isTutorialRoom: 1
   captionSequenceAsset: {fileID: 11400000, guid: c1bf58571e762224babc5cd370f67273, type: 2}
   completionCaptionAsset: {fileID: 11400000, guid: a097673b9339ea4478c1406096391206, type: 2}
+  tutorialData:
+    showTutorial: 1
+    tutorialSprite: {fileID: 21300000, guid: 3821d724dc07947449547850ddd20414, type: 3}
+    tutorialMaterial: {fileID: 0}
+    mainText: RIGHT CLICK TO USE UTILITY
+    tipText: Use this in case you miss a dash.

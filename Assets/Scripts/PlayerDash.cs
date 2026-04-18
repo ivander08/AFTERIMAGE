@@ -25,6 +25,9 @@ public class PlayerDash : MonoBehaviour
     public float zoomDistance = 15f;
     public float zoomSpeed = 5f;
 
+    public AudioClip dashSound;
+    public AudioClip slashSound;
+
     public float dodgeCooldown = 1.5f; 
     private float _lastDodgeTime = -99f;
 
@@ -53,7 +56,7 @@ public class PlayerDash : MonoBehaviour
     int _playerLayer;
     int _enemyLayer;
     
-    private List<EnemyBase> _highlightedEnemies = new List<EnemyBase>();
+    private readonly HashSet<EnemyBase> _highlightedEnemies = new HashSet<EnemyBase>();
 
     void Awake()
     {
@@ -86,7 +89,7 @@ public class PlayerDash : MonoBehaviour
         CalculateDashData();
         HandleCameraZoom();
 
-        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen)) return;
+        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen)) return;
 
         if (Mouse.current == null || _isDashing) return;
 
@@ -141,6 +144,16 @@ public class PlayerDash : MonoBehaviour
     IEnumerator PerformDash(bool isAttack)
     {
         _isDashing = true;
+
+        if (dashSound != null)
+        {
+            AudioService.PlayClip(dashSound, transform.position, 1.5f, 1f);
+        }
+
+        if (isAttack && slashSound != null)
+        {
+            AudioService.PlayClip(slashSound, transform.position, 1.5f, 1.05f);
+        }
 
         if (isAttack && katanaHip != null && katanaHand != null)
         {
@@ -284,6 +297,18 @@ public class PlayerDash : MonoBehaviour
 
     IEnumerator DealSequentialDamage(List<RaycastHit> targets, Vector3 attackDirection)
     {
+        int validKills = 0;
+
+        foreach (var hit in targets)
+        {
+            if (hit.collider.TryGetComponent(out IDamageable d)) validKills++;
+        }
+
+        if (validKills >= 2 && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddMultiKillBonus(validKills);
+        }
+
         foreach (var hit in targets)
         {
             GameObject victim = hit.collider.gameObject;
@@ -291,7 +316,6 @@ public class PlayerDash : MonoBehaviour
             {
                 if (victim.TryGetComponent(out IDamageable damageable))
                 {
-                    Debug.Log($"[PlayerDash] Damage dealt to {victim.name}");
                     damageable.TakeDamage(damageAmount);
                 }
             }
@@ -348,22 +372,47 @@ public class PlayerDash : MonoBehaviour
 
     void UpdateEnemyHighlights()
     {
-        ClearHighlights();
-        
+        var currentHighlights = new HashSet<EnemyBase>();
         var hits = Physics.SphereCastAll(transform.position, hitRadius, _dashDirection, _dashDistance, hitLayer);
+
         foreach (var hit in hits)
         {
             if (hit.collider.TryGetComponent(out EnemyBase enemy))
             {
+                currentHighlights.Add(enemy);
+            }
+        }
+
+        var toRemove = _highlightedEnemies.Where(enemy => enemy == null || !currentHighlights.Contains(enemy)).ToList();
+        foreach (var enemy in toRemove)
+        {
+            if (enemy != null)
+            {
+                enemy.SetHighlight(false);
+            }
+
+            _highlightedEnemies.Remove(enemy);
+        }
+
+        foreach (var enemy in currentHighlights)
+        {
+            if (_highlightedEnemies.Add(enemy))
+            {
                 enemy.SetHighlight(true);
-                _highlightedEnemies.Add(enemy);
             }
         }
     }
 
     void ClearHighlights()
     {
-        foreach (var enemy in _highlightedEnemies) if (enemy != null) enemy.SetHighlight(false);
+        foreach (var enemy in _highlightedEnemies)
+        {
+            if (enemy != null)
+            {
+                enemy.SetHighlight(false);
+            }
+        }
+
         _highlightedEnemies.Clear();
     }
 

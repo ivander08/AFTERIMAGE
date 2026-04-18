@@ -124,7 +124,7 @@ public class ThrowableObject : MonoBehaviour
         if (enemy != null)
         {
             enemy.Stun(stunDuration);
-            Debug.Log($"{gameObject.name} stunned {enemy.name} for {stunDuration}s");
+            if (ScoreManager.Instance != null) ScoreManager.Instance.AddThrowableBonus();
         }
         
         Destroy(gameObject);

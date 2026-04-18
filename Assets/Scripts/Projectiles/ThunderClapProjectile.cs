@@ -77,6 +77,10 @@ public class ThunderClapProjectile : BaseProjectile
             }
         }
 
+        if ((directHitObj != null || hitColliders.Length > 0) && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddUtilityScore("Thunderclap");
+        }
         
         Destroy(gameObject);
     }

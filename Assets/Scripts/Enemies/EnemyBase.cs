@@ -11,7 +11,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public float detectRange = 15f;
     public int damage = 1;
     public bool isInvulnerable = false;
+    public int scoreValue = 100;
     [SerializeField] public bool showGizmos = false;
+    public AudioClip[] deathSounds;
+    public AudioClip[] hitSounds;
+    public GameObject deathVFXPrefab;
     protected NavMeshAgent _agent;
     protected Rigidbody _rb;
     protected Animator _animator;
@@ -76,12 +80,29 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (isInvulnerable) return;
         if (_isDead) return;
         health -= damage;
+
+        AudioService.PlayRandom(hitSounds, transform.position, 2f, 0.95f, 1.05f);
+
         if (health <= 0) Die();
     }
 
     protected virtual void Die()
     {
         _isDead = true;
+
+        AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
+
+        if (deathVFXPrefab != null)
+        {
+            Instantiate(deathVFXPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddKillScore(scoreValue, gameObject.name);
+        }
+        
+        
         ResetPhysicsState(); 
         _agent.enabled = false; 
         StopAllCoroutines();
@@ -103,7 +124,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         EnemyDetectionUI ui = GetComponentInChildren<EnemyDetectionUI>();
         if (ui != null)
         {
-            ui.SetHighlightColor(active ? Color.yellow : Color.white);
+            ui.SetHighlighted(active);
         }
     }
 

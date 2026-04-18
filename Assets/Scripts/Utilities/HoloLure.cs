@@ -21,12 +21,20 @@ public class HoloLure : MonoBehaviour, IDamageable
     void AttractEnemies()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, aggroRadius, enemyLayer);
+        bool affectedEnemy = false;
+
         foreach (var col in colliders)
         {
             if (col.TryGetComponent(out EnemyBase enemy))
             {
                 enemy.SetTargetOverride(transform);
+                affectedEnemy = true;
             }
+        }
+
+        if (affectedEnemy && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddUtilityScore("Holo-Lure");
         }
     }
 

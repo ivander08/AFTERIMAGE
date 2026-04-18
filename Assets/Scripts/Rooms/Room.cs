@@ -16,7 +16,7 @@ public class Room : MonoBehaviour
 
     public bool IsCombatActive => _isCombatActive;
 
-    private void Start()
+    private void Awake()
     {
         _enemies.AddRange(GetComponentsInChildren<EnemyBase>());
         _doors.AddRange(GetComponentsInChildren<Door>());
@@ -93,12 +93,12 @@ public class Room : MonoBehaviour
     public void UnlockRoomAfterCaption()
     {
         _captionLocked = false;
-        // Don't unlock fully - let combat lock take over if enemies are alive
-        if (_isCleared)
+        
+        if (_isCleared || _enemies.Count == 0)
         {
             UnlockRoom();
         }
-        else if (_enemies.Count > 0)
+        else
         {
             // Re-activate combat lock
             LockRoom();

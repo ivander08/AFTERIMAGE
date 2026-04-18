@@ -9,6 +9,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     public bool isDead = false;
 
+    public AudioClip[] deathSounds;
+
     void Awake()
     {
         _currentHealth = maxHealth;
@@ -31,6 +33,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     void Die()
     {
         isDead = true;
+
+        AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
+        
         
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<PlayerDash>().enabled = false;

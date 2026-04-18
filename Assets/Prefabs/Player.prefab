@@ -10344,6 +10344,8 @@ MonoBehaviour:
   normalDistance: 45
   zoomDistance: 35
   zoomSpeed: 10
+  dashSound: {fileID: 0}
+  slashSound: {fileID: 0}
   dodgeCooldown: 2
   trail: {fileID: 0}
   playerRenderer: {fileID: 0}
@@ -10365,6 +10367,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 1
   isDead: 0
+  deathSounds:
+  - {fileID: 8300000, guid: e8bfff41a3ca1924ca291f1f3159d7e3, type: 3}
+  - {fileID: 8300000, guid: 941dbbddc984e3f4dbcfe512fe74b1b8, type: 3}
+  - {fileID: 8300000, guid: 3e04894961f519c4a833378e20ff0913, type: 3}
+  - {fileID: 8300000, guid: 6a8e7fa88c8f9c549b56f9498af15832, type: 3}
+  - {fileID: 8300000, guid: fc21f9a36365a5d4aad4b774d8639a15, type: 3}
 --- !u!114 &6788641004531544936
 MonoBehaviour:
   m_ObjectHideFlags: 0

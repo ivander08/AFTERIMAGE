@@ -53,7 +53,7 @@ public class Door : MonoBehaviour
         AudioClip clipToPlay = doorMaterial == DoorMaterial.Wood ? woodBreakSound : metalBreakSound;
         if (clipToPlay != null)
         {
-            AudioSource.PlayClipAtPoint(clipToPlay, transform.position);
+            AudioService.PlayClip(clipToPlay, transform.position, 1f, 1f);
         }
 
         GameObject vfxToSpawn = doorMaterial == DoorMaterial.Wood ? woodBreakVfxPrefab : metalBreakVfxPrefab;

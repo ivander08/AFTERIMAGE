@@ -15,3 +15,9 @@ MonoBehaviour:
   isTutorialRoom: 1
   captionSequenceAsset: {fileID: 11400000, guid: 2c6f99ce17ea6034eb67cccd8fc77875, type: 2}
   completionCaptionAsset: {fileID: 11400000, guid: f60f9e3c852c04747887e92a733a2853, type: 2}
+  tutorialData:
+    showTutorial: 1
+    tutorialSprite: {fileID: 21300000, guid: 2cd53dc1437d0034095f09539f69688a, type: 3}
+    tutorialMaterial: {fileID: 0}
+    mainText: CTRL TO DODGE
+    tipText: Use this to maneuver yourself.

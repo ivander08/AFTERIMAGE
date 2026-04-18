@@ -106,6 +106,8 @@ public class IaijutsuBreakAbility : MonoBehaviour
         
         yield return new WaitForSeconds(dramaticPause);
 
+        if (ScoreManager.Instance != null) ScoreManager.Instance.AddUltimateBonus();
+
         foreach (var enemy in targetEnemies)
         {
             if (enemy != null && !enemy.IsDead) enemy.TakeDamage(9999);

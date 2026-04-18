@@ -10080,6 +10080,8 @@ MonoBehaviour:
   targetingSquare: {fileID: 7002465604504052383}
   indicatorIcon: {fileID: 8886293671228514176}
   indicatorColor: {r: 1, g: 0, b: 0, a: 1}
+  highlightEnterSound: {fileID: 8300000, guid: 0247a06329b52cc49aa3c5d5bc469509, type: 3}
+  highlightExitSound: {fileID: 8300000, guid: 8ef0cb86d3ff1024a9b3a5def0330501, type: 3}
 --- !u!1 &5348637495010054305
 GameObject:
   m_ObjectHideFlags: 0
@@ -10093,6 +10095,7 @@ GameObject:
   - component: {fileID: 6206268114121032970}
   - component: {fileID: 6964439790423798181}
   - component: {fileID: 5264217603126440698}
+  - component: {fileID: 8602776234778184665}
   m_Layer: 7
   m_Name: EnemyGrunt
   m_TagString: Enemy
@@ -10206,11 +10209,119 @@ MonoBehaviour:
   damage: 1
   isInvulnerable: 0
   showGizmos: 0
+  deathSounds:
+  - {fileID: 8300000, guid: e8bfff41a3ca1924ca291f1f3159d7e3, type: 3}
+  - {fileID: 8300000, guid: 941dbbddc984e3f4dbcfe512fe74b1b8, type: 3}
+  - {fileID: 8300000, guid: 3e04894961f519c4a833378e20ff0913, type: 3}
+  - {fileID: 8300000, guid: 6a8e7fa88c8f9c549b56f9498af15832, type: 3}
+  - {fileID: 8300000, guid: fc21f9a36365a5d4aad4b774d8639a15, type: 3}
+  hitSounds:
+  - {fileID: 8300000, guid: 092603f930dee2d49b07952fd22d76b1, type: 3}
+  - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
+  - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
+  deathVFXPrefab: {fileID: 6207748249219978080, guid: 39282063a81ecb54788d1c1d086cea30, type: 3}
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
   katanaHip: {fileID: 5488670550538090506}
   katanaHand: {fileID: 596957573482376737}
+--- !u!82 &8602776234778184665
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5348637495010054305}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5488670550538090506
 GameObject:
   m_ObjectHideFlags: 0
@@ -10260,7 +10371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1485257108761474926
 RectTransform:
   m_ObjectHideFlags: 0

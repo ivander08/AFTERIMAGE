@@ -12,11 +12,13 @@ public class RepulsorUtility : BaseUtility
     protected override void ExecuteUtility(Transform origin)
     {
         Collider[] colliders = Physics.OverlapSphere(origin.position, radius, enemyLayer);
-        
+        bool affectedEnemy = false;
+
         foreach (var col in colliders)
         {
             if (col.TryGetComponent(out EnemyBase enemy))
             {
+                affectedEnemy = true;
                 Vector3 direction = (enemy.transform.position - origin.position).normalized;
                 float adjustedForce = pushForce;
                 
@@ -28,6 +30,11 @@ public class RepulsorUtility : BaseUtility
                 
                 enemy.Knockback(direction, adjustedForce, stunDuration);
             }
+        }
+
+        if (affectedEnemy && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddUtilityScore(UtilityName);
         }
     }
 

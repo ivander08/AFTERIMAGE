@@ -38,7 +38,7 @@ public class UtilityManager : MonoBehaviour
     {
         if (_playerHealth != null && _playerHealth.isDead) return;
         if (_playerMovement != null && _playerMovement.isMovementLocked) return;
-        if (CaptionManager.IsFrozen) return;
+        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen) return;
         
         if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
         {
