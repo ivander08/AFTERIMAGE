@@ -46,21 +46,17 @@ public class EnemyGrunt : EnemyBase
 
     protected override void HandleBehavior()
     {
-        if (_isAttacking) return;
-        if (!CanAggro()) return;
+        if (_isAttacking || !CanAggro()) return;
 
         Transform target = GetTarget();
         if (target == null) return;
+        
+        _agent.SetDestination(target.position);
+
         float dist = Vector3.Distance(transform.position, target.position);
-
-        if (dist <= detectRange)
+        if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
         {
-            _agent.SetDestination(target.position);
-
-            if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
-            {
-                StartCoroutine(AttackRoutine(target));
-            }
+            StartCoroutine(AttackRoutine(target));
         }
     }
 

@@ -188,7 +188,7 @@ public class PlayerDash : MonoBehaviour
                 doorInPath.Break();
                 zone.OnPlayerDashThrough();
                 
-                Vector3 landingPos = zone.GetLandingPosition();
+                Vector3 landingPos = zone.GetLandingPosition(transform.position);
                 Vector3 distVector = landingPos - transform.position;
 
                 distVector.y = 0;
@@ -297,27 +297,19 @@ public class PlayerDash : MonoBehaviour
 
     IEnumerator DealSequentialDamage(List<RaycastHit> targets, Vector3 attackDirection)
     {
-        int validKills = 0;
-
         foreach (var hit in targets)
         {
-            if (hit.collider.TryGetComponent(out IDamageable d)) validKills++;
-        }
-
-        if (validKills >= 2 && ScoreManager.Instance != null)
-        {
-            ScoreManager.Instance.AddMultiKillBonus(validKills);
-        }
-
-        foreach (var hit in targets)
-        {
-            GameObject victim = hit.collider.gameObject;
-            if (victim != null)
+            // FIX: Wall check. Linecast from player to the hit point. 
+            // If it hits the Environment (Layer 0 or a specific wall layer), skip this enemy.
+            if (Physics.Linecast(transform.position, hit.point, 1 << 0)) // Assuming Layer 0 is Default/Environment
             {
-                if (victim.TryGetComponent(out IDamageable damageable))
-                {
-                    damageable.TakeDamage(damageAmount);
-                }
+                continue;
+            }
+
+            GameObject victim = hit.collider.gameObject;
+            if (victim != null && victim.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damageAmount);
             }
             yield return new WaitForSeconds(damageDelay);
         }
@@ -421,7 +413,7 @@ public class PlayerDash : MonoBehaviour
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, hitRadius, dir, Mathf.Max(dist, 2f));
         foreach (var hit in hits)
         {
-            if (hit.collider.TryGetComponent(out Door door))
+            if (hit.collider.TryGetComponent(out Door door) && !door.IsBroken)
             {
                 return door;
             }

@@ -13533,6 +13533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8bfa8475ce3da4f926d043485388dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomManager
+  startingRoom: {fileID: 0}
 --- !u!4 &583498754
 Transform:
   m_ObjectHideFlags: 0
@@ -14090,18 +14091,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1809905317}
     m_Modifications:
-    - target: {fileID: 1519883288618330773, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
-      propertyPath: indicatorColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519883288618330773, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
-      propertyPath: indicatorColor.g
-      value: 0.76606226
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519883288618330773, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
-      propertyPath: indicatorColor.r
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4216346870082212399, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
       propertyPath: m_Name
       value: EnemyShard
@@ -19619,7 +19608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Starter_Room
 --- !u!1 &1209680005
 GameObject:
   m_ObjectHideFlags: 0
@@ -23932,7 +23920,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_One
+  doorMaterial: 0
+  woodBreakSound: {fileID: 0}
+  metalBreakSound: {fileID: 0}
+  woodBreakVfxPrefab: {fileID: 0}
+  metalBreakVfxPrefab: {fileID: 0}
 --- !u!64 &1528599270
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -27471,10 +27463,20 @@ MonoBehaviour:
   detectRange: 15
   damage: 1
   isInvulnerable: 0
+  scoreValue: 100
   showGizmos: 0
+  realizationTime: 0.05
+  patrolPoints: []
+  minPatrolWait: 1
+  maxPatrolWait: 3
+  deathSounds: []
+  hitSounds: []
+  deathVFXPrefab: {fileID: 0}
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
+  katanaHip: {fileID: 0}
+  katanaHand: {fileID: 0}
 --- !u!54 &1850808212
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -33731,7 +33733,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_One
 --- !u!43 &1977679508
 Mesh:
   m_ObjectHideFlags: 0
@@ -35503,7 +35504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Starter_Room
 --- !u!1 &2062196057
 GameObject:
   m_ObjectHideFlags: 0
@@ -35598,7 +35598,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Three
+  doorMaterial: 0
+  woodBreakSound: {fileID: 0}
+  metalBreakSound: {fileID: 0}
+  woodBreakVfxPrefab: {fileID: 0}
+  metalBreakVfxPrefab: {fileID: 0}
 --- !u!64 &2076357853
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -36642,6 +36646,8 @@ MonoBehaviour:
   normalDistance: 45
   zoomDistance: 35
   zoomSpeed: 10
+  dashSound: {fileID: 0}
+  slashSound: {fileID: 0}
   dodgeCooldown: 2
   trail: {fileID: 0}
   playerRenderer: {fileID: 0}
@@ -36724,6 +36730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 1
   isDead: 0
+  deathSounds: []
 --- !u!1001 &6992154346010365982
 PrefabInstance:
   m_ObjectHideFlags: 0

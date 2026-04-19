@@ -3984,7 +3984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_Six
 --- !u!114 &110023855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8204,7 +8203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_Three
 --- !u!114 &182433176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9564,7 +9562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 1450912884}
 --- !u!114 &242685802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9577,8 +9574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Five
   doorMaterial: 1
+  roomA: {fileID: 628821535}
+  roomB: {fileID: 1450912884}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -27132,7 +27130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_Four
 --- !u!114 &628821536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38661,8 +38658,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_One
   doorMaterial: 1
+  roomA: {fileID: 1203431860}
+  roomB: {fileID: 1853925771}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -38679,7 +38677,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 1853925771}
 --- !u!82 &945742628
 AudioSource:
   m_ObjectHideFlags: 0
@@ -39359,7 +39356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_Two
 --- !u!114 &970284739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50953,7 +50949,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Starter_Room
 --- !u!114 &1203431861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57075,7 +57070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 970284738}
 --- !u!114 &1272429048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57088,8 +57082,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Two
   doorMaterial: 1
+  roomA: {fileID: 1853925771}
+  roomB: {fileID: 970284738}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -60043,7 +60038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 628821535}
 --- !u!114 &1314683976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60056,8 +60050,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Four
   doorMaterial: 1
+  roomA: {fileID: 182433175}
+  roomB: {fileID: 628821535}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -67672,7 +67667,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_Five
 --- !u!114 &1450912885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70928,7 +70922,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 1975682762}
 --- !u!114 &1528599269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70941,8 +70934,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_One
   doorMaterial: 0
+  roomA: {fileID: 0}
+  roomB: {fileID: 0}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 0}
   woodBreakVfxPrefab: {fileID: 0}
@@ -72329,7 +72323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 182433175}
 --- !u!114 &1561062096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72342,8 +72335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Three
   doorMaterial: 1
+  roomA: {fileID: 970284738}
+  roomB: {fileID: 182433175}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -83957,6 +83951,10 @@ MonoBehaviour:
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
+  realizationTime: 0.1
+  patrolPoints: []
+  minPatrolWait: 1
+  maxPatrolWait: 3
   deathSounds: []
   hitSounds: []
   deathVFXPrefab: {fileID: 0}
@@ -84142,7 +84140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_One
 --- !u!114 &1853925772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88598,7 +88595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Room_One
 --- !u!43 &1977679508
 Mesh:
   m_ObjectHideFlags: 0
@@ -90986,7 +90982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 110023854}
 --- !u!114 &2012531693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90999,8 +90994,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Six
   doorMaterial: 1
+  roomA: {fileID: 1450912884}
+  roomB: {fileID: 110023854}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 8300000, guid: 30215724ef6cf6049842db6514f7a2a2, type: 3}
   woodBreakVfxPrefab: {fileID: 0}
@@ -92299,7 +92295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f19984b18d1f14d931904dd613dee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomName: Starter_Room
 --- !u!1 &2062196057
 GameObject:
   m_ObjectHideFlags: 0
@@ -92737,7 +92732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502478f5161bf4cb99907ed7f1239a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorDashZone
-  destinationRoom: {fileID: 0}
 --- !u!114 &2076357852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92750,8 +92744,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871efdbcf29c9a74f82e15981b152581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  doorName: Door_To_Room_Three
   doorMaterial: 0
+  roomA: {fileID: 0}
+  roomB: {fileID: 0}
   woodBreakSound: {fileID: 0}
   metalBreakSound: {fileID: 0}
   woodBreakVfxPrefab: {fileID: 0}

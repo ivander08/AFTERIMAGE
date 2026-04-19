@@ -8,8 +8,11 @@ public enum DoorMaterial
 
 public class Door : MonoBehaviour 
 {
-    public string doorName;
+    public string DoorName => gameObject.name;
     public DoorMaterial doorMaterial = DoorMaterial.Wood;
+
+    public Room roomA;
+    public Room roomB;
 
     [Header("Effects")]
     public AudioClip woodBreakSound;
@@ -18,11 +21,18 @@ public class Door : MonoBehaviour
     public GameObject metalBreakVfxPrefab;
 
     private bool isLocked;
-    private Room room;
+    public bool IsBroken { get; private set; }
+    
     private Renderer doorRenderer;
     private Material doorMaterialInstance;
     private Color originalColor;
     private Collider _col;
+
+    private void Awake()
+    {
+        if (roomA != null) roomA.RegisterDoor(this);
+        if (roomB != null) roomB.RegisterDoor(this);
+    }
 
     private void Start()
     {
@@ -36,14 +46,21 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void SetRoom(Room targetRoom) => room = targetRoom;
-
     public void Break()
     {
-        if (isLocked) return;
+        if (isLocked || IsBroken) return;
+        
+        IsBroken = true;
 
         if (doorRenderer != null) doorRenderer.enabled = false;
-        if (_col != null) _col.enabled = false;
+        
+        if (_col != null) 
+        {
+            _col.enabled = false; 
+
+            BoxCollider boxTrigger = gameObject.AddComponent<BoxCollider>();
+            boxTrigger.isTrigger = true;
+        }
 
         PlayBreakEffects();
     }
@@ -65,6 +82,8 @@ public class Door : MonoBehaviour
 
     public void Lock()
     {
+        if (IsBroken) return; // Don't lock a broken door
+
         isLocked = true;
         if (doorRenderer != null) 
         {
@@ -76,6 +95,8 @@ public class Door : MonoBehaviour
 
     public void Unlock()
     {
+        if (IsBroken) return; // Don't magically rebuild the door visually
+
         isLocked = false;
         if (doorRenderer != null) 
         {

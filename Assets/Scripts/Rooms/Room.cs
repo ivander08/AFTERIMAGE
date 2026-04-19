@@ -4,7 +4,7 @@ using System.Linq;
 
 public class Room : MonoBehaviour
 {
-    public string roomName;
+    public string RoomName => gameObject.name;
 
     private List<EnemyBase> _enemies = new();
     private List<Door> _doors = new();
@@ -19,7 +19,6 @@ public class Room : MonoBehaviour
     private void Awake()
     {
         _enemies.AddRange(GetComponentsInChildren<EnemyBase>());
-        _doors.AddRange(GetComponentsInChildren<Door>());
         _roomCaption = GetComponent<RoomCaption>();
 
         foreach (var enemy in _enemies)
@@ -27,10 +26,13 @@ public class Room : MonoBehaviour
             enemy.AssignRoom(this);
             enemy.OnDeath += CheckClearCondition;
         }
+    }
 
-        foreach (var door in _doors)
+    public void RegisterDoor(Door door)
+    {
+        if (door != null && !_doors.Contains(door))
         {
-            door.SetRoom(this);
+            _doors.Add(door);
         }
     }
 
@@ -46,13 +48,19 @@ public class Room : MonoBehaviour
     {
         RoomManager.Instance.SetCurrentRoom(this);
         
-        // Check if caption should play
         if (_roomCaption != null)
         {
             _roomCaption.OnPlayerEntered();
         }
 
-        // Only lock for combat if no caption is playing and room has enemies
+        foreach (var enemy in _enemies)
+        {
+            if (enemy != null && !enemy.IsDead)
+            {
+                enemy.NotifyPlayerEnteredRoom();
+            }
+        }
+
         if (!_captionLocked && !_isCleared && _enemies.Count > 0)
         {
             LockRoom();
@@ -63,13 +71,8 @@ public class Room : MonoBehaviour
     public void SetEntryDoor(Door door)
     {
         _entryDoor = door;
-
-        if (_isCleared)
-        {
-            Destroy(door.gameObject);
-            _entryDoor = null;
-        }
     }
+
 
     private void LockRoom()
     {
@@ -108,11 +111,6 @@ public class Room : MonoBehaviour
 
     private void UnlockRoom()
     {
-        if (_entryDoor != null)
-        {
-            Destroy(_entryDoor.gameObject);
-        }
-        
         foreach (var door in _doors)
         {
             if (door != null)

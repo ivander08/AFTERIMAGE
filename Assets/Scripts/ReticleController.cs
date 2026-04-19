@@ -77,7 +77,7 @@ public class ReticleController : MonoBehaviour
             {
                 if (rayHit.collider.TryGetComponent(out Door door))
                 {
-                    if (!door.IsLocked())
+                    if (!door.IsLocked() && !door.IsBroken)
                     {
                         doorInPath = door;
                         break;
@@ -90,7 +90,7 @@ public class ReticleController : MonoBehaviour
                 DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
                 if (zone != null)
                 {
-                    Vector3 landingPos = zone.GetLandingPosition();
+                    Vector3 landingPos = zone.GetLandingPosition(player.position);
                     clampedCursor.position = new Vector3(landingPos.x, hitPoint.y, landingPos.z);
                     return;
                 }

@@ -13,6 +13,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public bool isInvulnerable = false;
     public int scoreValue = 100;
     [SerializeField] public bool showGizmos = false;
+
+    public float realizationTime = 0.05f;
+    public Transform[] patrolPoints;
+    public float minPatrolWait = 1f;
+    public float maxPatrolWait = 3f;
+
     public AudioClip[] deathSounds;
     public AudioClip[] hitSounds;
     public GameObject deathVFXPrefab;
@@ -33,6 +39,13 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected bool IsPlayerDead => _playerHealth != null && _playerHealth.isDead;
     protected bool ShouldAbortAttack(Transform target) => target == null || IsPlayerDead;
 
+    private int _patrolIndex = 0;
+    private bool _isPatrolWaiting = false;
+    private float _patrolWaitEndTime = 0f;
+    private bool _patrolForward = true;
+    private float _aggroStartTime = float.MaxValue;
+    private bool _hasRealized = false;
+
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -50,6 +63,17 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public void AssignRoom(Room room)
     {
         _myRoom = room;
+    }
+
+    public void NotifyPlayerEnteredRoom()
+    {
+        _aggroStartTime = Time.time + realizationTime;
+        _hasRealized = false;
+        
+        if (_agent != null && _agent.isOnNavMesh)
+        {
+            _agent.isStopped = true;
+        }
     }
 
     protected bool CanAggro()
@@ -70,7 +94,80 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void Update()
     {
         if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null || IsPlayerDead) return;
-        HandleBehavior();
+
+        if (CanAggro())
+        {
+            if (Time.time < _aggroStartTime)
+            {
+                if (_agent.isOnNavMesh) _agent.isStopped = true;
+                return;
+            }
+
+            if (!_hasRealized)
+            {
+                _hasRealized = true;
+                if (_agent.isOnNavMesh) _agent.isStopped = false;
+            }
+
+            HandleBehavior();
+        }
+        else
+        {
+            HandlePatrol();
+        }
+    }
+
+    private void HandlePatrol()
+    {
+        if (patrolPoints == null || patrolPoints.Length == 0) return;
+        if (_agent == null || !_agent.isOnNavMesh) return;
+
+        if (_isPatrolWaiting)
+        {
+            if (Time.time >= _patrolWaitEndTime)
+            {
+                _isPatrolWaiting = false;
+                SetNextPatrolPoint();
+            }
+        }
+        else
+        {
+            if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
+            {
+                _isPatrolWaiting = true;
+                _patrolWaitEndTime = Time.time + UnityEngine.Random.Range(minPatrolWait, maxPatrolWait);
+            }
+        }
+    }
+
+    private void SetNextPatrolPoint()
+    {
+        if (patrolPoints.Length <= 1) return;
+
+        if (_patrolForward)
+        {
+            _patrolIndex++;
+            if (_patrolIndex >= patrolPoints.Length)
+            {
+                _patrolIndex = patrolPoints.Length - 2;
+                _patrolForward = false;
+            }
+        }
+        else
+        {
+            _patrolIndex--;
+            if (_patrolIndex < 0)
+            {
+                _patrolIndex = 1;
+                _patrolForward = true;
+            }
+        }
+
+        if (patrolPoints[_patrolIndex] != null)
+        {
+            _agent.isStopped = false;
+            _agent.SetDestination(patrolPoints[_patrolIndex].position);
+        }
     }
 
     protected abstract void HandleBehavior();
