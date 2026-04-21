@@ -297,19 +297,27 @@ public class PlayerDash : MonoBehaviour
 
     IEnumerator DealSequentialDamage(List<RaycastHit> targets, Vector3 attackDirection)
     {
+        int validKills = 0;
+
         foreach (var hit in targets)
         {
-            // FIX: Wall check. Linecast from player to the hit point. 
-            // If it hits the Environment (Layer 0 or a specific wall layer), skip this enemy.
-            if (Physics.Linecast(transform.position, hit.point, 1 << 0)) // Assuming Layer 0 is Default/Environment
-            {
-                continue;
-            }
+            if (hit.collider.TryGetComponent(out IDamageable d)) validKills++;
+        }
 
+        if (validKills >= 2 && ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddMultiKillBonus(validKills);
+        }
+
+        foreach (var hit in targets)
+        {
             GameObject victim = hit.collider.gameObject;
-            if (victim != null && victim.TryGetComponent(out IDamageable damageable))
+            if (victim != null)
             {
-                damageable.TakeDamage(damageAmount);
+                if (victim.TryGetComponent(out IDamageable damageable))
+                {
+                    damageable.TakeDamage(damageAmount);
+                }
             }
             yield return new WaitForSeconds(damageDelay);
         }

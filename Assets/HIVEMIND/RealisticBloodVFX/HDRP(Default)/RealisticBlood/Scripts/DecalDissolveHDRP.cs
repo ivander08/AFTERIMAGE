@@ -39,7 +39,7 @@ public class HDRPDecalDissolver : MonoBehaviour
 
 #if UNITY_RENDER_PIPELINE_UNIVERSAL
         var urpProjectors = GetComponentsInChildren<UnityEngine.Rendering.Universal.DecalProjector>();
-        foreach (var projector in urpProjectors)//
+        foreach (var projector in urpProjectors)
         {
             TryCloneAndRegisterMaterial(projector.material, cloned => projector.material = cloned);
         }

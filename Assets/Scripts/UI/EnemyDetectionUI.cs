@@ -69,6 +69,6 @@ public class EnemyDetectionUI : MonoBehaviour
 
     public void SetHighlightColor(Color color)
     {
-        SetHighlighted(color == Color.yellow);
+        SetHighlighted(color == Color.white);
     }
 }
