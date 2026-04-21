@@ -508,6 +508,8 @@ MonoBehaviour:
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
+  katanaHip: {fileID: 4066347144988998250}
+  katanaHand: {fileID: 1377110138788919911}
 --- !u!1 &5998859357723465549
 GameObject:
   m_ObjectHideFlags: 0

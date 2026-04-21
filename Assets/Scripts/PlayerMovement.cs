@@ -38,6 +38,14 @@ public class PlayerMovement : MonoBehaviour
             HandleInputAndRotation();
             HandleMovement();
         }
+        else
+        {
+            // If movement is frozen mid-walk, force walk animation off.
+            if (_animator != null)
+            {
+                _animator.SetBool("isWalking", false);
+            }
+        }
     }
 
     void LateUpdate()

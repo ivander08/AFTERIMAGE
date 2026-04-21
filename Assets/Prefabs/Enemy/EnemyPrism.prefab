@@ -10300,6 +10300,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
   - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 0d9496a63ab503346ae1b157db446fc4, type: 3}
+  katanaHip: {fileID: 9088463740606359317}
+  katanaHand: {fileID: 4220461190703981582}
   shardPrefab: {fileID: 4216346870082212399, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
   attackRange: 1.5
   attackWindup: 0.1

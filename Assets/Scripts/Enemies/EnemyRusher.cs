@@ -10,15 +10,28 @@ public class EnemyRusher : EnemyBase
     public float cooldown = 0.8f;
 
     private float _lastDashTime = -99f;
+    private bool _isDashing = false;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        SetKatanaVisible(false);
+    }
 
     protected override void HandleBehavior()
     {
-        if (!CanAggro()) return;
+        if (!CanAggro()) return;//
 
         Transform target = GetTarget();
         float dist = Vector3.Distance(transform.position, target.position);
 
         bool canDash = _lastDashTime + cooldown <= Time.time;
+
+        // Update walking animation
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", dist > dashRange && !_isDashing);
+        }
 
         if (canDash && dist <= dashRange)
         {
@@ -34,12 +47,21 @@ public class EnemyRusher : EnemyBase
     IEnumerator DashAttack(Transform target)
     {
         _lastDashTime = Time.time;
+        _isDashing = true;
         
         _agent.isStopped = true;
         
         Vector3 targetPosition = target.position;
         Vector3 dashDirection = (new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position).normalized;
         transform.forward = dashDirection;
+        
+        // Draw sword and trigger dash animation
+        SetKatanaVisible(true);
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", false);
+            _animator.SetTrigger("dashTrigger");
+        }
         
         yield return new WaitForSeconds(chargeTime);
         
@@ -61,6 +83,8 @@ public class EnemyRusher : EnemyBase
             yield return null;
         }
 
+        SetKatanaVisible(false);
+        _isDashing = false;
         _agent.isStopped = false;
     }
 }

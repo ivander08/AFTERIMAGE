@@ -1,11 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyPhalanx : EnemyBase
 {
     public GameObject shield;
     public float repulsorForceReduction = 0.7f;
     public float attackRange = 2f;
-    // public int shieldKnockbackForce = 30;
     public float attackCooldown = 0.5f;
     public float attackWindup = 0.1f;
 
@@ -18,6 +18,7 @@ public class EnemyPhalanx : EnemyBase
     {
         base.Awake();
         AssignShield();
+        SetKatanaVisible(false);
     }
 
     private void AssignShield()
@@ -36,6 +37,18 @@ public class EnemyPhalanx : EnemyBase
         }
     }
 
+    private IEnumerator WaitForAttackAnimationEnd()
+    {
+        yield return null;
+
+        while (_animator != null && _animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            yield return null;
+        }
+
+        SetKatanaVisible(false);
+    }
+
     protected override void HandleBehavior()
     {
         if (_isAttacking) return;
@@ -48,19 +61,30 @@ public class EnemyPhalanx : EnemyBase
         
         _agent.SetDestination(target.position);
 
+        // Update walking animation
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", distanceToPlayer > attackRange);
+        }
+
         if (distanceToPlayer <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
         {
             StartCoroutine(AttackRoutine(target));
         }
     }
 
-    private System.Collections.IEnumerator AttackRoutine(Transform target)
+    private IEnumerator AttackRoutine(Transform target)
     {
         _isAttacking = true;
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
         Debug.Log($"[EnemyPhalanx] {name} attacking player!");
+
+        // Fire attack animation and draw sword
+        SetKatanaVisible(true);
+        if (_animator != null) _animator.SetTrigger("dashTrigger");
+        StartCoroutine(WaitForAttackAnimationEnd());
 
         yield return new WaitForSeconds(attackWindup);
 
@@ -110,4 +134,5 @@ public class EnemyPhalanx : EnemyBase
         }
         return baseForce;
     }
+
 }

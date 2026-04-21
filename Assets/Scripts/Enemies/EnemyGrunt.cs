@@ -7,9 +7,6 @@ public class EnemyGrunt : EnemyBase
     public float attackWindup = 0.1f;
     public float attackCooldown = 0.5f;
 
-    [SerializeField] private GameObject katanaHip;
-    [SerializeField] private GameObject katanaHand;
-
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;
 
@@ -17,19 +14,6 @@ public class EnemyGrunt : EnemyBase
     {
         base.Awake();
         SetKatanaVisible(false);
-    }
-
-    private void SetKatanaVisible(bool active)
-    {
-        if (katanaHip != null)
-        {
-            katanaHip.SetActive(!active);
-        }
-
-        if (katanaHand != null)
-        {
-            katanaHand.SetActive(active);
-        }
     }
 
     private IEnumerator WaitForAttackAnimationEnd()
@@ -54,6 +38,11 @@ public class EnemyGrunt : EnemyBase
         _agent.SetDestination(target.position);
 
         float dist = Vector3.Distance(transform.position, target.position);
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", dist > attackRange);
+        }
+
         if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
         {
             StartCoroutine(AttackRoutine(target));

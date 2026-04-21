@@ -32,6 +32,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected bool _isKnockedBack = false;
     protected Room _myRoom;
     protected PlayerHealth _playerHealth;
+    
+    // Katana system for melee enemies
+    [SerializeField] protected GameObject katanaHip;
+    [SerializeField] protected GameObject katanaHand;
 
     public bool IsDead => _isDead;
     public event Action OnDeath;
@@ -58,6 +62,17 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         
         _currentTarget = _defaultTarget;
         _rb.isKinematic = true;
+    }
+
+    /// <summary>
+    /// Sets the katana visibility for melee enemies.
+    /// Melee enemies should call SetKatanaVisible(false) in their Awake()
+    /// and SetKatanaVisible(true) during attacks.
+    /// </summary>
+    protected void SetKatanaVisible(bool active)
+    {
+        if (katanaHip != null) katanaHip.SetActive(!active);
+        if (katanaHand != null) katanaHand.SetActive(active);
     }
 
     public void AssignRoom(Room room)
@@ -186,6 +201,13 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         _isDead = true;
+
+        // Prevent death animation blend issues when dying mid-walk or mid-swing.
+        SetKatanaVisible(false);
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", false);
+        }
 
         AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
 

@@ -9975,6 +9975,8 @@ MonoBehaviour:
   chargeTime: 0.1
   dashDuration: 0.15
   cooldown: 1.5
+  katanaHip: {fileID: 4870340781352766641}
+  katanaHand: {fileID: 6954988335225108608}
 --- !u!1 &6443013493724723200
 GameObject:
   m_ObjectHideFlags: 0

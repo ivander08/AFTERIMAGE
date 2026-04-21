@@ -10854,6 +10854,8 @@ MonoBehaviour:
   attackWindup: 0.1
   attackCooldown: 0.5
   moveSpeed: 12
+  katanaHip: {fileID: 1770650280695525893}
+  katanaHand: {fileID: 4977535211361822023}
 --- !u!1 &4366825388327245815
 GameObject:
   m_ObjectHideFlags: 0

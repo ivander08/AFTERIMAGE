@@ -11,6 +11,24 @@ public class EnemyPrism : EnemyBase
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        SetKatanaVisible(false);
+    }
+
+    private IEnumerator WaitForAttackAnimationEnd()
+    {
+        yield return null;
+
+        while (_animator != null && _animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            yield return null;
+        }
+
+        SetKatanaVisible(false);
+    }
+
     protected override void HandleBehavior()
     {
         if (_isAttacking) return;
@@ -23,6 +41,11 @@ public class EnemyPrism : EnemyBase
         if (dist <= detectRange)
         {
             _agent.SetDestination(target.position);
+
+            if (_animator != null)
+            {
+                _animator.SetBool("isWalking", dist > attackRange);
+            }
 
             if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
             {
@@ -37,6 +60,10 @@ public class EnemyPrism : EnemyBase
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
+
+        SetKatanaVisible(true);
+        if (_animator != null) _animator.SetTrigger("dashTrigger");
+        StartCoroutine(WaitForAttackAnimationEnd());
 
         yield return new WaitForSeconds(attackWindup);
 

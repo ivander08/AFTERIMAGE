@@ -14,10 +14,23 @@ public class EnemyShard : EnemyBase
     protected override void Awake()
     {
         base.Awake();
+        SetKatanaVisible(false);
         if (_agent != null)
         {
             _agent.speed = moveSpeed;
         }
+    }
+
+    private IEnumerator WaitForAttackAnimationEnd()
+    {
+        yield return null;
+
+        while (_animator != null && _animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            yield return null;
+        }
+
+        SetKatanaVisible(false);
     }
 
     protected override void HandleBehavior()
@@ -33,6 +46,12 @@ public class EnemyShard : EnemyBase
         {
             _agent.SetDestination(target.position);
 
+            // Update walking animation
+            if (_animator != null)
+            {
+                _animator.SetBool("isWalking", dist > attackRange);
+            }
+
             if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
             {
                 StartCoroutine(AttackRoutine(target));
@@ -46,6 +65,11 @@ public class EnemyShard : EnemyBase
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
+
+        // Draw sword and trigger attack animation
+        SetKatanaVisible(true);
+        if (_animator != null) _animator.SetTrigger("dashTrigger");
+        StartCoroutine(WaitForAttackAnimationEnd());
 
         yield return new WaitForSeconds(attackWindup);
 
