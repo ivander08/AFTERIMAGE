@@ -39,9 +39,18 @@ public class Room : MonoBehaviour
     public void RegisterEnemy(EnemyBase enemy)
     {
         if (enemy == null) return;
-        _enemies.Add(enemy);
-        enemy.AssignRoom(this);
-        enemy.OnDeath += CheckClearCondition;
+        
+        if (!_enemies.Contains(enemy))
+        {
+            _enemies.Add(enemy);
+            enemy.AssignRoom(this);
+            enemy.OnDeath += CheckClearCondition;
+
+            if (_isCombatActive)
+            {
+                enemy.NotifyPlayerEnteredRoom();
+            }
+        }
     }
 
     public void PlayerEntered()

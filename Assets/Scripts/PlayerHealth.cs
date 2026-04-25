@@ -24,6 +24,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         _currentHealth -= damage;
         Debug.Log("PLAYER HIT!");
 
+        CameraShakeService.Shake(0.8f);
+
         if (_currentHealth <= 0)
         {
             Die();

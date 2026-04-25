@@ -15,3 +15,9 @@ MonoBehaviour:
   isTutorialRoom: 1
   captionSequenceAsset: {fileID: 11400000, guid: b4f94e8209296ca4a870547d05df5305, type: 2}
   completionCaptionAsset: {fileID: 11400000, guid: 84cbee6cced8cc94386facca4115af3c, type: 2}
+  tutorialData:
+    showTutorial: 1
+    tutorialSprite: {fileID: 21300000, guid: d313d7570ea46334688f9abe6eb689a2, type: 3}
+    tutorialMaterial: {fileID: 2100000, guid: 543afdaa6a48b0345b5a3c31cbf45586, type: 2}
+    mainText: SPACEBAR TO USE ULT
+    tipText: Use this when you're overwhelmed.

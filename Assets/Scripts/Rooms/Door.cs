@@ -27,6 +27,7 @@ public class Door : MonoBehaviour
     private Material doorMaterialInstance;
     private Color originalColor;
     private Collider _col;
+    private Collider _brokenTrigger;
 
     private void Awake()
     {
@@ -58,8 +59,8 @@ public class Door : MonoBehaviour
         {
             _col.enabled = false; 
 
-            BoxCollider boxTrigger = gameObject.AddComponent<BoxCollider>();
-            boxTrigger.isTrigger = true;
+            _brokenTrigger = gameObject.AddComponent<BoxCollider>();
+            _brokenTrigger.isTrigger = true;
         }
 
         PlayBreakEffects();
@@ -82,28 +83,46 @@ public class Door : MonoBehaviour
 
     public void Lock()
     {
-        if (IsBroken) return; // Don't lock a broken door
-
         isLocked = true;
+
         if (doorRenderer != null) 
         {
             doorRenderer.enabled = true;
             doorMaterialInstance.color = Color.red;
         }
+
         if (_col != null) _col.enabled = true;
+
+        if (_brokenTrigger != null)
+        {
+            _brokenTrigger.enabled = false;
+        }
     }
 
     public void Unlock()
     {
-        if (IsBroken) return; // Don't magically rebuild the door visually
-
         isLocked = false;
-        if (doorRenderer != null) 
+
+        if (IsBroken)
         {
-            doorRenderer.enabled = true;
-            doorMaterialInstance.color = originalColor;
+            if (doorRenderer != null) doorRenderer.enabled = false;
+            if (_col != null) _col.enabled = false;
+            
+            if (_brokenTrigger != null)
+            {
+                _brokenTrigger.enabled = true;
+            }
         }
-        if (_col != null) _col.enabled = true;
+        else
+        {
+            if (doorRenderer != null) 
+            {
+                doorRenderer.enabled = true;
+                doorMaterialInstance.color = originalColor;
+            }
+            
+            if (_col != null) _col.enabled = true;
+        }
     }
 
     public bool IsLocked() => isLocked;

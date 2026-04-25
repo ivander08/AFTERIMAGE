@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyGeist : EnemyBase
 {
@@ -16,10 +17,24 @@ public class EnemyGeist : EnemyBase
     private bool _isEthereal = false;
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;
+    private Renderer[] _renderers;
+    private Dictionary<Material, Color> _originalEmission = new Dictionary<Material, Color>();
 
     protected override void Awake()
     {
         base.Awake();
+        _renderers = GetComponentsInChildren<Renderer>();
+        
+        // Cache original emission colors
+        foreach (var r in _renderers)
+        {
+            foreach (var mat in r.materials)
+            {
+                if (mat.HasProperty("_EmissionColor"))
+                    _originalEmission[mat] = mat.GetColor("_EmissionColor");
+            }
+        }
+        
         SetKatanaVisible(false);
         StartCoroutine(PhaseRoutine());
     }
@@ -115,6 +130,24 @@ public class EnemyGeist : EnemyBase
     {
         if (_isDead) return;
         _isEthereal = state;
+
+        float alpha = state ? 0.3f : 1f;
+        foreach (var r in _renderers)
+        {
+            foreach (var mat in r.materials)
+            {
+                if (!mat.HasProperty("_Color")) continue;
+                Color c = mat.color;
+                c.a = alpha;
+                mat.color = c;
+
+                if (mat.HasProperty("_EmissionColor"))
+                {
+                    mat.SetColor("_EmissionColor", state ? Color.black : 
+                        (_originalEmission.TryGetValue(mat, out Color orig) ? orig : Color.black));
+                }
+            }
+        }
     }
 
     public override void TakeDamage(int damageAmount)

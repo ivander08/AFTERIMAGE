@@ -16,11 +16,11 @@ MonoBehaviour:
   - speakerName: Mother
     messages:
     - text: '"What if you can''t use your utilities, or there are no throwables?"'
-      cameraTargetId: 
-      cameraZoom: 0
+      cameraTargetId: room_six
+      cameraZoom: 50
     - text: '"Then use your inner abilities, Subject Zero."'
-      cameraTargetId: 
-      cameraZoom: 0
+      cameraTargetId: room_six
+      cameraZoom: 50
     - text: '"We''ve implanted an ability we name Iaijutsu Break inside you."'
       cameraTargetId: 
       cameraZoom: 0

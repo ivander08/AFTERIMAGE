@@ -40,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // If movement is frozen mid-walk, force walk animation off.
             if (_animator != null)
             {
                 _animator.SetBool("isWalking", false);

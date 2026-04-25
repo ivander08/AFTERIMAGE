@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &251468986714409803
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.2302289
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 117.92
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e63ccdb3874ee547a109308e5a97eb6, type: 2}
+    - target: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_Name
+      value: SM_Prop_Small_Table_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6059673045833414194}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7419261710927899384}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 92769093794442114}
+  m_SourcePrefab: {fileID: 100100000, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+--- !u!1 &1133794846690965018 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 475df621a41209846ba2e4e3a9f8253b, type: 3}
+  m_PrefabInstance: {fileID: 251468986714409803}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6059673045833414194
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133794846690965018}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1986078, y: 1.1225574, z: 1.1986072}
+  m_Center: {x: 0, y: 0.5498365, z: 0.00000062584877}
+--- !u!114 &7419261710927899384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133794846690965018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f5ff66654736804e901c55de09b3455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThrowableObject
+  throwSpeed: 50
+  detectionRange: 15
+  stunDuration: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 257
+  playerPickupRadius: 1.2
+--- !u!114 &92769093794442114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133794846690965018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495c8dcd4bfe42f4893db2a61645174a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaptionCameraTarget
+  id: enemy_6

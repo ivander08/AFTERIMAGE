@@ -10285,7 +10285,7 @@ MonoBehaviour:
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
-  realizationTime: 0.05
+  realizationTime: 0.1
   patrolPoints: []
   minPatrolWait: 1
   maxPatrolWait: 3

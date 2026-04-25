@@ -9,6 +9,7 @@ public class ReticleController : MonoBehaviour
     
     public float maxDashDistance = 6f;
     public LayerMask groundMask;
+    public LayerMask environmentMask;
 
     Camera _cam;
 
@@ -102,6 +103,11 @@ public class ReticleController : MonoBehaviour
             if (dist > maxDashDistance)
             {
                 dir = dir.normalized * maxDashDistance;
+            }
+
+            if (Physics.SphereCast(player.position, 0.5f, dir.normalized, out RaycastHit envHit, dir.magnitude, environmentMask, QueryTriggerInteraction.Ignore))
+            {
+                dir = dir.normalized * envHit.distance;
             }
 
             clampedCursor.position = player.position + dir;

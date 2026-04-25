@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a387d93b49aeb784399ba0c89a2ff02f, type: 3}
+  m_Name: LevelConfig_Level3
+  m_EditorClassIdentifier: Assembly-CSharp::LevelLoadoutConfig
+  levelSceneName: Level3
+  availableUtilities:
+  - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
+  - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
+  - {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}

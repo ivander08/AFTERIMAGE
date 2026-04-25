@@ -9955,7 +9955,7 @@ MonoBehaviour:
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
-  realizationTime: 0.05
+  realizationTime: 0.1
   patrolPoints: []
   minPatrolWait: 1
   maxPatrolWait: 3
@@ -9970,13 +9970,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
   - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: b6160327657a1f9429203924ca537a48, type: 3}
-  dashRange: 6
+  katanaHip: {fileID: 4870340781352766641}
+  katanaHand: {fileID: 6954988335225108608}
+  dashRange: 5
   dashSpeed: 40
   chargeTime: 0.1
   dashDuration: 0.15
   cooldown: 1.5
-  katanaHip: {fileID: 4870340781352766641}
-  katanaHand: {fileID: 6954988335225108608}
 --- !u!1 &6443013493724723200
 GameObject:
   m_ObjectHideFlags: 0
@@ -10321,8 +10321,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.6
-      minScalar: 0.8
+      scalar: 0.2
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:

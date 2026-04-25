@@ -39,6 +39,8 @@ public class PlayerDash : MonoBehaviour
     public GameObject katanaHip;
     public GameObject katanaHand;
 
+    public LayerMask environmentMask; 
+
     private bool _isDashing = false;
     private bool _isPenaltyActive = false;
     
@@ -129,6 +131,29 @@ public class PlayerDash : MonoBehaviour
             _dashDirection = transform.forward;
             _dashDistance = maxDashDistance;
         }
+
+        Door doorInPath = GetDoorInDashPath(_dashDirection, _dashDistance);
+
+        if (doorInPath != null && !doorInPath.IsLocked())
+        {
+            DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+            if (zone != null)
+            {
+                Vector3 landingPos = zone.GetLandingPosition(transform.position);
+                Vector3 distVector = landingPos - transform.position;
+                distVector.y = 0;
+
+                _dashDirection = distVector.normalized;
+                _dashDistance = distVector.magnitude;
+            }
+        }
+        else
+        {
+            if (Physics.SphereCast(transform.position, _cc.radius, _dashDirection, out RaycastHit envHit, _dashDistance, environmentMask, QueryTriggerInteraction.Ignore))
+            {
+                _dashDistance = envHit.distance;
+            }
+        }
     }
 
     void HandleCameraZoom()
@@ -186,6 +211,7 @@ public class PlayerDash : MonoBehaviour
             if (zone != null)
             {
                 doorInPath.Break();
+                CameraShakeService.Shake(0.2f); 
                 zone.OnPlayerDashThrough();
                 
                 Vector3 landingPos = zone.GetLandingPosition(transform.position);

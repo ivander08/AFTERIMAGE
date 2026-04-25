@@ -40,6 +40,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public bool IsDead => _isDead;
     public event Action OnDeath;
 
+    public GameObject[] bloodDecalPrefabs;
+
     protected bool IsPlayerDead => _playerHealth != null && _playerHealth.isDead;
     protected bool ShouldAbortAttack(Transform target) => target == null || IsPlayerDead;
 
@@ -139,6 +141,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (_isPatrolWaiting)
         {
+            SetWalkingAnimation(false);
+
             if (Time.time >= _patrolWaitEndTime)
             {
                 _isPatrolWaiting = false;
@@ -147,6 +151,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
+            SetWalkingAnimation(true);
+
             if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
             {
                 _isPatrolWaiting = true;
@@ -182,6 +188,15 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             _agent.isStopped = false;
             _agent.SetDestination(patrolPoints[_patrolIndex].position);
+            SetWalkingAnimation(true);
+        }
+    }
+
+    protected void SetWalkingAnimation(bool isWalking)
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("isWalking", isWalking);
         }
     }
 
@@ -195,6 +210,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         AudioService.PlayRandom(hitSounds, transform.position, 2f, 0.95f, 1.05f);
 
+        CameraShakeService.Shake(0.5f); 
+
         if (health <= 0) Die();
     }
 
@@ -202,12 +219,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         _isDead = true;
 
-        // Prevent death animation blend issues when dying mid-walk or mid-swing.
+        SetHighlight(false);
         SetKatanaVisible(false);
-        if (_animator != null)
-        {
-            _animator.SetBool("isWalking", false);
-        }
+        SetWalkingAnimation(false);
 
         AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
 
@@ -220,7 +234,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             ScoreManager.Instance.AddKillScore(scoreValue, gameObject.name);
         }
-        
+
+        SpawnBloodPool();
         
         ResetPhysicsState(); 
         _agent.enabled = false; 
@@ -229,17 +244,28 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (_animator != null)
         {
+            _animator.ResetTrigger("dashTrigger");
             _animator.SetInteger("deathIndex", UnityEngine.Random.Range(0, 3));
             _animator.SetTrigger("deathTrigger");
         }
 
         OnDeath?.Invoke();
-        // Destroy(gameObject, 3f); 
+    }
+
+    private void SpawnBloodPool()
+    {
+        if (bloodDecalPrefabs == null || bloodDecalPrefabs.Length == 0) return;
+        int randomIndex = UnityEngine.Random.Range(0, bloodDecalPrefabs.Length);
+        GameObject prefab = bloodDecalPrefabs[randomIndex];
+        Vector3 spawnPos = transform.position + Vector3.up * 0.1f; 
+        GameObject decal = Instantiate(prefab, spawnPos, prefab.transform.rotation);
+        decal.transform.Rotate(Vector3.forward, UnityEngine.Random.Range(0f, 360f), Space.Self);
     }
 
     public void SetHighlight(bool active)
     {
-        if (_isDead) return;
+        if (_isDead && active) return; 
+
         EnemyDetectionUI ui = GetComponentInChildren<EnemyDetectionUI>();
         if (ui != null)
         {

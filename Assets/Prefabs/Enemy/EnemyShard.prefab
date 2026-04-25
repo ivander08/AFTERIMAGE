@@ -10835,7 +10835,7 @@ MonoBehaviour:
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
-  realizationTime: 0.25
+  realizationTime: 0.1
   patrolPoints: []
   minPatrolWait: 1
   maxPatrolWait: 3
@@ -10850,12 +10850,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
   - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 42830785d37d2044fae19de444245a59, type: 3}
+  katanaHip: {fileID: 1770650280695525893}
+  katanaHand: {fileID: 4977535211361822023}
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
   moveSpeed: 12
-  katanaHip: {fileID: 1770650280695525893}
-  katanaHand: {fileID: 4977535211361822023}
 --- !u!1 &4366825388327245815
 GameObject:
   m_ObjectHideFlags: 0

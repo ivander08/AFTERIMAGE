@@ -494,13 +494,23 @@ MonoBehaviour:
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
-  realizationTime: 0.05
+  realizationTime: 0.1
   patrolPoints: []
   minPatrolWait: 1
   maxPatrolWait: 3
-  deathSounds: []
-  hitSounds: []
-  deathVFXPrefab: {fileID: 0}
+  deathSounds:
+  - {fileID: 8300000, guid: e8bfff41a3ca1924ca291f1f3159d7e3, type: 3}
+  - {fileID: 8300000, guid: 941dbbddc984e3f4dbcfe512fe74b1b8, type: 3}
+  - {fileID: 8300000, guid: 3e04894961f519c4a833378e20ff0913, type: 3}
+  - {fileID: 8300000, guid: 6a8e7fa88c8f9c549b56f9498af15832, type: 3}
+  - {fileID: 8300000, guid: fc21f9a36365a5d4aad4b774d8639a15, type: 3}
+  hitSounds:
+  - {fileID: 8300000, guid: 092603f930dee2d49b07952fd22d76b1, type: 3}
+  - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
+  - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
+  deathVFXPrefab: {fileID: 6207748249219978080, guid: c2f3e8e433b3a1d4eaf2adea810af515, type: 3}
+  katanaHip: {fileID: 4066347144988998250}
+  katanaHand: {fileID: 1377110138788919911}
   minSolidTime: 0.5
   maxSolidTime: 1.5
   minEtherealTime: 0.5
@@ -508,8 +518,6 @@ MonoBehaviour:
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
-  katanaHip: {fileID: 4066347144988998250}
-  katanaHand: {fileID: 1377110138788919911}
 --- !u!1 &5998859357723465549
 GameObject:
   m_ObjectHideFlags: 0

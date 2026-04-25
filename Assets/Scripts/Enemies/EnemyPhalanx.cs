@@ -4,6 +4,7 @@ using System.Collections;
 public class EnemyPhalanx : EnemyBase
 {
     public GameObject shield;
+    [SerializeField] private GameObject shieldCollider;
     public float repulsorForceReduction = 0.7f;
     public float attackRange = 2f;
     public float attackCooldown = 0.5f;
@@ -115,12 +116,13 @@ public class EnemyPhalanx : EnemyBase
     {
         if (!_shieldActive) return;
 
-        Debug.Log($"[EnemyPhalanx] Shield broken");
         _shieldActive = false;
+        
         if (_shieldInstance != null)
-        {
             _shieldInstance.SetActive(false);
-        }
+        
+        if (shieldCollider != null)
+            shieldCollider.SetActive(false);
     }
 
     public bool HasShield() => _shieldActive;
@@ -133,6 +135,12 @@ public class EnemyPhalanx : EnemyBase
             return baseForce * repulsorForceReduction;
         }
         return baseForce;
+    }
+
+    protected override void Die()
+    {
+        BreakShield();
+        base.Die();
     }
 
 }
