@@ -15,3 +15,6 @@ MonoBehaviour:
   levelSceneName: Level1
   availableUtilities:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
+  dateText: 17 January 2147
+  locationText: South Hayazuki District, Japan
+  missionText: Cleanse the Lumina Clan's hideout.

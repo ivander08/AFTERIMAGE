@@ -208,9 +208,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (_isDead) return;
         health -= damage;
 
-        AudioService.PlayRandom(hitSounds, transform.position, 2f, 0.95f, 1.05f);
+        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f);
 
-        CameraShakeService.Shake(0.5f); 
+        CameraShakeService.Shake(0.8f); 
 
         if (health <= 0) Die();
     }
@@ -223,7 +223,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         SetKatanaVisible(false);
         SetWalkingAnimation(false);
 
-        AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
+        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f);
 
         if (deathVFXPrefab != null)
         {
@@ -280,6 +280,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             _agent.isStopped = frozen;
         }
+
+        if (frozen)
+        {
+            SetWalkingAnimation(false);
+        }
     }
 
     protected virtual void OnDrawGizmosSelected()
@@ -291,6 +296,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public void Stun(float duration)
     {
+        if (_isDead) return;
         if (_isKnockedBack) return; 
         
         StopAllCoroutines();
@@ -362,6 +368,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         _isStunned = true;
         if (_agent.isOnNavMesh) _agent.isStopped = true;
+        SetWalkingAnimation(false);
         
         yield return new WaitForSeconds(duration);
         

@@ -10170,6 +10170,7 @@ GameObject:
   - component: {fileID: 3029570739912215405}
   - component: {fileID: 6318222119574378562}
   - component: {fileID: 3050034906192165202}
+  - component: {fileID: 3009459621789827821}
   m_Layer: 7
   m_Name: EnemyPrism
   m_TagString: Enemy
@@ -10302,10 +10303,53 @@ MonoBehaviour:
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 0d9496a63ab503346ae1b157db446fc4, type: 3}
   katanaHip: {fileID: 9088463740606359317}
   katanaHand: {fileID: 4220461190703981582}
+  bloodDecalPrefabs:
+  - {fileID: 8759256684978916287, guid: 83b5cf1a2298ec74fbab312d1ca8d2f7, type: 3}
+  - {fileID: 7085865934631658536, guid: e54f333a7139d0c44a2550cca2c89a56, type: 3}
+  - {fileID: 1696386747352874639, guid: eb6d0b05a6d2cd844a29097175c428e3, type: 3}
+  - {fileID: 8548040751485966269, guid: 7cf0d11922d6b6d47b27b7f96c34b3c9, type: 3}
+  - {fileID: 3849100079852330857, guid: 2bd1867b2913bd74c9744e74e0322f89, type: 3}
+  - {fileID: 7956933238142667545, guid: 8391e03ae01e0524a9fb33f2251f91d1, type: 3}
+  - {fileID: 2246834155783734478, guid: 20c714822ea1c154ab5d971f3dec3f98, type: 3}
+  - {fileID: 7054523898223142169, guid: 63f09e80ba43ff5419d250f5ff9630fd, type: 3}
+  - {fileID: 50431508744444821, guid: bfe9847e8183a5d44b3ea95320495783, type: 3}
+  - {fileID: 4227706996432818855, guid: 1ffa1926215982a46be37dfca29a3988, type: 3}
+  - {fileID: 43481317786896717, guid: a384da7dfd0c0d3439323ac972138e12, type: 3}
+  - {fileID: 2716457411630357888, guid: 62b5f3c0b77a6e84fb5fe51ab3e42eb5, type: 3}
+  - {fileID: 6563824369585507153, guid: d0ea0ee6ed549df42abe0ff0edf17721, type: 3}
+  - {fileID: 7780323448050119854, guid: 9f01cc9a057f0ab4886b9debbab87d72, type: 3}
+  - {fileID: 60229524597006253, guid: 87b5c4be00d6ecd43acaab9dc32c7239, type: 3}
+  - {fileID: 3979231466254530644, guid: 62f85b2c01183294cbd26422f176d7ec, type: 3}
+  - {fileID: 2817260816258676170, guid: 7157e4529eda13f42978028dd7035b40, type: 3}
+  - {fileID: 6301176135403937174, guid: 2a55ce2ba521e0b4ab768480d85f4aa3, type: 3}
   shardPrefab: {fileID: 4216346870082212399, guid: b990361fe7158f643b2be9789ecf6893, type: 3}
   attackRange: 1.5
   attackWindup: 0.1
   attackCooldown: 0.5
+--- !u!114 &3009459621789827821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8984851328370812715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f28d096698dd67d4b96ef9355976151a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepAudio
+  footstepClips:
+  - {fileID: 8300000, guid: aee44e58437260446b87082e29f715df, type: 3}
+  - {fileID: 8300000, guid: 944db8f0ce562264c904a4176c2c801b, type: 3}
+  - {fileID: 8300000, guid: 08bdd2ec8e39b6e4aaf0274b3e75d639, type: 3}
+  - {fileID: 8300000, guid: ad7edb8ee0a1aa6489d4600f5d161370, type: 3}
+  stepInterval: 0.45
+  volume: 0.4
+  pitchMin: 0.9
+  pitchMax: 1.1
+  is3D: 1
+  minDistance: 0.5
+  maxDistance: 12
 --- !u!1 &9088463740606359317
 GameObject:
   m_ObjectHideFlags: 0

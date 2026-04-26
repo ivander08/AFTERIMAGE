@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using Unity.Cinemachine;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
@@ -10,6 +12,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public bool isDead = false;
 
     public AudioClip[] deathSounds;
+    public GameObject[] bloodDecalPrefabs;[Header("Death Camera Zoom")]
+    public CinemachineCamera deathCamera;
+    public float deathZoomDistance = 10f;
+    public float deathZoomSpeed = 3f;
+
+    public GameObject reticleObject;
 
     void Awake()
     {
@@ -36,8 +44,20 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         isDead = true;
 
-        AudioService.PlayRandom(deathSounds, transform.position, 0.9f, 0.95f, 1.05f);
+        if (reticleObject != null) reticleObject.SetActive(false);
+
+        // 1. Lock the audio service to stop enemies from making noise
+        AudioService.StopAllSFX();
+        AudioService.SetLock(true); 
+
+        if (AmbientAudioController.Instance != null)
+        {
+            AmbientAudioController.Instance.FadeToSilence(1.0f);
+        }
+
+        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f);
         
+        SpawnBloodPool();
         
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<PlayerDash>().enabled = false;
@@ -50,11 +70,40 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             _animator.SetTrigger("deathTrigger");
         }
 
-        Invoke(nameof(RestartLevel), 3f);
+        // Instantly show the death panel & play its sound
+        if (DeathPanelController.Instance != null)
+        {
+            DeathPanelController.Instance.Show();
+        }
+
+        // Trigger the camera zoom
+        if (deathCamera != null)
+        {
+            StartCoroutine(DeathZoomRoutine());
+        }
     }
 
-    void RestartLevel()
+    private IEnumerator DeathZoomRoutine()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        var posComposer = deathCamera.GetComponent<CinemachinePositionComposer>();
+        if (posComposer == null) yield break;
+
+        // Smoothly zoom the camera in forever (until the scene restarts)
+        while (true)
+        {
+            posComposer.CameraDistance = Mathf.Lerp(posComposer.CameraDistance, deathZoomDistance, Time.deltaTime * deathZoomSpeed);
+            yield return null;
+        }
+    }
+
+    void SpawnBloodPool()
+    {
+        if (bloodDecalPrefabs == null || bloodDecalPrefabs.Length == 0) return;
+
+        int randomIndex = UnityEngine.Random.Range(0, bloodDecalPrefabs.Length);
+        GameObject prefab = bloodDecalPrefabs[randomIndex];
+        Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
+        GameObject decal = Instantiate(prefab, spawnPos, prefab.transform.rotation);
+        decal.transform.Rotate(Vector3.forward, UnityEngine.Random.Range(0f, 360f), Space.Self);
     }
 }

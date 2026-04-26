@@ -16,3 +16,6 @@ MonoBehaviour:
   availableUtilities:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
   - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
+  dateText: 24 January 2147
+  locationText: Lumina Corp. Labs, Jeju Island
+  missionText: Stop them from copying our subjects.

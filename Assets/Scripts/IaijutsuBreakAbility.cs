@@ -13,6 +13,12 @@ public class IaijutsuBreakAbility : MonoBehaviour
     public TrailRenderer trailRenderer;
     public bool highlightEnemies = true;
 
+    [Header("Audio")]
+    public AudioClip dashSound;
+    public AudioClip finisherThudSound;
+    [Range(0f, 1f)] public float dashSoundVolume = 0.2f;
+    [Range(0f, 1f)] public float finisherThudVolume = 0.1f;
+
     private bool _usedThisLevel = false;
     private PlayerMovement _playerMovement;
     private CharacterController _characterController;
@@ -46,7 +52,7 @@ public class IaijutsuBreakAbility : MonoBehaviour
 
     private bool CanUse()
     {
-        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen) return false;
+        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished) return false;
         if (_playerMovement != null && _playerMovement.isMovementLocked) return false;
         if (_usedThisLevel) return false;
         if (_isExecuting) return false;
@@ -96,6 +102,11 @@ public class IaijutsuBreakAbility : MonoBehaviour
 
         for (int i = 0; i < targetPositions.Count; i++)
         {
+            if (dashSound != null)
+            {
+                AudioService.PlayClip2D(dashSound, dashSoundVolume, 1f);
+            }
+
             yield return StartCoroutine(DashToPosition(targetPositions[i], dashSpeed));
             yield return new WaitForSeconds(dashInterval);
         }
@@ -111,6 +122,11 @@ public class IaijutsuBreakAbility : MonoBehaviour
         foreach (var enemy in targetEnemies)
         {
             if (enemy != null && !enemy.IsDead) enemy.TakeDamage(9999);
+        }
+
+        if (finisherThudSound != null)
+        {
+            AudioService.PlayClip2D(finisherThudSound, finisherThudVolume, 1f);
         }
 
         if (highlightEnemies)

@@ -1,11 +1,9 @@
-// Assets/Scripts/Loadout/LoadoutHoverEffect.cs
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
-{
-    [Header("Color Swap")]
+{[Header("Color Swap")]
     public bool useColorSwap = false;
     public Color normalColor = new Color(1f, 0.6f, 0f, 1f);
     public Color hoverColor  = new Color(0.2f, 0.8f, 1f, 1f);
@@ -16,6 +14,12 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
     public Material normalMaterial;
     public Material hoverMaterial;
     public Material clickMaterial;
+
+    [Header("Audio")]
+    public AudioClip hoverSound;
+    [Range(0f, 1f)] public float hoverVolume = 0.5f;
+    public AudioClip clickSound;
+    [Range(0f, 1f)] public float clickVolume = 0.8f;
 
     [Header("Debug")]
     public bool debugLog = true;
@@ -32,7 +36,6 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     private void OnDisable()
     {
-        // Reset state when disabled to prevent stuck hover
         _isHovered = false;
         _isClicking = false;
         CancelInvoke(nameof(ReturnToNormal));
@@ -42,32 +45,28 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
     public void OnPointerEnter(PointerEventData eventData)
     {
         _isHovered = true;
-
-        if (debugLog)
-            Debug.Log($"[HoverEffect] ENTER → {gameObject.name} | hovered={_isHovered} | clicking={_isClicking}");
-
         if (!_isClicking)
+        {
             ApplyHover();
+            if (hoverSound != null) AudioService.PlayClip2D(hoverSound, hoverVolume);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         _isHovered = false;
-
-        if (debugLog)
-            Debug.Log($"[HoverEffect] EXIT → {gameObject.name} | hovered={_isHovered} | clicking={_isClicking}");
-
         if (!_isClicking)
+        {
             ApplyNormal();
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (debugLog)
-            Debug.Log($"[HoverEffect] CLICK → {gameObject.name} | hovered={_isHovered}");
-
         _isClicking = true;
         ApplyClick();
+        
+        if (clickSound != null) AudioService.PlayClip2D(clickSound, clickVolume);
 
         CancelInvoke(nameof(ReturnToNormal));
         Invoke(nameof(ReturnToNormal), 0.1f);
@@ -76,14 +75,8 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void ReturnToNormal()
     {
         _isClicking = false;
-
-        if (debugLog)
-            Debug.Log($"[HoverEffect] ReturnToNormal → {gameObject.name} | hovered={_isHovered}");
-
-        if (_isHovered)
-            ApplyHover();
-        else
-            ApplyNormal();
+        if (_isHovered) ApplyHover();
+        else ApplyNormal();
     }
 
     private void ApplyHover()

@@ -12,6 +12,7 @@ public class CaptionManager : MonoBehaviour
     public TextMeshProUGUI captionText;
     public TextMeshProUGUI speakerNameText;
     public float typeSpeed = 0.03f;
+    public AudioClip typeSound;
 
     public bool IsPlaying => captionPanel != null && captionPanel.activeSelf;
     public bool FreezeActive { get; private set; }
@@ -24,6 +25,7 @@ public class CaptionManager : MonoBehaviour
     private bool _isTyping;
     private Coroutine _typeCoroutine;
     private Coroutine _autoAdvanceCoroutine;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
@@ -33,6 +35,8 @@ public class CaptionManager : MonoBehaviour
             return;
         }
         Instance = this;
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
         if (captionPanel != null) captionPanel.SetActive(false);
     }
 
@@ -119,6 +123,10 @@ public class CaptionManager : MonoBehaviour
         foreach (char c in message)
         {
             captionText.text += c;
+            if (typeSound != null && !char.IsWhiteSpace(c))
+            {
+                _audioSource.PlayOneShot(typeSound, 0.3f);
+            }
             yield return new WaitForSeconds(typeSpeed);
         }
         _isTyping = false;

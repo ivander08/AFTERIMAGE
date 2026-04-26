@@ -9,6 +9,9 @@ public class EnemyRusher : EnemyBase
     public float dashDuration = 0.15f;
     public float cooldown = 0.8f;
 
+    public AudioClip chargeSound;
+    public AudioClip dashSound;
+
     private float _lastDashTime = -99f;
     private bool _isDashing = false;
 
@@ -20,7 +23,7 @@ public class EnemyRusher : EnemyBase
 
     protected override void HandleBehavior()
     {
-        if (!CanAggro()) return;//
+        if (!CanAggro()) return;
 
         Transform target = GetTarget();
         float dist = Vector3.Distance(transform.position, target.position);
@@ -55,15 +58,32 @@ public class EnemyRusher : EnemyBase
         Vector3 dashDirection = (new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position).normalized;
         transform.forward = dashDirection;
         
-        // Draw sword and trigger dash animation
+        // Draw sword and charge up
         SetKatanaVisible(true);
         if (_animator != null)
         {
             _animator.SetBool("isWalking", false);
-            _animator.SetTrigger("dashTrigger");
+        }
+        
+        // Play charge sound
+        if (chargeSound != null)
+        {
+            AudioService.PlayClip(chargeSound, transform.position, 1.5f);
         }
         
         yield return new WaitForSeconds(chargeTime);
+        
+        // Trigger dash animation right before movement
+        if (_animator != null)
+        {
+            _animator.SetTrigger("dashTrigger");
+        }
+        
+        // Play dash movement sound
+        if (dashSound != null)
+        {
+            AudioService.PlayClip(dashSound, transform.position, 2f);
+        }
         
         float dashTimer = 0f;
         while (dashTimer < dashDuration)

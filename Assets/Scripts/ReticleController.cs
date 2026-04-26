@@ -22,7 +22,7 @@ public class ReticleController : MonoBehaviour
     {
         if (player == null || Mouse.current == null) return;
 
-        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen)
+        if (CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished || PausePanelController.IsPaused)
         {
             if (rawCursor != null) rawCursor.gameObject.SetActive(false);
             if (clampedCursor != null) clampedCursor.gameObject.SetActive(false);

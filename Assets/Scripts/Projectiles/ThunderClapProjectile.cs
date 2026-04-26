@@ -8,8 +8,20 @@ public class ThunderClapProjectile : BaseProjectile
     public float stunDuration = 2.5f;
     public LayerMask enemyLayer;
 
+    [Header("Audio")]
+    public AudioClip hitSfx;
+    public float hitSfxVolume = 1f;
+
     private Vector3 _startPosition;
     private bool _hasExploded = false;
+    private bool _didPlayHitSfx;
+
+    private void PlayHitSfxOnce()
+    {
+        if (_didPlayHitSfx || hitSfx == null) return;
+        _didPlayHitSfx = true;
+        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f);
+    }
 
     protected override void Awake()
     {
@@ -81,6 +93,8 @@ public class ThunderClapProjectile : BaseProjectile
         {
             ScoreManager.Instance.AddUtilityScore("Thunderclap");
         }
+
+        PlayHitSfxOnce();
         
         Destroy(gameObject);
     }

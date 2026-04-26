@@ -9,6 +9,9 @@ public class ThrowableObject : MonoBehaviour
     public float stunDuration = 1f;
     public LayerMask enemyLayer = -1;
     public LayerMask obstacleLayer = -1;
+    public AudioClip[] throwSounds;
+    public AudioClip[] hitEnemySounds;
+    public GameObject hitEnemyVFXPrefab;
 
     public float playerPickupRadius = 1.2f;
 
@@ -60,6 +63,8 @@ public class ThrowableObject : MonoBehaviour
 
         _targetEnemy = nearestEnemy;
         _hasBeenThrown = true;
+
+        AudioService.PlayRandom(throwSounds, transform.position, 1.5f, 0.95f, 1.05f);
 
         Debug.Log($"[ThrowableObject] Throwing {gameObject.name} at {_targetEnemy.name}");
     }
@@ -116,9 +121,15 @@ public class ThrowableObject : MonoBehaviour
     {
         if (enemy != null)
         {
+            AudioService.PlayRandom(hitEnemySounds, transform.position, 2f, 0.95f, 1.05f);
+            if (hitEnemyVFXPrefab != null)
+            {
+                Vector3 vfxPos = enemy.transform.position + Vector3.up * 0.5f;
+                Instantiate(hitEnemyVFXPrefab, vfxPos, Quaternion.identity);
+            }
             enemy.Stun(stunDuration);
             if (ScoreManager.Instance != null) ScoreManager.Instance.AddThrowableBonus();
-            CameraShakeService.Shake(0.5f);
+            CameraShakeService.Shake(0.8f);
         }
 
         Destroy(gameObject);

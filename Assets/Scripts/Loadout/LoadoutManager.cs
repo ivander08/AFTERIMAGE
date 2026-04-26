@@ -46,6 +46,13 @@ public class LoadoutManager : MonoBehaviour
 
     private void Awake()
     {
+        // OVERRIDE the inspector properties if we transitioned via the Progress Manager
+        if (GameProgressManager.Instance != null && GameProgressManager.Instance.CurrentPendingConfig != null)
+        {
+            levelConfig = GameProgressManager.Instance.CurrentPendingConfig;
+            gameSceneName = levelConfig.levelSceneName;
+        }
+
         availableUtilities = levelConfig.availableUtilities;
         _chosen = new int[availableUtilities.Length];
     }
@@ -135,6 +142,9 @@ public class LoadoutManager : MonoBehaviour
     {
         var entries = new List<LoadoutData.LoadoutEntry>();
 
+        foreach(var entry in entries) 
+            Debug.Log($"[LoadoutManager] Exporting: {entry.definition.utilityName} x{entry.count}");
+
         for (int i = 0; i < availableUtilities.Length; i++)
         {
             if (_chosen[i] > 0)
@@ -151,7 +161,7 @@ public class LoadoutManager : MonoBehaviour
             new GameObject("LoadoutData").AddComponent<LoadoutData>();
 
         LoadoutData.Instance.SetLoadout(entries);
-        SceneManager.LoadScene(gameSceneName);
+        SceneTransitionManager.Instance.LoadScene(gameSceneName);
     }
 
     // ── Visual helpers ────────────────────────────────────────────────────────

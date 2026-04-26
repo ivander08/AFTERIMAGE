@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!isMovementLocked && !CaptionManager.IsFrozen && !TutorialUIManager.IsOpen)
+        if (!isMovementLocked && !CaptionManager.IsFrozen && !TutorialUIManager.IsOpen && !PreGamePanel.IsPlaying && !FinishPanelController.IsFinished)
         {
             HandleInputAndRotation();
             HandleMovement();
@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleInputAndRotation()
     {
-        if (Mouse.current == null || isAimingLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen) return;
+         if (Mouse.current == null || isAimingLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished) return;
 
         Ray ray = _cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane playerPlane = new Plane(Vector3.up, transform.position);
@@ -112,6 +112,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (camTarget == null) return;
         if (CaptionCameraController.IsDriving) return;
+
+        // ADD THIS LINE to stop the camera from tracking the mouse at the end
+        if (FinishPanelController.IsFinished) return; 
 
         float currentDist = _currentAimDirection.magnitude;
 

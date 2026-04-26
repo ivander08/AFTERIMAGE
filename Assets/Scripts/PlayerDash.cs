@@ -27,6 +27,7 @@ public class PlayerDash : MonoBehaviour
 
     public AudioClip dashSound;
     public AudioClip slashSound;
+    public AudioClip thudSound;
 
     public float dodgeCooldown = 1.5f; 
     private float _lastDodgeTime = -99f;
@@ -91,7 +92,7 @@ public class PlayerDash : MonoBehaviour
         CalculateDashData();
         HandleCameraZoom();
 
-        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen)) return;
+        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished)) return;
 
         if (Mouse.current == null || _isDashing) return;
 
@@ -160,6 +161,7 @@ public class PlayerDash : MonoBehaviour
     {
         if (_posComposer == null) return;
         if (CaptionCameraController.IsDriving) return;
+        if (FinishPanelController.IsFinished) return; 
         float currentDist = _posComposer.CameraDistance;
         if (Mathf.Abs(currentDist - _targetCamDistance) < 0.01f) return;
         float newDist = Mathf.Lerp(currentDist, _targetCamDistance, Time.unscaledDeltaTime * zoomSpeed);
@@ -172,12 +174,12 @@ public class PlayerDash : MonoBehaviour
 
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, 1.5f, 1f);
+            AudioService.PlayClip2D(dashSound, 0.15f, 1f);
         }
 
         if (isAttack && slashSound != null)
         {
-            AudioService.PlayClip(slashSound, transform.position, 1.5f, 1.05f);
+            AudioService.PlayClip2D(slashSound, 0.15f, 1.05f);
         }
 
         if (isAttack && katanaHip != null && katanaHand != null)
@@ -211,7 +213,7 @@ public class PlayerDash : MonoBehaviour
             if (zone != null)
             {
                 doorInPath.Break();
-                CameraShakeService.Shake(0.2f); 
+                CameraShakeService.Shake(0.5f); 
                 zone.OnPlayerDashThrough();
                 
                 Vector3 landingPos = zone.GetLandingPosition(transform.position);
@@ -343,6 +345,11 @@ public class PlayerDash : MonoBehaviour
                 if (victim.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(damageAmount);
+                    
+                    if (thudSound != null)
+                    {
+                        AudioService.PlayClip2D(thudSound, 0.05f, 1f);
+                    }
                 }
             }
             yield return new WaitForSeconds(damageDelay);

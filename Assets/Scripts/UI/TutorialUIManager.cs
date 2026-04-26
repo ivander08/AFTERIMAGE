@@ -17,8 +17,10 @@ public class TutorialUIManager : MonoBehaviour
     public TextMeshProUGUI mainText; // Assign TutorialText
     public TextMeshProUGUI tipText; // Assign TipText
     public Button tryItButton; // Assign the UI Button component
+    public AudioClip showSound;
 
     private Action _onCompleteCallback;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
@@ -28,6 +30,8 @@ public class TutorialUIManager : MonoBehaviour
             return; 
         }
         Instance = this;
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
         
         if (panelRoot != null) panelRoot.SetActive(false);
         if (tryItButton != null) tryItButton.onClick.AddListener(CloseTutorial);
@@ -47,6 +51,10 @@ public class TutorialUIManager : MonoBehaviour
         if (tipText != null) tipText.text = data.tipText;
 
         panelRoot.SetActive(true);
+        if (showSound != null)
+        {
+            _audioSource.PlayOneShot(showSound, 0.3f);
+        }
     }
 
     private void CloseTutorial()

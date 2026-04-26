@@ -137,6 +137,12 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 257
+  throwSounds:
+  - {fileID: 8300000, guid: 87a886f54cfbd4741be7beba66532d93, type: 3}
+  hitEnemySounds:
+  - {fileID: 8300000, guid: 5e0078ed93e77bf4e9dff5c98671e1be, type: 3}
+  - {fileID: 8300000, guid: 8053a2d14b23672469326736bd0f4491, type: 3}
+  hitEnemyVFXPrefab: {fileID: 6207748249219978080, guid: 7e215eae3eb101b438d2ab17cf7d5aad, type: 3}
   playerPickupRadius: 1.2
 --- !u!114 &92769093794442114
 MonoBehaviour:

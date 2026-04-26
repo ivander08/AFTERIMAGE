@@ -135,6 +135,8 @@ MonoBehaviour:
   speed: 50
   lifetime: 1
   lureDevicePrefab: {fileID: 6155569945303488007, guid: 91316634ee945c944808e9acda890bb8, type: 3}
+  hitSfx: {fileID: 8300000, guid: aed6899352a930740a6401b0fa691407, type: 3}
+  hitSfxVolume: 1.5
 --- !u!135 &5104859610347169826
 SphereCollider:
   m_ObjectHideFlags: 0

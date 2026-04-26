@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class RoomManager : MonoBehaviour
 {
@@ -18,8 +19,14 @@ public class RoomManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        // Wait for PreGamePanel to finish if it's playing
+        while (PreGamePanel.IsPlaying)
+        {
+            yield return null;
+        }
+
         if (startingRoom != null)
         {
             startingRoom.PlayerEntered();
