@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class PlasmaKunaiProjectile : BaseProjectile
 {
+    [Header("VFX")]
+    public GameObject hitVfx;
     [Header("Audio")]
     public AudioClip hitSfx;
     public float hitSfxVolume = 1.5f;
@@ -18,6 +20,11 @@ public class PlasmaKunaiProjectile : BaseProjectile
 
     public override void OnHit(Collider other)
     {
+        if (hitVfx != null)
+        {
+            Instantiate(hitVfx, transform.position, Quaternion.LookRotation(_lastHitNormal));
+        }
+        
         EnemyPhalanx phalanxParent = other.GetComponentInParent<EnemyPhalanx>();
         
         if (phalanxParent != null && other.gameObject != phalanxParent.gameObject)

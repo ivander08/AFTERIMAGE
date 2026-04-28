@@ -148,6 +148,9 @@ public class FinishPanelController : MonoBehaviour
         PlayerMovement pm = FindObjectOfType<PlayerMovement>();
         if (pm != null) pm.isMovementLocked = true;
         
+        // Fade out the level music
+        if (MusicManager.Instance != null) MusicManager.Instance.FadeOutMusic();
+        
         AudioService.SetLock(true); 
 
         if (_isLevel0)

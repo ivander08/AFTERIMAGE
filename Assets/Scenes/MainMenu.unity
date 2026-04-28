@@ -3446,6 +3446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
   mainMixer: {fileID: 24100000, guid: adb4c2af7e9309d42b5f963e91fa03e8, type: 2}
   menuMusic: {fileID: 8300000, guid: 9d6f2b6af420853439a47907077d9331, type: 3}
+  level0Music: {fileID: 8300000, guid: d33be2df5e30442499d64ec059b88459, type: 3}
   levelMusicTracks:
   - {fileID: 8300000, guid: 9cdc7adfe2ed3124280f3b06d4be6960, type: 3}
   - {fileID: 8300000, guid: 1c29671f466a0ab4091c934fa1ff2adb, type: 3}
@@ -3453,6 +3454,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 62b176e2fa5441a4583505b21c6b5717, type: 3}
   fadeDuration: 1.5
   maxMusicVolume: 0.03
+  level0MusicVolume: 0.07
 --- !u!1 &1465214986
 GameObject:
   m_ObjectHideFlags: 0

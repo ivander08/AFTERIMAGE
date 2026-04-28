@@ -283,5 +283,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KunaiProjectile
   speed: 70
   lifetime: 3
+  hitVfx: {fileID: 6207748249219978080, guid: a0886d282bfd2b74b94968d0825687bf, type: 3}
   hitSfx: {fileID: 8300000, guid: 4cf741dcacb311d479e4e11699af4fb6, type: 3}
   hitSfxVolume: 1.5

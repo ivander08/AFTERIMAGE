@@ -11,16 +11,19 @@ public class MusicManager : MonoBehaviour
 
     [Header("Music Tracks")]
     public AudioClip menuMusic;
+    public AudioClip level0Music;
     public AudioClip[] levelMusicTracks;
 
     [Header("Settings")]
     public float fadeDuration = 1.5f;
-    [Range(0f, 1f)] public float maxMusicVolume = 0.5f; // Cap the max volume
+    [Range(0f, 1f)] public float maxMusicVolume = 0.5f; // Cap the max volume for regular levels
+    [Range(0f, 1f)] public float level0MusicVolume = 0.5f; // Separate volume for Level0
 
     private AudioSource _audioSource;
     private string _currentTrackType = ""; // "Menu" or "Level"
     private string _lastSceneName = "";
     private Coroutine _musicRoutine;
+    private bool _isPlayingLevel0Music = false; // Track if current music is Level0
 
     private void Awake()
     {
@@ -104,11 +107,25 @@ public class MusicManager : MonoBehaviour
             yield return null;
         }
 
-        // Pick a random track
-        if (levelMusicTracks != null && levelMusicTracks.Length > 0)
+        // Check if this is Level0 and we have Level0 music
+        bool isLevel0 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level0";
+        AudioClip trackToPlay = null;
+        
+        if (isLevel0 && level0Music != null)
         {
-            AudioClip randomTrack = levelMusicTracks[Random.Range(0, levelMusicTracks.Length)];
-            _audioSource.clip = randomTrack;
+            trackToPlay = level0Music;
+            _isPlayingLevel0Music = true;
+        }
+        else if (levelMusicTracks != null && levelMusicTracks.Length > 0)
+        {
+            // Pick a random track for non-Level0 scenes
+            trackToPlay = levelMusicTracks[Random.Range(0, levelMusicTracks.Length)];
+            _isPlayingLevel0Music = false;
+        }
+
+        if (trackToPlay != null)
+        {
+            _audioSource.clip = trackToPlay;
             _audioSource.Play();
             
             // Fade it in smoothly
@@ -132,15 +149,16 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator FadeInRoutine()
     {
+        float targetVolume = _isPlayingLevel0Music ? level0MusicVolume : maxMusicVolume;
         float elapsed = 0f;
 
         while (elapsed < fadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-            _audioSource.volume = Mathf.Lerp(0f, maxMusicVolume, elapsed / fadeDuration);
+            _audioSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / fadeDuration);
             yield return null;
         }
-        _audioSource.volume = maxMusicVolume;
+        _audioSource.volume = targetVolume;
     }
 
     // --- VOLUME CONTROL API (For your UI Sliders later) ---
@@ -170,5 +188,13 @@ public class MusicManager : MonoBehaviour
 
         SetMusicVolume(savedMusic);
         SetSFXVolume(savedSFX);
+    }
+
+    // --- LEVEL COMPLETION API ---
+
+    public void FadeOutMusic()
+    {
+        if (_musicRoutine != null) StopCoroutine(_musicRoutine);
+        _musicRoutine = StartCoroutine(FadeOutRoutine());
     }
 }

@@ -348,7 +348,7 @@ public class PlayerDash : MonoBehaviour
                     
                     if (thudSound != null)
                     {
-                        AudioService.PlayClip2D(thudSound, 0.05f, 1f);
+                        AudioService.PlayClip2D(thudSound, 0.1f, 1f);
                     }
                 }
             }
@@ -473,6 +473,8 @@ public class PlayerDash : MonoBehaviour
             }
         }
     }
+
+    public bool IsPlayerDashing() => _isDashing;
 
     void SetColor(Color c) { if (playerRenderer != null) playerRenderer.material.color = c; }
     

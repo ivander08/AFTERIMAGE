@@ -11,6 +11,8 @@ public class EnemyRusher : EnemyBase
 
     public AudioClip chargeSound;
     public AudioClip dashSound;
+    public float chargeSoundMinDistance = 8f;
+    public float dashSoundMinDistance = 3f;
 
     private float _lastDashTime = -99f;
     private bool _isDashing = false;
@@ -68,7 +70,7 @@ public class EnemyRusher : EnemyBase
         // Play charge sound
         if (chargeSound != null)
         {
-            AudioService.PlayClip(chargeSound, transform.position, 1.5f);
+            AudioService.PlayClip(chargeSound, transform.position, volume: 1.5f, minDistance: chargeSoundMinDistance);
         }
         
         yield return new WaitForSeconds(chargeTime);
@@ -82,7 +84,7 @@ public class EnemyRusher : EnemyBase
         // Play dash movement sound
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, 2f);
+            AudioService.PlayClip(dashSound, transform.position, volume: 2f, minDistance: dashSoundMinDistance);
         }
         
         float dashTimer = 0f;
@@ -93,9 +95,21 @@ public class EnemyRusher : EnemyBase
             Collider[] hits = Physics.OverlapSphere(transform.position, 1.0f);
             foreach(var hit in hits)
             {
-                if(hit.CompareTag("Player") && hit.TryGetComponent(out IDamageable damageable))
+                if(hit.CompareTag("Player"))
                 {
-                    damageable.TakeDamage(damage);
+                    PlayerDash playerDash = hit.GetComponent<PlayerDash>();
+                    if (playerDash != null && playerDash.IsPlayerDashing())
+                    {
+                        // Player is dashing head-on, Rusher takes damage instead
+                        if (TryGetComponent(out IDamageable rushDamageable))
+                        {
+                            rushDamageable.TakeDamage(damage);
+                        }
+                    }
+                    else if (hit.TryGetComponent(out IDamageable damageable))
+                    {
+                        damageable.TakeDamage(damage);
+                    }
                 }
             }
 

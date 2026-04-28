@@ -9998,7 +9998,9 @@ MonoBehaviour:
   dashDuration: 0.15
   cooldown: 1.5
   chargeSound: {fileID: 8300000, guid: 394fdc4c21bea3444844cb7810009ec6, type: 3}
-  dashSound: {fileID: 8300000, guid: e90f1e5fb8cebf74686e34a25073fb93, type: 3}
+  dashSound: {fileID: 8300000, guid: 7c7796b64f2b19141b405786a9eddd53, type: 3}
+  chargeSoundMinDistance: 8
+  dashSoundMinDistance: 10
 --- !u!114 &6391932741704358070
 MonoBehaviour:
   m_ObjectHideFlags: 0

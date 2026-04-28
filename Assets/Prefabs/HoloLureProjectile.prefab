@@ -135,8 +135,17 @@ MonoBehaviour:
   speed: 50
   lifetime: 1
   lureDevicePrefab: {fileID: 6155569945303488007, guid: 91316634ee945c944808e9acda890bb8, type: 3}
+  hitVfx: {fileID: 6207748249219978080, guid: e7f4e988e3bd687498cf5c8e80c042ed, type: 3}
+  lureSpawnDistance: 1
+  lureSpawnMinDistance: 0.1
+  lureSpawnMaxDistance: 1.5
+  lureSpawnCheckRadius: 0.25
+  lureSpawnStep: 0.15
+  destroyVfx: {fileID: 6207748249219978080, guid: e7f4e988e3bd687498cf5c8e80c042ed, type: 3}
   hitSfx: {fileID: 8300000, guid: aed6899352a930740a6401b0fa691407, type: 3}
   hitSfxVolume: 1.5
+  destroySfx: {fileID: 8300000, guid: 455b8e55f5156084cb024640d6d63afd, type: 3}
+  destroySfxVolume: 1
 --- !u!135 &5104859610347169826
 SphereCollider:
   m_ObjectHideFlags: 0

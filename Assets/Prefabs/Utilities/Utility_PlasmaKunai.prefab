@@ -49,4 +49,4 @@ MonoBehaviour:
   _currentUses: 0
   plasmaKunaiPrefab: {fileID: 2842522608422121543, guid: 70aad3f9acda1384b81e99bae159512c, type: 3}
   throwSfx: {fileID: 8300000, guid: 607c97eeda612544d813be58aafe7762, type: 3}
-  throwSfxVolume: 0.1
+  throwSfxVolume: 0.07

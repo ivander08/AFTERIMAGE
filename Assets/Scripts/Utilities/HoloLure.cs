@@ -6,6 +6,10 @@ public class HoloLure : MonoBehaviour, IDamageable
     public float lifetime = 3f;
     public float aggroRadius = 20f;
     public LayerMask enemyLayer;
+    [Header("Destroy FX")]
+    public GameObject destroyVfx;
+    public AudioClip destroySfx;
+    public float destroySfxVolume = 1f;
 
     private void Start()
     {
@@ -16,6 +20,16 @@ public class HoloLure : MonoBehaviour, IDamageable
     private void OnDestroy()
     {
         ReleaseEnemies();
+
+        if (destroyVfx != null)
+        {
+            Instantiate(destroyVfx, transform.position, Quaternion.identity);
+        }
+
+        if (destroySfx != null)
+        {
+            AudioService.PlayClip(destroySfx, transform.position, destroySfxVolume, 1f, -1f, 10f, -1f);
+        }
     }
 
     void AttractEnemies()

@@ -3,6 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class ScatterProjectile : BaseProjectile
 {
+    [Header("VFX")]
+    public GameObject hitVfx;
+
     private int _damage = 1;
 
     protected override void Awake()
@@ -37,6 +40,7 @@ public class ScatterProjectile : BaseProjectile
             return;
         }
         
+        _lastHitNormal = -transform.forward;
         OnHit(other);
     }
 
@@ -45,6 +49,11 @@ public class ScatterProjectile : BaseProjectile
         if (other.GetComponent<ScatterProjectile>() != null)
         {
             return;
+        }
+
+        if (hitVfx != null)
+        {
+            Instantiate(hitVfx, transform.position, Quaternion.LookRotation(_lastHitNormal));
         }
         
         if (other.TryGetComponent(out IDamageable damageable))

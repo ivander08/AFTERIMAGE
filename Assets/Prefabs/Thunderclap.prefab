@@ -155,11 +155,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StunGrenadeProjectile
   speed: 50
   lifetime: 3
-  explosionRadius: 3
+  explosionRadius: 4.5
   maxRange: 8
   stunDuration: 0.8
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  explosionVfx: {fileID: 6207748249219978080, guid: 0389979d6ec5c9446a9590e70e5f97fd, type: 3}
   hitSfx: {fileID: 8300000, guid: fe99df71d8559b14a8ffe0f86199f7c4, type: 3}
   hitSfxVolume: 1

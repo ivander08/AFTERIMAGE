@@ -7,6 +7,7 @@ public abstract class BaseProjectile : MonoBehaviour
     public float lifetime = 3f;
 
     protected Rigidbody _rb;
+    protected Vector3 _lastHitNormal = Vector3.forward;
 
     protected virtual void Awake()
     {
@@ -43,7 +44,8 @@ public abstract class BaseProjectile : MonoBehaviour
         {
             if (!hit.collider.CompareTag("Player"))
             {
-                transform.position = hit.point; 
+                transform.position = hit.point;
+                _lastHitNormal = hit.normal;
                 OnHit(hit.collider);
                 return; // Stop moving
             }
@@ -55,12 +57,19 @@ public abstract class BaseProjectile : MonoBehaviour
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) return;
+        // Triggers don't provide a contact normal, approximate from travel direction
+        _lastHitNormal = -transform.forward;
         OnHit(other);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player")) return;
+        if (collision.contactCount > 0)
+            _lastHitNormal = collision.GetContact(0).normal;
+        else
+            _lastHitNormal = -transform.forward;
+
         OnHit(collision.collider);
     }
 

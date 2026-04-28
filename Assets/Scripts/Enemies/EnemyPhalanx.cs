@@ -9,6 +9,9 @@ public class EnemyPhalanx : EnemyBase
     public float attackRange = 2f;
     public float attackCooldown = 0.5f;
     public float attackWindup = 0.1f;
+    
+    [SerializeField] private GameObject shieldBreakVFX;
+    [SerializeField] private AudioClip shieldBreakSFX;
 
     private GameObject _shieldInstance;
     private bool _shieldActive = true;
@@ -123,6 +126,19 @@ public class EnemyPhalanx : EnemyBase
         
         if (shieldCollider != null)
             shieldCollider.SetActive(false);
+
+        // Spawn VFX at shield position
+        if (shieldBreakVFX != null)
+        {
+            Vector3 spawnPos = _shieldInstance != null ? _shieldInstance.transform.position : transform.position;
+            Instantiate(shieldBreakVFX, spawnPos, Quaternion.identity);
+        }
+
+        // Play shield break sound
+        if (shieldBreakSFX != null)
+        {
+            AudioService.PlayClip2D(shieldBreakSFX, 0.08f, 1f);
+        }
     }
 
     public bool HasShield() => _shieldActive;

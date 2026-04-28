@@ -70868,6 +70868,10 @@ PrefabInstance:
       value: UICanvas
       objectReference: {fileID: 0}
     - target: {fileID: 8926923459952953735, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
+      propertyPath: finishCamera
+      value: 
+      objectReference: {fileID: 1358995082}
+    - target: {fileID: 8926923459952953735, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: finishPanelSfx
       value: 
       objectReference: {fileID: 8300000, guid: 8c3cba2200ceb8b42983ecd6eebf9000, type: 3}

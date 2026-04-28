@@ -8,6 +8,8 @@ public class ThunderClapProjectile : BaseProjectile
     public float stunDuration = 2.5f;
     public LayerMask enemyLayer;
 
+    [Header("VFX")]
+    public GameObject explosionVfx;
     [Header("Audio")]
     public AudioClip hitSfx;
     public float hitSfxVolume = 1f;
@@ -61,6 +63,11 @@ public class ThunderClapProjectile : BaseProjectile
     void Explode(GameObject directHitObj)
     {
         _hasExploded = true;
+        
+        if (explosionVfx != null)
+        {
+            Instantiate(explosionVfx, transform.position, Quaternion.LookRotation(_lastHitNormal));
+        }
         
         if (directHitObj != null)
         {

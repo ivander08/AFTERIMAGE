@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: de77239a54cf5ca4f9484ac1644eb605, type: 2}
+  - {fileID: 2100000, guid: e6875da3b9ed71842863e3f2e1b0128f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -248,6 +248,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  destroyVfx: {fileID: 6207748249219978080, guid: e7f4e988e3bd687498cf5c8e80c042ed, type: 3}
+  destroySfx: {fileID: 8300000, guid: 455b8e55f5156084cb024640d6d63afd, type: 3}
+  destroySfxVolume: 1
 --- !u!1001 &7764150689568845886
 PrefabInstance:
   m_ObjectHideFlags: 0
