@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// Base class for all projectile types. Handles movement, collision, lifetime,
+/// and shield-breaking logic.
+/// </summary>
+
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseProjectile : MonoBehaviour
 {
@@ -79,12 +84,10 @@ public abstract class BaseProjectile : MonoBehaviour
     {
         if (other.TryGetComponent(out EnemyPhalanx phalanx))
         {
-            Debug.Log($"[BaseProjectile] Shield broken (direct hit)!");
             phalanx.BreakShield();
         }
         else if (other.GetComponentInParent<EnemyPhalanx>() is EnemyPhalanx parentPhalanx)
         {
-            Debug.Log($"[BaseProjectile] Shield broken (parent search)!");
             parentPhalanx.BreakShield();
         }
     }

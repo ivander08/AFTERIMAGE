@@ -2,6 +2,11 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Represents a single room. Manages enemy registration, room locking,
+/// combat state, and caption triggers.
+/// </summary>
+
 public class Room : MonoBehaviour
 {
     public string RoomName => gameObject.name;

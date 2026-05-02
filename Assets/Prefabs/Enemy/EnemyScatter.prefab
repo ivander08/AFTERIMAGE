@@ -111,7 +111,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 3
+  m_Speed: 7
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -163,12 +163,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScatter
   health: 1
-  detectRange: 15
+  detectRange: 30
   damage: 1
   isInvulnerable: 0
   scoreValue: 100
   showGizmos: 0
-  realizationTime: 0.1
+  realizationTime: 0.05
   patrolPoints: []
   minPatrolWait: 1
   maxPatrolWait: 3
@@ -205,7 +205,7 @@ MonoBehaviour:
   firePoint: {fileID: 8803910493180491816}
   maxRange: 8
   attackCooldown: 0.8
-  attackWindup: 0.4
+  attackWindup: 0.3
   projectileCount: 5
   spreadAngle: 45
   projectileSpeed: 45

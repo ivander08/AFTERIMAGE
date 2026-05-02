@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Door that can be locked/unlocked and broken by player dash.
+/// </summary>
+
 public enum DoorMaterial
 {
     Wood,

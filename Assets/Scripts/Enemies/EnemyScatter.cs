@@ -1,6 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Ranged enemy that fires spread projectiles at the player.
+/// Has tracking, windup, and fire phases.
+/// </summary>
+
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class EnemyScatter : EnemyBase
@@ -53,7 +58,7 @@ public class EnemyScatter : EnemyBase
 
         if (distance > maxRange)
         {
-            _agent.isStopped = false; // <-- ADDED: Allow the agent to move again
+            _agent.isStopped = false;
             _agent.SetDestination(target.position);
         }
         else

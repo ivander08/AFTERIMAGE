@@ -1,4 +1,8 @@
 using UnityEngine;
+
+/// <summary>
+/// Controls crosshair UI position and behavior.
+/// </summary>
 using UnityEngine.InputSystem;
 
 public class ReticleController : MonoBehaviour

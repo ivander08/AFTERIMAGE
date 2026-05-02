@@ -1,4 +1,3 @@
-// Assets/Scripts/Audio/AmbientAudioTrigger.cs
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]

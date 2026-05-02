@@ -1,4 +1,3 @@
-// Assets/Scripts/Loadout/LoadoutData.cs
 using System.Collections.Generic;
 using UnityEngine;
 

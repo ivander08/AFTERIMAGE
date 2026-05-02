@@ -1,4 +1,8 @@
 using UnityEngine;
+
+/// <summary>
+/// Tracks kill score, multi-kill bonuses, and throwable bonuses.
+/// </summary>
 using System;
 
 public class ScoreManager : MonoBehaviour

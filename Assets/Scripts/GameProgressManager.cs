@@ -1,5 +1,8 @@
-// Assets/Scripts/GameProgressManager.cs
 using UnityEngine;
+
+/// <summary>
+/// Persists game progress (levels unlocked, score totals) between scenes.
+/// </summary>
 using UnityEngine.SceneManagement;
 
 public class GameProgressManager : MonoBehaviour

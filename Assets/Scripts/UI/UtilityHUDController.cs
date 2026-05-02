@@ -1,5 +1,11 @@
-// Assets/Scripts/UI/UtilityHUDController.cs
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+/// <summary>
+/// Displays utility slot icons, counts, and selection state in the HUD.
+/// Auto-refreshes when the selected utility or use-count changes.
+/// </summary>
 using UnityEngine.UI;
 using TMPro;
 

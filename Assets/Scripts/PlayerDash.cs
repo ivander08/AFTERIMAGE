@@ -5,14 +5,25 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using Unity.Cinemachine;
 
+/// <summary>
+/// Handles player dash attacks (left-click) and dodge rolls (Ctrl).
+/// Manages enemy highlights, door breaking, camera zoom, and slow-mo recovery.
+/// </summary>
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerDash : MonoBehaviour
 {
+    #region Inspector Fields - Dash
     public float maxDashDistance = 6f;
-    public float dashSpeed = 40f; 
+    public float dashSpeed = 40f;
+    #endregion
+
+    #region Inspector Fields - Combat
 
     public float damageDelay = 0.05f;
+    #endregion
+
+    #region Inspector Fields - Camera
     public float missPenalty = 1.0f;
     public float slowMotionFactor = 0.3f;
 
@@ -25,11 +36,20 @@ public class PlayerDash : MonoBehaviour
     public float zoomDistance = 15f;
     public float zoomSpeed = 5f;
 
+    #endregion
+
+    #region Inspector Fields - Audio
     public AudioClip dashSound;
+    #endregion
+
+    #region Inspector Fields - Cooldown
     public AudioClip slashSound;
     public AudioClip thudSound;
 
-    public float dodgeCooldown = 1.5f; 
+    public float dodgeCooldown = 1.5f;
+    #endregion
+
+    #region Inspector Fields - VFX & Animation
     private float _lastDodgeTime = -99f;
 
     public TrailRenderer trail;
@@ -40,7 +60,10 @@ public class PlayerDash : MonoBehaviour
     public GameObject katanaHip;
     public GameObject katanaHand;
 
-    public LayerMask environmentMask; 
+    public LayerMask environmentMask;
+    #endregion
+
+    #region Private State
 
     private bool _isDashing = false;
     private bool _isPenaltyActive = false;
@@ -61,6 +84,9 @@ public class PlayerDash : MonoBehaviour
     
     private readonly HashSet<EnemyBase> _highlightedEnemies = new HashSet<EnemyBase>();
 
+    #endregion
+
+    #region Unity Lifecycle
     void Awake()
     {
         _cc = GetComponent<CharacterController>();
@@ -84,6 +110,10 @@ public class PlayerDash : MonoBehaviour
                 _targetCamDistance = normalDistance;
                 _posComposer.CameraDistance = normalDistance;
             }
+        
+            #endregion
+        
+            #region Update Loop
         }
     }
 
@@ -190,7 +220,7 @@ public class PlayerDash : MonoBehaviour
 
         if (_animator != null) _animator.SetTrigger("dashTrigger");
         
-        bool wasAlreadyLocked = _movement.isMovementLocked;//
+        bool wasAlreadyLocked = _movement.isMovementLocked;
 
         if (!wasAlreadyLocked)
         {
@@ -281,7 +311,6 @@ public class PlayerDash : MonoBehaviour
             yield return null;
         }
 
-        // Let the animator animation finish independently without blocking recovery logic
         if (_animator != null)
         {
             StartCoroutine(WaitForDashAnimationEnd());
@@ -322,6 +351,10 @@ public class PlayerDash : MonoBehaviour
         
         _isDashing = false;
     }
+
+    #endregion
+
+    #region Damage & Recovery
 
     IEnumerator DealSequentialDamage(List<RaycastHit> targets, Vector3 attackDirection)
     {
@@ -380,6 +413,10 @@ public class PlayerDash : MonoBehaviour
         _isPenaltyActive = false;
     }
 
+    #endregion
+
+    #region Animation
+
     IEnumerator WaitForDashAnimationEnd()
     {
         yield return null;
@@ -396,6 +433,14 @@ public class PlayerDash : MonoBehaviour
             katanaHand.SetActive(false);
         }
     }
+
+    #endregion
+
+    #region Target Detection
+
+    #endregion
+
+    #region Highlight System
 
     List<RaycastHit> GetSortedTargets(Vector3 dir, float dist)
     {
@@ -462,6 +507,10 @@ public class PlayerDash : MonoBehaviour
         return null;
     }
 
+    #endregion
+
+    #region Projectile Swat
+
     void CheckAndDestroyProjectiles(Vector3 position, Vector3 dashDir)
     {
         Collider[] colliders = Physics.OverlapSphere(position, hitRadius);
@@ -474,9 +523,17 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
-    public bool IsPlayerDashing() => _isDashing;
+    #endregion
 
+    #region Public API
+    public bool IsPlayerDashing() => _isDashing;
+    #endregion
+
+    #region Utilities
     void SetColor(Color c) { if (playerRenderer != null) playerRenderer.material.color = c; }
-    
+    #endregion
+
+    #region Gizmos
     void OnDrawGizmosSelected() { Gizmos.color = Color.red; Gizmos.DrawWireSphere(transform.position, hitRadius); }
+    #endregion
 }

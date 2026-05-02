@@ -3,6 +3,10 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Melee enemy that phases between ethereal (invulnerable) and solid states.
+/// </summary>
+
 public class EnemyGeist : EnemyBase
 {
     public float minSolidTime = 0.5f;

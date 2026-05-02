@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Shield-bearing melee enemy. The shield must be broken
+/// before the Phalanx can be damaged normally.
+/// </summary>
+
 public class EnemyPhalanx : EnemyBase
 {
     public GameObject shield;
@@ -83,7 +88,6 @@ public class EnemyPhalanx : EnemyBase
         _agent.isStopped = true;
 
         transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
-        Debug.Log($"[EnemyPhalanx] {name} attacking player!");
 
         // Fire attack animation and draw sword
         SetKatanaVisible(true);
@@ -103,7 +107,6 @@ public class EnemyPhalanx : EnemyBase
         {
             if (target.TryGetComponent(out IDamageable damageable))
             {
-                Debug.Log($"[EnemyPhalanx] Damage dealt to player!");
                 damageable.TakeDamage(damage);
             }
         }

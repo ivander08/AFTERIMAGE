@@ -1,4 +1,8 @@
 using UnityEngine;
+
+/// <summary>
+/// Manages player hit points, invulnerability frames, and death state.
+/// </summary>
 using UnityEngine.SceneManagement;
 using System.Collections;
 using Unity.Cinemachine;

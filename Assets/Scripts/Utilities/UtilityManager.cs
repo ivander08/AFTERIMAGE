@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manages utility switching (Q key) and usage (right-click).
+/// Utility HUD is handled by UtilityHUDController.
+/// </summary>
+
 public class UtilityManager : MonoBehaviour
 {
     public BaseUtility[] availableUtilities;
@@ -51,7 +56,6 @@ public class UtilityManager : MonoBehaviour
         if (availableUtilities == null || availableUtilities.Length <= 1) return;
 
         _currentUtilityIndex = (_currentUtilityIndex + 1) % availableUtilities.Length;
-        Debug.Log($"Switched to: {CurrentUtility?.UtilityName}");
     }
 
     public bool UseCurrentUtility()

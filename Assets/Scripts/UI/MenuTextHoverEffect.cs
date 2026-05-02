@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/MenuTextHoverEffect.cs
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;

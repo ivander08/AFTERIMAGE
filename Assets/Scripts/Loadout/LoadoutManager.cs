@@ -1,4 +1,3 @@
-// Assets/Scripts/Loadout/LoadoutManager.cs
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

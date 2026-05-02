@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/PreGamePanel.cs
 using System.Collections;
 using UnityEngine;
 using TMPro;

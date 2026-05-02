@@ -1,5 +1,9 @@
-// Assets/Scripts/ThrowableObject.cs
 using UnityEngine;
+
+/// <summary>
+/// Auto-aiming throwable that homes to and stuns the nearest visible enemy.
+/// Activated when the player touches it.
+/// </summary>
 
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
@@ -55,18 +59,13 @@ public class ThrowableObject : MonoBehaviour
     {
         EnemyBase nearestEnemy = FindNearestVisibleEnemy();
 
-        if (nearestEnemy == null)
-        {
-            Debug.Log("[ThrowableObject] No visible enemies found.");
-            return;
-        }
+        if (nearestEnemy == null) return;
 
         _targetEnemy = nearestEnemy;
         _hasBeenThrown = true;
 
         AudioService.PlayRandom(throwSounds, transform.position, 1.5f, 0.95f, 1.05f);
 
-        Debug.Log($"[ThrowableObject] Throwing {gameObject.name} at {_targetEnemy.name}");
     }
 
     EnemyBase FindNearestVisibleEnemy()

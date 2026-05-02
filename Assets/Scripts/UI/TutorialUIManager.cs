@@ -1,5 +1,12 @@
-// Assets/Scripts/UI/TutorialUIManager.cs
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System;
+
+/// <summary>
+/// Manages the tutorial popup panel with image, text, tip,
+/// and a "Try It" button that closes and unfreezes the player.
+/// </summary>
 using UnityEngine.UI;
 using TMPro;
 using System;

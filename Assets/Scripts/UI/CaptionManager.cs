@@ -4,6 +4,11 @@ using System;
 using System.Collections;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manages subtitle/caption sequences with typewriter effect,
+/// speaker names, and optional player freeze.
+/// </summary>
+
 public class CaptionManager : MonoBehaviour
 {
     public static CaptionManager Instance { get; private set; }

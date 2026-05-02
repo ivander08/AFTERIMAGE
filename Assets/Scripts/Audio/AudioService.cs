@@ -1,6 +1,9 @@
-// Assets/Scripts/Audio/AudioService.cs
 using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Static audio service for playing spatialized sounds and clips.
+/// </summary>
 using UnityEngine.Audio;
 
 public enum AudioPriority { UI = 0, World = 1 }

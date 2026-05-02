@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles player movement (WASD), mouse-aim rotation,
+/// and camera target positioning.
+/// </summary>
+
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -113,8 +118,7 @@ public class PlayerMovement : MonoBehaviour
         if (camTarget == null) return;
         if (CaptionCameraController.IsDriving) return;
 
-        // ADD THIS LINE to stop the camera from tracking the mouse at the end
-        if (FinishPanelController.IsFinished) return; 
+        if (FinishPanelController.IsFinished) return;
 
         float currentDist = _currentAimDirection.magnitude;
 

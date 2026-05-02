@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Special ability that performs a quick-draw slash to break enemy shields.
+/// </summary>
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerMovement))]

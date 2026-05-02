@@ -1,5 +1,8 @@
-// Assets/Scripts/Audio/FootstepAudio.cs
 using UnityEngine;
+
+/// <summary>
+/// Plays footstep sounds from a triggered animation event.
+/// </summary>
 
 public class FootstepAudio : MonoBehaviour
 {

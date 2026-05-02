@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/SceneTransitionManager.cs
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;

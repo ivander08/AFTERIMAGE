@@ -2,6 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 
+/// <summary>
+/// Support enemy that tethers to a nearby ally, making it invulnerable
+/// until the Weaver is defeated.
+/// </summary>
+
 public class EnemyWeaver : EnemyBase
 {
     public float tetherRange = 20f;

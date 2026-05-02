@@ -1,4 +1,3 @@
-// Assets/Scripts/Audio/AmbientAudioController.cs
 using System.Collections;
 using UnityEngine;
 

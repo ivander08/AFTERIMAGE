@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Melee enemy that charges at the player with a dashing attack.
+/// Can be countered by the player dashing into it head-on.
+/// </summary>
+
 public class EnemyRusher : EnemyBase
 {
     public float dashRange = 4f;

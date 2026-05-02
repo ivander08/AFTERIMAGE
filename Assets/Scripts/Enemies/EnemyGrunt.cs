@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Basic melee enemy that chases and attacks the player.
+/// </summary>
+
 public class EnemyGrunt : EnemyBase
 {
     public float attackRange = 1.5f;

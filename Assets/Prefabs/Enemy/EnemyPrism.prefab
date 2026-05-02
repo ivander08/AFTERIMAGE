@@ -10229,7 +10229,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 7
+  m_Speed: 5
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -10281,7 +10281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPrism
   health: 1
-  detectRange: 15
+  detectRange: 30
   damage: 1
   isInvulnerable: 0
   scoreValue: 100

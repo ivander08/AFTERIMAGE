@@ -1,4 +1,8 @@
 using UnityEngine;
+
+/// <summary>
+/// Static service for camera shake effects used by damage events.
+/// </summary>
 using Unity.Cinemachine;
 
 [RequireComponent(typeof(CinemachineImpulseSource))]

@@ -304,11 +304,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaver
   health: 1
-  detectRange: 15
+  detectRange: 30
   damage: 1
-  rend: {fileID: 0}
   isInvulnerable: 0
+  scoreValue: 100
   showGizmos: 1
+  realizationTime: 0.05
+  patrolPoints: []
+  minPatrolWait: 1
+  maxPatrolWait: 3
+  deathSounds: []
+  hitSounds: []
+  deathVFXPrefab: {fileID: 0}
+  katanaHip: {fileID: 0}
+  katanaHand: {fileID: 0}
+  bloodDecalPrefabs: []
   tetherRange: 20
   enemyLayer:
     serializedVersion: 2
@@ -432,6 +442,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetectionUI
   targetingSquare: {fileID: 3754389024605473265}
   indicatorIcon: {fileID: 1319819531566878663}
+  indicatorColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightEnterSound: {fileID: 0}
+  highlightExitSound: {fileID: 0}
 --- !u!1001 &1115056761380888620
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/MainMenuUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 

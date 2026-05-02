@@ -3,10 +3,15 @@ using UnityEngine.AI;
 using System.Collections;
 using System;
 
+/// <summary>
+/// Base class for all enemy types. Handles patrol, combat aggro,
+/// knockback/stun, damage, death, and audio/VFX feedback.
+/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Rigidbody))]
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
+    #region Inspector Fields
     public int health = 1;
     public float detectRange = 15f;
     public int damage = 1;
@@ -37,8 +42,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected GameObject katanaHip;
     [SerializeField] protected GameObject katanaHand;
 
+    #endregion
+
+    #region State Properties
     public bool IsDead => _isDead;
     public event Action OnDeath;
+    #endregion
 
     public GameObject[] bloodDecalPrefabs;
 
@@ -52,6 +61,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     private float _aggroStartTime = float.MaxValue;
     private bool _hasRealized = false;
 
+    #region Unity Lifecycle
     protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -108,6 +118,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         _currentTarget = newTarget != null ? newTarget : _defaultTarget;
     }
 
+    #endregion
+
+    #region Combat & Aggro
+
     protected virtual void Update()
     {
         if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null || IsPlayerDead) return;
@@ -133,6 +147,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             HandlePatrol();
         }
     }
+
+    #endregion
+
+    #region Patrol
 
     private void HandlePatrol()
     {
@@ -202,6 +220,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected abstract void HandleBehavior();
 
+    #endregion
+
+    #region Damage & Death
+
     public virtual void TakeDamage(int damage)
     {
         if (isInvulnerable) return;
@@ -252,6 +274,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         OnDeath?.Invoke();
     }
 
+    #endregion
+
+    #region Highlight
+
     private void SpawnBloodPool()
     {
         if (bloodDecalPrefabs == null || bloodDecalPrefabs.Length == 0) return;
@@ -273,6 +299,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    #endregion
+
+    #region Crowd Control
+
     public void SetFrozen(bool frozen)
     {
         _isStunned = frozen;
@@ -287,12 +317,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    #endregion
+
+    #region Gizmos
     protected virtual void OnDrawGizmosSelected()
     {
         if (!showGizmos) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
     }
+
+    #endregion
+
+    #region Knockback & Stun Coroutines
 
     public void Stun(float duration)
     {
@@ -362,6 +399,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             ResetPhysicsState();
         }
+        #endregion
     }
 
     IEnumerator StunRoutine(float duration)

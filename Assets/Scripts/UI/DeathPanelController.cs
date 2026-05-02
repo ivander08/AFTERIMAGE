@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/DeathPanelController.cs
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;

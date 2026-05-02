@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/FinishPanelController.cs
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;

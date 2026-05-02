@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Singleton manager that tracks the player's current room
+/// and triggers room entry logic.
+/// </summary>
+
 public class RoomManager : MonoBehaviour
 {
     public static RoomManager Instance { get; private set; }

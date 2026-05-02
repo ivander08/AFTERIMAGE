@@ -1,4 +1,3 @@
-// Assets/Scripts/UI/UIParallax.cs
 using UnityEngine;
 using UnityEngine.InputSystem;
 

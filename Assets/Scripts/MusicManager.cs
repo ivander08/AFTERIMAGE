@@ -1,6 +1,9 @@
-// Assets/Scripts/Audio/MusicManager.cs
 using System.Collections;
 using UnityEngine;
+
+/// <summary>
+/// Manages background music playback and track switching.
+/// </summary>
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 

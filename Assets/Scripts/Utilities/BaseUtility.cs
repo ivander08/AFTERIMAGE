@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Base class for all equippable utility items with cooldown and use-count.
+/// </summary>
+
 public abstract class BaseUtility : MonoBehaviour
 {
     public float cooldown = 0.1f;

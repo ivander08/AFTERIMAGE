@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrowableObject
   throwSpeed: 50
-  detectionRange: 15
+  detectionRange: 30
   stunDuration: 1
   enemyLayer:
     serializedVersion: 2
