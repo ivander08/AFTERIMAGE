@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2495235798381840005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2732053605660567652}
+  - component: {fileID: 2621225813188299674}
+  - component: {fileID: 5444860971105641258}
+  m_Layer: 0
+  m_Name: GameProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2732053605660567652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495235798381840005}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13672, y: 35.62591, z: 1.18544}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2621225813188299674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495235798381840005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf9077d63c54ae4cbec23e8e50163cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameProgressManager
+  level0SceneName: Level0
+  loadoutSceneName: LoadoutScene
+  mainMenuSceneName: MainMenu
+  loadoutConfigs:
+  - {fileID: 11400000, guid: ef98f025b086ae64d93f8f8adad0f088, type: 2}
+  - {fileID: 11400000, guid: aedeb530865b0aa45ab2966fc5087efe, type: 2}
+  - {fileID: 11400000, guid: 858adb0db31119a42a2f8ec49e99d8a2, type: 2}
+  - {fileID: 11400000, guid: ce76b761b3460364993856290c57759e, type: 2}
+  - {fileID: 11400000, guid: fc0967800a0031444a7330c5e786c93e, type: 2}
+--- !u!114 &5444860971105641258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495235798381840005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19bb73406d842247b0e30dc0100c1cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MusicManager
+  mainMixer: {fileID: 24100000, guid: adb4c2af7e9309d42b5f963e91fa03e8, type: 2}
+  menuMusic: {fileID: 8300000, guid: 9d6f2b6af420853439a47907077d9331, type: 3}
+  level0Music: {fileID: 8300000, guid: d33be2df5e30442499d64ec059b88459, type: 3}
+  levelMusicTracks:
+  - {fileID: 8300000, guid: 9cdc7adfe2ed3124280f3b06d4be6960, type: 3}
+  - {fileID: 8300000, guid: 1c29671f466a0ab4091c934fa1ff2adb, type: 3}
+  - {fileID: 8300000, guid: 4144d3bcbcb751f41bc0773ab4418311, type: 3}
+  - {fileID: 8300000, guid: 62b176e2fa5441a4583505b21c6b5717, type: 3}
+  - {fileID: 8300000, guid: 555a8b28670443244a60c3ec1cabd37c, type: 3}
+  - {fileID: 8300000, guid: a81151ad10dcdb74197eddb4c1dd8000, type: 3}
+  - {fileID: 8300000, guid: 6a78de338757f2643968ba0a4150ea58, type: 3}
+  fadeDuration: 1.5
+  maxMusicVolume: 0.035
+  level0MusicVolume: 0.07

@@ -243,7 +243,7 @@ public class PlayerDash : MonoBehaviour
             if (zone != null)
             {
                 doorInPath.Break();
-                CameraShakeService.Shake(0.5f); 
+                CameraShakeService.Shake(0.5f);
                 zone.OnPlayerDashThrough();
                 
                 Vector3 landingPos = zone.GetLandingPosition(transform.position);

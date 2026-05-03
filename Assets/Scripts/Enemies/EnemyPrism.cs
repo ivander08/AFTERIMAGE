@@ -31,26 +31,26 @@ public class EnemyPrism : EnemyBase
 
     protected override void HandleBehavior()
     {
+        Debug.Log($"[Prism] myRoom={_myRoom?.name}, currentRoom={RoomManager.Instance?.CurrentRoom?.name}, canAggro={CanAggro()}");
+        
         if (_isAttacking) return;
         if (!CanAggro()) return;
 
         Transform target = GetTarget();
         if (target == null) return;
+        
         float dist = Vector3.Distance(transform.position, target.position);
 
-        if (dist <= detectRange)
+        _agent.SetDestination(target.position);
+
+        if (_animator != null)
         {
-            _agent.SetDestination(target.position);
+            _animator.SetBool("isWalking", dist > attackRange);
+        }
 
-            if (_animator != null)
-            {
-                _animator.SetBool("isWalking", dist > attackRange);
-            }
-
-            if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
-            {
-                StartCoroutine(AttackRoutine(target));
-            }
+        if (dist <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
+        {
+            StartCoroutine(AttackRoutine(target));
         }
     }
 

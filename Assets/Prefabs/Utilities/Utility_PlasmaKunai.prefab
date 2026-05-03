@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de54731a9db9a8b498523a71bedd4c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KunaiUtility
+  icon: {fileID: 21300000, guid: 6291a772332c9bc4e8392453c76ca3fd, type: 3}
+  iconMaterial: {fileID: 2100000, guid: 0f4bdde6d23a2c44abf762342e15b07f, type: 2}
   cooldown: 0.1
   maxUses: 3
   _currentUses: 0

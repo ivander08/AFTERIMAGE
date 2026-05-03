@@ -56,10 +56,14 @@ public class LoadoutApplier : MonoBehaviour
                     instance.maxUses = entry.count;
                     
                     // Set current uses
-                    var field = typeof(BaseUtility).GetField("_currentUses", 
+                    var field = typeof(BaseUtility).GetField("_currentUses",
                         System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     
                     if (field != null) field.SetValue(instance, entry.count);
+
+                    // Copy visual data from the definition so the utility knows its own icon
+                    instance.icon = mapping.definition.icon;
+                    instance.iconMaterial = mapping.definition.iconMaterial;
 
                     result.Add(instance);
                     foundMapping = true;

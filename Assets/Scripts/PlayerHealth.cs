@@ -14,6 +14,27 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private Animator _animator;
 
     public bool isDead = false;
+    public bool isInvulnerable = false;
+
+    /// <summary>
+    /// When enabled, the player takes no damage.
+    /// Toggled via the DebugHUD in-game overlay (F3 key).
+    /// </summary>
+    public bool godMode { get; set; } = false;
+
+    public void ResetHealth()
+    {
+        _currentHealth = maxHealth;
+        isDead = false;
+
+        // Reset animator
+        if (_animator != null)
+        {
+            _animator.ResetTrigger("deathTrigger");
+            _animator.SetInteger("deathIndex", 0);
+            _animator.Play("Breathing Idle", 0, 0f);
+        }
+    }
 
     public AudioClip[] deathSounds;
     public GameObject[] bloodDecalPrefabs;[Header("Death Camera Zoom")]
@@ -32,11 +53,19 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         if (isDead) return;
+        if (isInvulnerable) return;
+
+        // God Mode: ignore all damage
+        if (godMode)
+        {
+            Debug.Log("[GodMode] Damage ignored!");
+            return;
+        }
 
         _currentHealth -= damage;
         Debug.Log("PLAYER HIT!");
 
-        CameraShakeService.Shake(0.8f);
+        CameraShakeService.Shake(0.4f);
 
         if (_currentHealth <= 0)
         {

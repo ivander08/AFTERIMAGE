@@ -77,11 +77,14 @@ public class EnemyScatter : EnemyBase
         _isAttacking = true;
 
         // 1. TRACKING PHASE: Smoothly turn to face the player BEFORE raising the gun
-        float maxTurnTime = 0.5f; 
+        float maxTurnTime = 0.5f;
         float elapsedTurn = 0f;
         
         while (elapsedTurn < maxTurnTime && target != null)
         {
+            // Stop tracking if stunned
+            if (_isStunned) break;
+
             Vector3 directionToTarget = (target.position - transform.position).normalized;
             directionToTarget.y = 0; // Keep rotation flat on the ground
             
@@ -98,6 +101,15 @@ public class EnemyScatter : EnemyBase
             }
             elapsedTurn += Time.deltaTime;
             yield return null;
+        }
+
+        // Stop if stunned during tracking
+        if (_isStunned)
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            if (_animator != null) _animator.SetBool("isAiming", false);
+            yield break;
         }
 
         if (ShouldAbortAttack(target))
@@ -121,6 +133,15 @@ public class EnemyScatter : EnemyBase
 
         // 3. WINDUP PHASE: The enemy stands perfectly still, giving the player time to run away
         yield return new WaitForSeconds(attackWindup);
+
+        // Stop if stunned during windup (e.g. Repulsor)
+        if (_isStunned)
+        {
+            _agent.isStopped = false;
+            _isAttacking = false;
+            if (_animator != null) _animator.SetBool("isAiming", false);
+            yield break;
+        }
 
         if (ShouldAbortAttack(target))
         {
@@ -150,6 +171,15 @@ public class EnemyScatter : EnemyBase
 
         _lastAttackTime = Time.time;
         _isAttacking = false;
+    }
+
+    protected override void Die()
+    {
+        // Ensure aim animation is reset before death
+        // (AttackRoutine may be mid-execution when StopAllCoroutines fires)
+        if (_animator != null) _animator.SetBool("isAiming", false);
+        _isAttacking = false;
+        base.Die();
     }
 
     private void FireSpreadProjectiles(Vector3 baseDirection)

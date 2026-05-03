@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
@@ -12,9 +13,12 @@ public class EnemyWeaver : EnemyBase
     public float tetherRange = 20f;
     public LayerMask enemyLayer;
     public Color tetherColor = Color.cyan;
+    public Material tetherLineMaterial;
+    public Material tetherOutlineMaterial;
 
     private LineRenderer _tetherLine;
     private EnemyBase _tetheredEnemy;
+    private List<SkinnedMeshRenderer> _tetheredRenderers = new();
 
     protected override void Awake()
     {
@@ -24,7 +28,16 @@ public class EnemyWeaver : EnemyBase
         _tetherLine.startWidth = 0.1f;
         _tetherLine.endWidth = 0.1f;
         _tetherLine.positionCount = 2;
-        _tetherLine.material = new Material(Shader.Find("Sprites/Default"));
+
+        if (tetherLineMaterial != null)
+        {
+            _tetherLine.material = new Material(tetherLineMaterial);
+        }
+        else
+        {
+            _tetherLine.material = new Material(Shader.Find("Sprites/Default"));
+        }
+
         _tetherLine.startColor = tetherColor;
         _tetherLine.endColor = tetherColor;
         _tetherLine.enabled = false;
@@ -70,7 +83,7 @@ public class EnemyWeaver : EnemyBase
         
         EnemyBase[] validEnemies = colliders
             .Select(col => col.GetComponent<EnemyBase>())
-            .Where(enemy => enemy != null && enemy != this && !enemy.IsDead && !(enemy is EnemyShard))
+            .Where(enemy => enemy != null && enemy != this && !enemy.IsDead && !(enemy is EnemyShard) && enemy.MyRoom == _myRoom)
             .ToArray();
 
         if (validEnemies.Length > 0)
@@ -78,6 +91,7 @@ public class EnemyWeaver : EnemyBase
             _tetheredEnemy = validEnemies[Random.Range(0, validEnemies.Length)];
             _tetheredEnemy.isInvulnerable = true;
             _tetherLine.enabled = true;
+            ApplyTetherVisual(_tetheredEnemy);
         }
     }
 
@@ -89,6 +103,38 @@ public class EnemyWeaver : EnemyBase
         _tetherLine.SetPosition(1, _tetheredEnemy.transform.position + Vector3.up * 0.5f);
     }
 
+    void ApplyTetherVisual(EnemyBase target)
+    {
+        _tetheredRenderers.Clear();
+        SkinnedMeshRenderer[] renderers = target.GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (var renderer in renderers)
+        {
+            int originalCount = renderer.materials.Length;
+            var materials = new Material[originalCount + 1];
+            System.Array.Copy(renderer.materials, materials, originalCount);
+            materials[originalCount] = tetherOutlineMaterial;
+            renderer.materials = materials;
+            _tetheredRenderers.Add(renderer);
+        }
+    }
+
+    void RemoveTetherVisual()
+    {
+        foreach (var renderer in _tetheredRenderers)
+        {
+            if (renderer == null) continue;
+
+            int currentCount = renderer.materials.Length;
+            if (currentCount > 0)
+            {
+                var materials = new Material[currentCount - 1];
+                System.Array.Copy(renderer.materials, materials, currentCount - 1);
+                renderer.materials = materials;
+            }
+        }
+        _tetheredRenderers.Clear();
+    }
+
     void ClearTether()
     {
         if (_tetheredEnemy != null)
@@ -97,6 +143,7 @@ public class EnemyWeaver : EnemyBase
             _tetheredEnemy = null;
         }
 
+        RemoveTetherVisual();
         _tetherLine.enabled = false;
     }
 

@@ -23,7 +23,7 @@ public class HoloLureProjectile : BaseProjectile
     {
         if (_didPlayHitSfx || hitSfx == null) return;
         _didPlayHitSfx = true;
-        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f);
+        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f, minDistance: 2f);
     }
 
     public override void OnHit(Collider other)

@@ -79,22 +79,34 @@ public class EnemyRusher : EnemyBase
         }
         
         yield return new WaitForSeconds(chargeTime);
-        
+
+        // Stop dash if stunned during charge
+        if (_isStunned)
+        {
+            SetKatanaVisible(false);
+            _isDashing = false;
+            _agent.isStopped = false;
+            yield break;
+        }
+
         // Trigger dash animation right before movement
         if (_animator != null)
         {
             _animator.SetTrigger("dashTrigger");
         }
-        
+
         // Play dash movement sound
         if (dashSound != null)
         {
             AudioService.PlayClip(dashSound, transform.position, volume: 2f, minDistance: dashSoundMinDistance);
         }
-        
+
         float dashTimer = 0f;
         while (dashTimer < dashDuration)
         {
+            // Stop dash if stunned mid-dash (e.g. Repulsor)
+            if (_isStunned) break;
+
             transform.position += dashDirection * dashSpeed * Time.deltaTime;
 
             Collider[] hits = Physics.OverlapSphere(transform.position, 1.0f);
@@ -122,8 +134,11 @@ public class EnemyRusher : EnemyBase
             yield return null;
         }
 
-        SetKatanaVisible(false);
-        _isDashing = false;
-        _agent.isStopped = false;
+        if (!_isStunned)
+        {
+            SetKatanaVisible(false);
+            _isDashing = false;
+            _agent.isStopped = false;
+        }
     }
 }

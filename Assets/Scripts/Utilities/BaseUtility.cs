@@ -6,6 +6,11 @@ using UnityEngine;
 
 public abstract class BaseUtility : MonoBehaviour
 {
+    [Header("Icon (set by LoadoutApplier from UtilityDefinition)")]
+    public Sprite icon;
+    public Material iconMaterial;
+
+    [Header("Settings")]
     public float cooldown = 0.1f;
     public int maxUses = 3;
 

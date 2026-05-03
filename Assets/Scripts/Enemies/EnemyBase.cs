@@ -87,6 +87,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (katanaHand != null) katanaHand.SetActive(active);
     }
 
+    public Room MyRoom => _myRoom;
+
     public void AssignRoom(Room room)
     {
         _myRoom = room;
@@ -210,7 +212,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    protected void SetWalkingAnimation(bool isWalking)
+    public void SetWalkingAnimation(bool isWalking)
     {
         if (_animator != null)
         {
@@ -230,11 +232,20 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (_isDead) return;
         health -= damage;
 
-        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f);
+        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f, minDistance: 1.5f);
 
-        CameraShakeService.Shake(0.8f); 
+        CameraShakeService.Shake(0.4f);
 
         if (health <= 0) Die();
+    }
+
+    // EnemyBase.cs
+    public void ForceKill()
+    {
+        if (_isDead) return;
+        isInvulnerable = false; // strip invulnerability
+        health = 0;
+        Die();
     }
 
     protected virtual void Die()
@@ -245,7 +256,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         SetKatanaVisible(false);
         SetWalkingAnimation(false);
 
-        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f);
+        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f, minDistance: 1.5f);
 
         if (deathVFXPrefab != null)
         {
@@ -331,30 +342,40 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     #region Knockback & Stun Coroutines
 
+    private Coroutine _stunCoroutine;
+    private Coroutine _knockbackCoroutine;
+
     public void Stun(float duration)
     {
         if (_isDead) return;
-        if (_isKnockedBack) return; 
+        if (_isKnockedBack) return;
         
-        StopAllCoroutines();
-        ResetPhysicsState(); 
-        StartCoroutine(StunRoutine(duration));
+        if (_stunCoroutine != null) StopCoroutine(_stunCoroutine);
+        if (_knockbackCoroutine != null) { StopCoroutine(_knockbackCoroutine); _knockbackCoroutine = null; }
+        
+        ResetPhysicsState();
+        _stunCoroutine = StartCoroutine(StunRoutine(duration));
     }
 
     public void Knockback(Vector3 dir, float force, float duration)
     {
         if (_isDead) return;
         
-        StopAllCoroutines(); 
-        ResetPhysicsState(); 
+        if (_knockbackCoroutine != null) StopCoroutine(_knockbackCoroutine);
+        if (_stunCoroutine != null) { StopCoroutine(_stunCoroutine); _stunCoroutine = null; }
         
-        StartCoroutine(KnockbackRoutine(dir, force, duration));
+        ResetPhysicsState();
+        
+        _knockbackCoroutine = StartCoroutine(KnockbackRoutine(dir, force, duration));
     }
 
     private void ResetPhysicsState()
     {
         _isKnockedBack = false;
         _isStunned = false;
+
+        // Clear stun animation (combat stun only — SetFrozen does not touch animator)
+        if (_animator != null) _animator.SetBool("isStunned", false);
 
         if (_rb != null)
         {
@@ -380,6 +401,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         _isKnockedBack = true;
         _isStunned = true;
 
+        // Trigger stun animation
+        if (_animator != null) _animator.SetBool("isStunned", true);
+
         if (_agent.isOnNavMesh) _agent.isStopped = true;
         _agent.enabled = false;
         
@@ -399,12 +423,18 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         {
             ResetPhysicsState();
         }
-        #endregion
+        _knockbackCoroutine = null;
     }
+
+    #endregion
 
     IEnumerator StunRoutine(float duration)
     {
         _isStunned = true;
+
+        // Trigger stun animation
+        if (_animator != null) _animator.SetBool("isStunned", true);
+
         if (_agent.isOnNavMesh) _agent.isStopped = true;
         SetWalkingAnimation(false);
         
@@ -413,7 +443,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (!_isDead)
         {
             _isStunned = false;
+
+            // Clear stun animation
+            if (_animator != null) _animator.SetBool("isStunned", false);
+
             if (_agent.isOnNavMesh) _agent.isStopped = false;
         }
+        _stunCoroutine = null;
     }
 }

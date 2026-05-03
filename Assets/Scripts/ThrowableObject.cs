@@ -64,7 +64,7 @@ public class ThrowableObject : MonoBehaviour
         _targetEnemy = nearestEnemy;
         _hasBeenThrown = true;
 
-        AudioService.PlayRandom(throwSounds, transform.position, 1.5f, 0.95f, 1.05f);
+        AudioService.PlayRandom(throwSounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 2.5f);
 
     }
 
@@ -78,6 +78,7 @@ public class ThrowableObject : MonoBehaviour
         foreach (var col in enemiesInRange)
         {
             if (!col.TryGetComponent(out EnemyBase enemy)) continue;
+            if (enemy is EnemyGeist geist && geist.IsEthereal) continue;
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             if (distance < nearestDistance && IsEnemyVisible(enemy))
             {
@@ -120,7 +121,14 @@ public class ThrowableObject : MonoBehaviour
     {
         if (enemy != null)
         {
-            AudioService.PlayRandom(hitEnemySounds, transform.position, 2f, 0.95f, 1.05f);
+            // Don't hit ethereal Geists
+            if (enemy is EnemyGeist geist && geist.IsEthereal)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            AudioService.PlayRandom(hitEnemySounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 2.5f);
             if (hitEnemyVFXPrefab != null)
             {
                 Vector3 vfxPos = enemy.transform.position + Vector3.up * 0.5f;
@@ -128,7 +136,7 @@ public class ThrowableObject : MonoBehaviour
             }
             enemy.Stun(stunDuration);
             if (ScoreManager.Instance != null) ScoreManager.Instance.AddThrowableBonus();
-            CameraShakeService.Shake(0.8f);
+            CameraShakeService.Shake(0.4f);
         }
 
         Destroy(gameObject);

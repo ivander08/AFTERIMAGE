@@ -90,10 +90,21 @@ public class UtilityHUDController : MonoBehaviour
             if (slot.utilityIcon != null)
             {
                 slot.utilityIcon.enabled = hasUtility;
-                if (hasUtility && utilityVisuals != null && utilIndex < utilityVisuals.Length)
+                if (hasUtility)
                 {
-                    slot.utilityIcon.sprite   = utilityVisuals[utilIndex].icon;
-                    slot.utilityIcon.material = utilityVisuals[utilIndex].material;
+                    BaseUtility util = utilities[utilIndex];
+                    // Use the icon/material directly from the utility instance (set by LoadoutApplier).
+                    // Fall back to the legacy utilityVisuals array if the utility doesn't carry its own icon.
+                    if (util.icon != null)
+                    {
+                        slot.utilityIcon.sprite   = util.icon;
+                        slot.utilityIcon.material = util.iconMaterial;
+                    }
+                    else if (utilityVisuals != null && utilIndex < utilityVisuals.Length)
+                    {
+                        slot.utilityIcon.sprite   = utilityVisuals[utilIndex].icon;
+                        slot.utilityIcon.material = utilityVisuals[utilIndex].material;
+                    }
                 }
             }
 

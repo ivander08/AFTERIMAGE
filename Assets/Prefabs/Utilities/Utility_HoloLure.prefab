@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec711db04916ad448750a647c1795b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoloLureUtility
+  icon: {fileID: 21300000, guid: d9cb588a0978b1348ab73e0492a66a95, type: 3}
+  iconMaterial: {fileID: 2100000, guid: 37e6bfac36eb3d24f9e1cefe1b1b45e0, type: 2}
   cooldown: 0.1
   maxUses: 3
   _currentUses: 0

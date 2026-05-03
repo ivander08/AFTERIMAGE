@@ -51,7 +51,9 @@ public class Room : MonoBehaviour
             enemy.AssignRoom(this);
             enemy.OnDeath += CheckClearCondition;
 
-            if (_isCombatActive)
+            // Notify if combat is active, OR if the room hasn't been cleared yet
+            // (covers edge case where shards are spawned mid-dash before PlayerEntered fires)
+            if (_isCombatActive || !_isCleared)
             {
                 enemy.NotifyPlayerEnteredRoom();
             }
@@ -152,3 +154,4 @@ public class Room : MonoBehaviour
         return _enemies;
     }
 }
+

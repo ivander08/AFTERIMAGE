@@ -18,7 +18,7 @@ public class EnemyGeist : EnemyBase
     public float attackWindup = 0.1f;
     public float attackCooldown = 0.5f;
 
-    private bool _isEthereal = false;
+    public bool IsEthereal { get; private set; } = false;
     private float _lastAttackTime = -99f;
     private bool _isAttacking = false;
     private Renderer[] _renderers;
@@ -133,7 +133,7 @@ public class EnemyGeist : EnemyBase
     void SetEthereal(bool state)
     {
         if (_isDead) return;
-        _isEthereal = state;
+        IsEthereal = state;
 
         float alpha = state ? 0.3f : 1f;
         foreach (var r in _renderers)
@@ -156,7 +156,7 @@ public class EnemyGeist : EnemyBase
 
     public override void TakeDamage(int damageAmount)
     {
-        if (_isEthereal) return;
+        if (IsEthereal) return;
         base.TakeDamage(damageAmount);
     }
 }

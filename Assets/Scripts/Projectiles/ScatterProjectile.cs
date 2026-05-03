@@ -51,6 +51,13 @@ public class ScatterProjectile : BaseProjectile
             return;
         }
 
+        // Enemy projectiles should not damage other enemies
+        if (other.GetComponent<EnemyBase>() != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (hitVfx != null)
         {
             Instantiate(hitVfx, transform.position, Quaternion.LookRotation(_lastHitNormal));

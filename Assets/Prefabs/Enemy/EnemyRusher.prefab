@@ -9992,11 +9992,11 @@ MonoBehaviour:
   - {fileID: 3979231466254530644, guid: 62f85b2c01183294cbd26422f176d7ec, type: 3}
   - {fileID: 2817260816258676170, guid: 7157e4529eda13f42978028dd7035b40, type: 3}
   - {fileID: 6301176135403937174, guid: 2a55ce2ba521e0b4ab768480d85f4aa3, type: 3}
-  dashRange: 5
+  dashRange: 6
   dashSpeed: 40
   chargeTime: 0.18
   dashDuration: 0.15
-  cooldown: 1.5
+  cooldown: 1
   chargeSound: {fileID: 8300000, guid: 394fdc4c21bea3444844cb7810009ec6, type: 3}
   dashSound: {fileID: 8300000, guid: 7c7796b64f2b19141b405786a9eddd53, type: 3}
   chargeSoundMinDistance: 8

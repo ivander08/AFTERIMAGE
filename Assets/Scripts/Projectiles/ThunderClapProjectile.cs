@@ -22,7 +22,7 @@ public class ThunderClapProjectile : BaseProjectile
     {
         if (_didPlayHitSfx || hitSfx == null) return;
         _didPlayHitSfx = true;
-        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f);
+        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f, minDistance: 2f);
     }
 
     protected override void Awake()
@@ -100,6 +100,8 @@ public class ThunderClapProjectile : BaseProjectile
         {
             ScoreManager.Instance.AddUtilityScore("Thunderclap");
         }
+
+        CameraShakeService.Shake(0.75f);
 
         PlayHitSfxOnce();
         

@@ -617,7 +617,6 @@ GameObject:
   - component: {fileID: 9056863}
   - component: {fileID: 9056862}
   - component: {fileID: 9056861}
-  - component: {fileID: 9056860}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -676,59 +675,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &9056860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
-  ImpulseDefinition:
-    ImpulseChannel: 1
-    ImpulseShape: 2
-    CustomImpulseShape:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    ImpulseDuration: 0.2
-    ImpulseType: 0
-    DissipationRate: 0.25
-    RawSignal: {fileID: 0}
-    AmplitudeGain: 1
-    FrequencyGain: 1
-    RepeatMode: 0
-    Randomize: 1
-    TimeEnvelope:
-      AttackShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      DecayShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      AttackTime: 0
-      SustainTime: 0.2
-      DecayTime: 0.7
-      ScaleWithImpact: 1
-      HoldForever: 0
-    ImpactRadius: 100
-    DirectionMode: 0
-    DissipationMode: 2
-    DissipationDistance: 100
-    PropagationSpeed: 343
-  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!114 &9056861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42865,14 +42811,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 1
+    ImpulseShape: 3
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.2
+    ImpulseDuration: 0.15
     ImpulseType: 0
     DissipationRate: 0.25
     RawSignal: {fileID: 0}
@@ -96771,6 +96717,63 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1001 &1792746608
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2495235798381840005, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_Name
+      value: GameProgressManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -42.10196
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 23.60425
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2732053605660567652, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
 --- !u!1 &1793630031
 GameObject:
   m_ObjectHideFlags: 0
@@ -112560,7 +112563,7 @@ PrefabInstance:
       objectReference: {fileID: 950150149}
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.data[0].count
@@ -112928,6 +112931,7 @@ SceneRoots:
   - {fileID: 2011122489}
   - {fileID: 2119363850}
   - {fileID: 1154319002}
+  - {fileID: 1792746608}
   - {fileID: 1229496466}
   - {fileID: 46637837}
   - {fileID: 1869588110}

@@ -28,6 +28,16 @@ public class MusicManager : MonoBehaviour
     private Coroutine _musicRoutine;
     private bool _isPlayingLevel0Music = false; // Track if current music is Level0
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void AutoInitialize()
+    {
+        if (Instance == null)
+        {
+            GameObject go = new GameObject("MusicManager (Auto-created)");
+            go.AddComponent<MusicManager>();
+        }
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,9 +53,12 @@ public class MusicManager : MonoBehaviour
         _audioSource.loop = true;
         _audioSource.playOnAwake = false;
 
-        // Assign to the Music mixer group automatically
-        AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("Music");
-        if (groups.Length > 0) _audioSource.outputAudioMixerGroup = groups[0];
+        // Assign to the Music mixer group if available
+        if (mainMixer != null)
+        {
+            AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("Music");
+            if (groups.Length > 0) _audioSource.outputAudioMixerGroup = groups[0];
+        }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -172,14 +185,16 @@ public class MusicManager : MonoBehaviour
     public void SetMusicVolume(float sliderValue)
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
-        mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
+        if (mainMixer != null)
+            mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
         PlayerPrefs.SetFloat("Pref_MusicVol", value);
     }
 
     public void SetSFXVolume(float sliderValue)
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
-        mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20);
+        if (mainMixer != null)
+            mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20);
         PlayerPrefs.SetFloat("Pref_SFXVol", value);
     }
 

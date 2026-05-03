@@ -79,6 +79,19 @@ public class DeathPanelController : MonoBehaviour
     {
         AudioService.SetLock(false); // Unlock for the next life
         PreGamePanel.SkipNextPreGame = true;
+
+        // Boss fight retry — respawn in-place without scene reload
+        if (EchoArenaController.IsBossActive && EchoArenaController.Instance != null)
+        {
+            EchoArenaController.Instance.RespawnForRetry();
+            gameObject.SetActive(false);
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+            Cursor.visible = false;
+            return;
+        }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
