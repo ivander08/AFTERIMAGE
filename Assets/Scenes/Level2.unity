@@ -70938,7 +70938,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: aedeb530865b0aa45ab2966fc5087efe, type: 2}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: skipForDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: reticleObject

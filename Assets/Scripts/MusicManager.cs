@@ -53,7 +53,6 @@ public class MusicManager : MonoBehaviour
         _audioSource.loop = true;
         _audioSource.playOnAwake = false;
 
-        // Assign to the Music mixer group if available
         if (mainMixer != null)
         {
             AudioMixerGroup[] groups = mainMixer.FindMatchingGroups("Music");
@@ -62,12 +61,26 @@ public class MusicManager : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
+        // REMOVE LoadSavedVolumes() from here
+    }
+
+    // ADD THIS: Load volumes in Start() so the AudioMixer is ready
+    private void Start()
+    {
         LoadSavedVolumes();
     }
 
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void SetMasterVolume(float sliderValue)
+    {
+        float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
+        if (mainMixer != null)
+            mainMixer.SetFloat("MasterVolume", Mathf.Log10(value) * 20 + 10);
+        PlayerPrefs.SetFloat("Pref_MasterVol", value);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -186,7 +199,7 @@ public class MusicManager : MonoBehaviour
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
         if (mainMixer != null)
-            mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
+            mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20 + 10);
         PlayerPrefs.SetFloat("Pref_MusicVol", value);
     }
 
@@ -194,16 +207,17 @@ public class MusicManager : MonoBehaviour
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
         if (mainMixer != null)
-            mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20);
+            mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20 + 10);
         PlayerPrefs.SetFloat("Pref_SFXVol", value);
     }
 
     private void LoadSavedVolumes()
     {
-        // Load preferences, default to 0.75 (75%) if first time
-        float savedMusic = PlayerPrefs.GetFloat("Pref_MusicVol", 0.75f);
-        float savedSFX = PlayerPrefs.GetFloat("Pref_SFXVol", 0.75f);
+        float savedMaster = PlayerPrefs.GetFloat("Pref_MasterVol", 0.5f);
+        float savedMusic  = PlayerPrefs.GetFloat("Pref_MusicVol",  0.5f);
+        float savedSFX    = PlayerPrefs.GetFloat("Pref_SFXVol",    0.5f);
 
+        SetMasterVolume(savedMaster);
         SetMusicVolume(savedMusic);
         SetSFXVolume(savedSFX);
     }

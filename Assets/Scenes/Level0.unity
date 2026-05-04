@@ -27866,7 +27866,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 1500, y: 150}
+  m_SizeDelta: {x: 1250, y: 150}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &541382508
 MonoBehaviour:
@@ -88640,8 +88640,8 @@ MonoBehaviour:
   resumeButton: {fileID: 2116077347}
   exitButton: {fileID: 181471852}
   mainMenuSceneName: MainMenu
-  pauseSfx: {fileID: 0}
-  unpauseSfx: {fileID: 0}
+  pauseSfx: {fileID: 8300000, guid: 862c1ea1f55cb2c4b83165707c9e8faa, type: 3}
+  unpauseSfx: {fileID: 8300000, guid: 08595764ec0fd4a47aeca39bbf8d0c59, type: 3}
 --- !u!225 &1622080486
 CanvasGroup:
   m_ObjectHideFlags: 0

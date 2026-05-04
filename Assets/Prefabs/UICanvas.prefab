@@ -2691,8 +2691,8 @@ MonoBehaviour:
   resumeButton: {fileID: 7881068135969857028}
   exitButton: {fileID: 8783408670785199688}
   mainMenuSceneName: MainMenu
-  pauseSfx: {fileID: 0}
-  unpauseSfx: {fileID: 0}
+  pauseSfx: {fileID: 8300000, guid: 862c1ea1f55cb2c4b83165707c9e8faa, type: 3}
+  unpauseSfx: {fileID: 8300000, guid: 08595764ec0fd4a47aeca39bbf8d0c59, type: 3}
 --- !u!1 &4545674591659308593
 GameObject:
   m_ObjectHideFlags: 0

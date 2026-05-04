@@ -32,6 +32,9 @@ public class EchoArenaController : MonoBehaviour
         private Vector3 _echoStartPosition;
     private Quaternion _echoStartRotation;
 
+    public CinemachineCamera gameplayCamera;   // drag your gameplay Cinemachine cam here
+public float respawnCameraDistance = 45f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -141,6 +144,20 @@ public class EchoArenaController : MonoBehaviour
     {
         yield return null;
 
+        if (_playerHealth != null)
+            _playerHealth.StopAllCoroutines();
+
+        if (gameplayCamera != null)
+        {
+            var composer = gameplayCamera.GetComponent<CinemachinePositionComposer>();
+            if (composer != null)
+                composer.CameraDistance = respawnCameraDistance;
+        }
+
+        PlayerDash pd = _playerMovement?.GetComponent<PlayerDash>();
+        if (pd != null)
+            pd.normalDistance = respawnCameraDistance;
+
         TeleportPlayer(checkpointPos);
 
         if (_playerHealth != null) _playerHealth.ResetHealth();
@@ -163,7 +180,6 @@ public class EchoArenaController : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-            PlayerDash pd = player.GetComponent<PlayerDash>();
             if (pd != null) pd.enabled = true;
 
             // Restore player color (Die() sets it to black)

@@ -15,6 +15,6 @@ MonoBehaviour:
   levelSceneName: Level0
   availableUtilities:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
-  dateText: 12 January 2147
-  locationText: Aether Corp. Bio-Unit, UNDISCLOSED
+  dateText: 17 February 2174
+  locationText: Aether Bio Corp, South Japan
   missionText: Subject Zero was born.

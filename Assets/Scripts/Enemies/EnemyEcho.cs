@@ -70,6 +70,9 @@ public class EnemyEcho : EnemyBase
     private int _kunaiCharges;
     private bool _dealtDashDamage = false;
 
+    public float dashChance = 0.8f;
+    public float kunaiMinDistance = 8f;
+
     #endregion
 
     #region Unity Lifecycle
@@ -187,7 +190,8 @@ public class EnemyEcho : EnemyBase
         FaceTarget(target);
 
         bool canDash = Time.time >= _lastDashTime + dashCooldown;
-        bool canThrow = _kunaiCharges > 0;
+        float distToPlayer = Vector3.Distance(transform.position, target.position);
+        bool canThrow = _kunaiCharges > 0 && distToPlayer >= kunaiMinDistance;
 
         if (canDash && canThrow)
         {

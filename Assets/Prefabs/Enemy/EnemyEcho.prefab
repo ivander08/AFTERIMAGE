@@ -5493,7 +5493,7 @@ MonoBehaviour:
   dashSpeed: 20
   dashRange: 4
   dashWindup: 0.1
-  dashCooldown: 0.4
+  dashCooldown: 0.375
   dodgeCooldown: 2
   dodgeDistance: 2
   dodgeSpeed: 30
@@ -5510,6 +5510,8 @@ MonoBehaviour:
   playerProjectileLayer:
     serializedVersion: 2
     m_Bits: 1
+  dashChance: 0.8
+  kunaiMinDistance: 4
 --- !u!114 &3645573114963392674
 MonoBehaviour:
   m_ObjectHideFlags: 0

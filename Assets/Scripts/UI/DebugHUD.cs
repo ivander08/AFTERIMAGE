@@ -1,403 +1,415 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// In-game debug overlay with FPS counter, God Mode toggle, and Skip Level button.
-/// Press F3 to toggle the debug panel visibility.
-/// Attach this to any GameObject in the scene (e.g., the Player or a DDOL manager).
+/// In-game debug overlay. Press F3 to toggle.
+/// Auto-initializes via RuntimeInitializeOnLoadMethod — no manual setup needed.
 /// </summary>
 public class DebugHUD : MonoBehaviour
 {
     public static DebugHUD Instance { get; private set; }
 
-    // No serialized KeyCode — we check for F3 via Keyboard.current in Update()
+    // ── Colors ────────────────────────────────────────────────────────────────
+    static readonly Color BgPanel    = new Color(0.06f, 0.06f, 0.08f, 0.96f);
+    static readonly Color BgRow      = new Color(1f, 1f, 1f, 0.04f);
+    static readonly Color BgBtn      = new Color(1f, 1f, 1f, 0.08f);
+    static readonly Color BgBtnDanger= new Color(0.8f, 0.2f, 0.2f, 0.55f);
+    static readonly Color Accent     = new Color(0.18f, 0.72f, 0.95f, 1f);
+    static readonly Color TextPri    = new Color(0.92f, 0.92f, 0.95f, 1f);
+    static readonly Color TextMuted  = new Color(0.55f, 0.55f, 0.60f, 1f);
+    static readonly Color TrackOff   = new Color(0.25f, 0.25f, 0.30f, 1f);
 
-    [Header("FPS Settings")]
-    public float fpsUpdateInterval = 0.25f;
-    public int fpsFontSize = 16;
-    public Color fpsColor = Color.green;
+    // ── FPS thresholds ────────────────────────────────────────────────────────
+    static readonly Color FpsGood = new Color(0.22f, 0.85f, 0.45f, 1f);
+    static readonly Color FpsWarn = new Color(0.95f, 0.72f, 0.18f, 1f);
+    static readonly Color FpsBad  = new Color(0.88f, 0.25f, 0.22f, 1f);
 
-    [Header("Debug Panel")]
-    public int panelFontSize = 14;
-    public Color panelBgColor = new Color(0f, 0f, 0f, 0.75f);
+    // ── State ─────────────────────────────────────────────────────────────────
+    bool  _panelOpen;
+    float _fps;
+    int   _frames;
+    float _elapsed;
 
-    // State
-    private bool _showDebugPanel = false;
-    private bool _showFps = true;
-    private float _fps = 0f;
-    private int _framesAccumulated = 0;
-    private float _timeAccumulated = 0f;
+    // ── UI refs ───────────────────────────────────────────────────────────────
+    GameObject   _canvas;
+    Text         _fpsLabel;
+    GameObject   _panel;
+    CanvasGroup  _panelCg;
 
-    // UI references (created at runtime)
-    private GameObject _canvasObject;
-    private GameObject _fpsTextObject;
-    private Text _fpsText;
-    private GameObject _panelObject;
-    private Text _godModeLabel;
-    private Toggle _godModeToggle;
-    private Button _skipLevelButton;
-    private Button _closeButton;
+    // ── Font ──────────────────────────────────────────────────────────────────
+    static Font _font;
 
-    /// <summary>
-    /// Automatically creates the DebugHUD instance when any scene loads,
-    /// so you don't need to manually attach it to any GameObject.
-    /// </summary>
+    // ─────────────────────────────────────────────────────────────────────────
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void AutoInitialize()
+    static void Boot()
     {
-        if (Instance == null)
-        {
-            GameObject go = new GameObject("DebugHUD");
-            DontDestroyOnLoad(go);
-            go.AddComponent<DebugHUD>();
-        }
+        if (Instance != null) return;
+        var go = new GameObject("DebugHUD");
+        DontDestroyOnLoad(go);
+        go.AddComponent<DebugHUD>();
     }
 
-    private void Awake()
+    void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-
-        CreateDebugUI();
+        LoadFont();
+        BuildUI();
     }
 
-    private void CreateDebugUI()
+    // ── Font resolution ───────────────────────────────────────────────────────
+    static void LoadFont()
     {
-        // --- Canvas ---
-        _canvasObject = new GameObject("DebugHUDCanvas");
-        _canvasObject.transform.SetParent(transform);
-
-        Canvas canvas = _canvasObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 999; // Very high so it renders on top of everything
-
-        CanvasScaler scaler = _canvasObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = 0.5f;
-
-        _canvasObject.AddComponent<GraphicRaycaster>();
-
-        // --- FPS Text (top-left corner) ---
-        _fpsTextObject = new GameObject("FpsText");
-        _fpsTextObject.transform.SetParent(_canvasObject.transform);
-
-        RectTransform fpsRt = _fpsTextObject.AddComponent<RectTransform>();
-        fpsRt.anchorMin = new Vector2(0, 1);
-        fpsRt.anchorMax = new Vector2(0, 1);
-        fpsRt.pivot = new Vector2(0, 1);
-        fpsRt.anchoredPosition = new Vector2(10, -10);
-        fpsRt.sizeDelta = new Vector2(200, 30);
-
-        _fpsText = _fpsTextObject.AddComponent<Text>();
-        _fpsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        _fpsText.fontSize = fpsFontSize;
-        _fpsText.color = fpsColor;
-        _fpsText.alignment = TextAnchor.UpperLeft;
-        _fpsText.text = "FPS: --";
-        _fpsText.horizontalOverflow = HorizontalWrapMode.Overflow;
-        _fpsText.verticalOverflow = VerticalWrapMode.Overflow;
-
-        // --- Debug Panel (center of screen) ---
-        _panelObject = new GameObject("DebugPanel");
-        _panelObject.transform.SetParent(_canvasObject.transform);
-
-        RectTransform panelRt = _panelObject.AddComponent<RectTransform>();
-        panelRt.anchorMin = new Vector2(0.5f, 0.5f);
-        panelRt.anchorMax = new Vector2(0.5f, 0.5f);
-        panelRt.pivot = new Vector2(0.5f, 0.5f);
-        panelRt.anchoredPosition = Vector2.zero;
-        panelRt.sizeDelta = new Vector2(300, 260);
-
-        // Panel background
-        Image panelBg = _panelObject.AddComponent<Image>();
-        panelBg.color = panelBgColor;
-
-        // Vertical layout for panel contents
-        VerticalLayoutGroup layout = _panelObject.AddComponent<VerticalLayoutGroup>();
-        layout.padding = new RectOffset(10, 10, 10, 10);
-        layout.spacing = 8;
-        layout.childAlignment = TextAnchor.MiddleCenter;
-        layout.childControlWidth = true;
-        layout.childControlHeight = false;
-        layout.childForceExpandWidth = true;
-        layout.childForceExpandHeight = false;
-
-        // --- Title ---
-        GameObject titleObj = new GameObject("TitleText");
-        titleObj.transform.SetParent(_panelObject.transform);
-        Text titleText = titleObj.AddComponent<Text>();
-        titleText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        titleText.fontSize = panelFontSize + 2;
-        titleText.fontStyle = FontStyle.Bold;
-        titleText.color = Color.white;
-        titleText.alignment = TextAnchor.MiddleCenter;
-        titleText.text = "DEBUG MENU";
-        LayoutElement titleLayout = titleObj.AddComponent<LayoutElement>();
-        titleLayout.minHeight = 25;
-
-        // --- FPS Toggle ---
-        GameObject fpsToggleObj = CreateToggle(_panelObject.transform, "Show FPS", _showFps, (on) =>
+        if (_font != null) return;
+        foreach (var name in new[] { "Consolas", "Courier New", "Courier" })
         {
-            _showFps = on;
-            if (_fpsTextObject != null) _fpsTextObject.SetActive(on);
-        });
-        fpsToggleObj.name = "FpsToggle";
+            var f = Font.CreateDynamicFontFromOSFont(name, 14);
+            if (f != null) { _font = f; return; }
+        }
+        _font = Resources.GetBuiltinResource<Font>("Arial.ttf")
+             ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+    }
 
-        // --- God Mode Toggle ---
-        GameObject godModeToggleObj = CreateToggle(_panelObject.transform, "God Mode", false, (on) =>
+    // ── Build all UI ──────────────────────────────────────────────────────────
+    void BuildUI()
+    {
+        // Canvas
+        _canvas = new GameObject("DebugCanvas");
+        _canvas.transform.SetParent(transform);
+        var c = _canvas.AddComponent<Canvas>();
+        c.renderMode   = RenderMode.ScreenSpaceOverlay;
+        c.sortingOrder = 999;
+        var cs = _canvas.AddComponent<CanvasScaler>();
+        cs.uiScaleMode        = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        cs.referenceResolution = new Vector2(1920, 1080);
+        cs.matchWidthOrHeight  = 0.5f;
+        _canvas.AddComponent<GraphicRaycaster>();
+
+        BuildFpsCounter();
+        BuildPanel();
+    }
+
+    // ── FPS counter (top-left, minimal) ───────────────────────────────────────
+    void BuildFpsCounter()
+    {
+        var root = MakeRect("FPS", _canvas.transform);
+        Anchor(root, 0, 1, 0, 1);
+        root.pivot = new Vector2(0, 1);
+        root.anchoredPosition = new Vector2(10, -10);
+        root.sizeDelta = new Vector2(90, 22);
+
+        var bg = root.gameObject.AddComponent<Image>();
+        bg.color = new Color(0.05f, 0.05f, 0.07f, 0.80f);
+
+        _fpsLabel = MakeText(root, "FPS --", 13, TextAnchor.MiddleCenter, TextPri);
+        FullStretch(_fpsLabel.rectTransform);
+    }
+
+    // ── Debug panel ───────────────────────────────────────────────────────────
+    void BuildPanel()
+    {
+        // Root
+        var rt = MakeRect("DebugPanel", _canvas.transform);
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0, 1);
+        rt.anchoredPosition = new Vector2(10, -36);  // sits below FPS counter
+        rt.sizeDelta = new Vector2(240, 0);           // height set by content below
+        _panel = rt.gameObject;
+
+        var bg = _panel.AddComponent<Image>();
+        bg.color = BgPanel;
+
+        _panelCg = _panel.AddComponent<CanvasGroup>();
+        _panelCg.alpha = 0f;
+
+        // ── Content (manual stacking, no LayoutGroup fighting you) ────────────
+        float y = -10f;
+        const float rowH   = 30f;
+        const float btnH   = 28f;
+        const float gap    = 4f;
+        const float indent = 12f;
+
+        // Header label
+        var header = MakeText(rt, "DEBUG", 11, TextAnchor.MiddleLeft, TextMuted);
+        PlaceChild(header.rectTransform, indent, y, 220, 20);
+        y -= 24f;
+
+        // Divider
+        MakeDivider(rt, y + 8, indent);
+        y -= 4f;
+
+        // Toggles
+        MakeToggleRow(rt, ref y, "Show FPS",  rowH, gap, indent, true,  isOn =>
         {
-            PlayerHealth player = FindObjectOfType<PlayerHealth>();
-            if (player != null)
-            {
-                player.godMode = on;
-                Debug.Log($"[DebugHUD] God Mode = {(on ? "ON" : "OFF")}");
-            }
-            else
-            {
-                Debug.LogWarning("[DebugHUD] No PlayerHealth found in scene!");
-            }
+            // fpsLabel always exists; just alpha the whole FPS root
         });
-        godModeToggleObj.name = "GodModeToggle";
 
-        // --- Skip Level Button ---
-        GameObject skipBtnObj = new GameObject("SkipLevelButton");
-        skipBtnObj.transform.SetParent(_panelObject.transform);
+        MakeToggleRow(rt, ref y, "God Mode", rowH, gap, indent, false, isOn =>
+        {
+            var ph = FindObjectOfType<PlayerHealth>();
+            if (ph) ph.godMode = isOn;
+            else Debug.LogWarning("[DebugHUD] PlayerHealth not found.");
+        });
 
-        _skipLevelButton = skipBtnObj.AddComponent<Button>();
-        Image skipBtnBg = skipBtnObj.AddComponent<Image>();
-        skipBtnBg.color = new Color(0.2f, 0.4f, 0.8f, 1f);
+        // Spacer
+        y -= 6f;
+        MakeDivider(rt, y, indent);
+        y -= 8f;
 
-        GameObject skipBtnTextObj = new GameObject("Text");
-        skipBtnTextObj.transform.SetParent(skipBtnObj.transform);
-        Text skipBtnText = skipBtnTextObj.AddComponent<Text>();
-        skipBtnText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        skipBtnText.fontSize = panelFontSize;
-        skipBtnText.color = Color.white;
-        skipBtnText.alignment = TextAnchor.MiddleCenter;
-        skipBtnText.text = "SKIP LEVEL";
-        RectTransform skipBtnTextRt = skipBtnTextObj.GetComponent<RectTransform>();
-        skipBtnTextRt.anchorMin = Vector2.zero;
-        skipBtnTextRt.anchorMax = Vector2.one;
-        skipBtnTextRt.sizeDelta = Vector2.zero;
+        // Buttons
+        MakeButton(rt, ref y, "Skip Level",        btnH, gap, indent, BgBtn,       OnSkipLevel);
+        MakeButton(rt, ref y, "Skip to Boss (L6)", btnH, gap, indent, BgBtn,       OnSkipBoss);
+        MakeButton(rt, ref y, "Close",             btnH, gap, indent, BgBtnDanger, OnClose);
 
-        LayoutElement skipLayout = skipBtnObj.AddComponent<LayoutElement>();
-        skipLayout.minHeight = 35;
+        y -= 10f;
 
-        _skipLevelButton.onClick.AddListener(OnSkipLevelClicked);
+        // Final height
+        rt.sizeDelta = new Vector2(240, -y);
 
-        // --- Skip to Boss Button (Level 6 debug) ---
-        GameObject skipBossBtnObj = new GameObject("SkipToBossButton");
-        skipBossBtnObj.transform.SetParent(_panelObject.transform);
-
-        Button skipBossBtn = skipBossBtnObj.AddComponent<Button>();
-        Image skipBossBg = skipBossBtnObj.AddComponent<Image>();
-        skipBossBg.color = new Color(0.6f, 0.2f, 0.6f, 1f);
-
-        GameObject skipBossTextObj = new GameObject("Text");
-        skipBossTextObj.transform.SetParent(skipBossBtnObj.transform);
-        Text skipBossText = skipBossTextObj.AddComponent<Text>();
-        skipBossText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        skipBossText.fontSize = panelFontSize;
-        skipBossText.color = Color.white;
-        skipBossText.alignment = TextAnchor.MiddleCenter;
-        skipBossText.text = "SKIP TO BOSS";
-        RectTransform skipBossTextRt = skipBossTextObj.GetComponent<RectTransform>();
-        skipBossTextRt.anchorMin = Vector2.zero;
-        skipBossTextRt.anchorMax = Vector2.one;
-        skipBossTextRt.sizeDelta = Vector2.zero;
-
-        LayoutElement skipBossLayout = skipBossBtnObj.AddComponent<LayoutElement>();
-        skipBossLayout.minHeight = 35;
-
-        skipBossBtn.onClick.AddListener(OnSkipToBossClicked);
-
-        // --- Close Button ---
-        GameObject closeBtnObj = new GameObject("CloseButton");
-        closeBtnObj.transform.SetParent(_panelObject.transform);
-
-        _closeButton = closeBtnObj.AddComponent<Button>();
-        Image closeBtnBg = closeBtnObj.AddComponent<Image>();
-        closeBtnBg.color = new Color(0.6f, 0.2f, 0.2f, 1f);
-
-        GameObject closeBtnTextObj = new GameObject("Text");
-        closeBtnTextObj.transform.SetParent(closeBtnObj.transform);
-        Text closeBtnText = closeBtnTextObj.AddComponent<Text>();
-        closeBtnText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        closeBtnText.fontSize = panelFontSize;
-        closeBtnText.color = Color.white;
-        closeBtnText.alignment = TextAnchor.MiddleCenter;
-        closeBtnText.text = "CLOSE";
-        RectTransform closeBtnTextRt = closeBtnTextObj.GetComponent<RectTransform>();
-        closeBtnTextRt.anchorMin = Vector2.zero;
-        closeBtnTextRt.anchorMax = Vector2.one;
-        closeBtnTextRt.sizeDelta = Vector2.zero;
-
-        LayoutElement closeLayout = closeBtnObj.AddComponent<LayoutElement>();
-        closeLayout.minHeight = 30;
-
-        _closeButton.onClick.AddListener(() => _showDebugPanel = false);
-
-        // Initially hide the panel
-        _panelObject.SetActive(false);
-
-        // Support FPS toggle via the text object visibility
-        if (!_showFps) _fpsTextObject.SetActive(false);
+        _panel.SetActive(false);
     }
 
-    private GameObject CreateToggle(Transform parent, string label, bool initialState, System.Action<bool> onValueChanged)
+    // ─────────────────────────────────────────────────────────────────────────
+    // Row helpers
+    // ─────────────────────────────────────────────────────────────────────────
+
+    void MakeToggleRow(RectTransform parent, ref float y,
+                       string label, float h, float gap, float indent,
+                       bool initial, System.Action<bool> cb)
     {
-        GameObject toggleObj = new GameObject("Toggle_" + label);
-        toggleObj.transform.SetParent(parent);
+        float panelW = parent.sizeDelta.x;
+        float rowW   = panelW - indent * 2;
 
-        Toggle toggle = toggleObj.AddComponent<Toggle>();
-        Image toggleBg = toggleObj.AddComponent<Image>();
-        toggleBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+        // Row background
+        var rowRt = MakeRect("Row_" + label, parent);
+        PlaceChild(rowRt, indent, y, rowW, h);
+        var rowBg = rowRt.gameObject.AddComponent<Image>();
+        rowBg.color = BgRow;
 
-        // Horizontal layout: label | toggle box
-        HorizontalLayoutGroup hLayout = toggleObj.AddComponent<HorizontalLayoutGroup>();
-        hLayout.padding = new RectOffset(8, 8, 2, 2);
-        hLayout.spacing = 8;
-        hLayout.childAlignment = TextAnchor.MiddleLeft;
-        hLayout.childControlWidth = true;
-        hLayout.childControlHeight = false;
-        hLayout.childForceExpandWidth = true;
-        hLayout.childForceExpandHeight = false;
+        // Label
+        var lbl = MakeText(rowRt, label, 13, TextAnchor.MiddleLeft, TextPri);
+        PlaceChild(lbl.rectTransform, 10, 0, rowW - 60, h);
 
-        LayoutElement toggleLayout = toggleObj.AddComponent<LayoutElement>();
-        toggleLayout.minHeight = 30;
+        // Switch track — y is negative because pivot is top-left (y goes downward)
+        const float trackW = 32f, trackH = 16f;
+        var trackRt = MakeRect("Track", rowRt);
+        PlaceChild(trackRt, rowW - 10 - trackW, -((h - trackH) * 0.5f), trackW, trackH);
+        var trackImg = trackRt.gameObject.AddComponent<Image>();
+        trackImg.color = initial ? Accent : TrackOff;
 
-        // Label text
-        GameObject labelObj = new GameObject("Label");
-        labelObj.transform.SetParent(toggleObj.transform);
-        Text labelText = labelObj.AddComponent<Text>();
-        labelText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        labelText.fontSize = panelFontSize;
-        labelText.color = Color.white;
-        labelText.alignment = TextAnchor.MiddleLeft;
-        labelText.text = label;
+        // Thumb — centered vertically inside track using middle-left anchor
+        const float thumbSz = 12f;
+        var thumbGo = new GameObject("Thumb");
+        thumbGo.transform.SetParent(trackRt, false);
+        var thumbRt = thumbGo.AddComponent<RectTransform>();
+        thumbRt.anchorMin = new Vector2(0, 0.5f);
+        thumbRt.anchorMax = new Vector2(0, 0.5f);
+        thumbRt.pivot     = new Vector2(0.5f, 0.5f);
+        thumbRt.sizeDelta = new Vector2(thumbSz, thumbSz);
+        thumbRt.anchoredPosition = new Vector2(initial ? trackW - thumbSz * 0.5f - 2 : thumbSz * 0.5f + 2, 0);
+        var thumbImg = thumbGo.AddComponent<Image>();
+        thumbImg.color = Color.white;
 
-        // Toggle graphic (the checkmark box)
-        GameObject toggleGraphic = new GameObject("Checkmark");
-        toggleGraphic.transform.SetParent(toggleObj.transform);
-        Image checkImage = toggleGraphic.AddComponent<Image>();
-        checkImage.color = Color.white;
+        // Toggle component on the row object
+        var toggle = rowRt.gameObject.AddComponent<Toggle>();
+        toggle.isOn          = initial;
+        toggle.targetGraphic = rowBg;
+        toggle.graphic       = thumbImg; // Unity needs this to detect the toggle region
+        toggle.onValueChanged.AddListener(isOn =>
+        {
+            trackImg.color = isOn ? Accent : TrackOff;
+            thumbRt.anchoredPosition = new Vector2(isOn ? trackW - thumbSz * 0.5f - 2 : thumbSz * 0.5f + 2, 0);
+            cb?.Invoke(isOn);
+        });
 
-        // Create a simple checkmark graphic programmatically
-        GameObject checkMark = new GameObject("CheckMarkIcon");
-        checkMark.transform.SetParent(toggleGraphic.transform);
-        Text checkText = checkMark.AddComponent<Text>();
-        checkText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        checkText.fontSize = panelFontSize;
-        checkText.color = Color.green;
-        checkText.alignment = TextAnchor.MiddleCenter;
-        checkText.text = "✓";
-        RectTransform checkRt = checkMark.GetComponent<RectTransform>();
-        checkRt.anchorMin = Vector2.zero;
-        checkRt.anchorMax = Vector2.one;
-        checkRt.sizeDelta = Vector2.zero;
-
-        toggle.graphic = checkImage;
-        toggle.targetGraphic = toggleBg;
-        toggle.isOn = initialState;
-        toggle.onValueChanged.AddListener((on) => onValueChanged?.Invoke(on));
-
-        // Set the checkmark visibility based on initial state
-        if (!initialState) checkMark.SetActive(false);
-        toggle.onValueChanged.AddListener((on) => checkMark.SetActive(on));
-
-        // Set the toggle graphic size
-        LayoutElement graphicLayout = toggleGraphic.AddComponent<LayoutElement>();
-        graphicLayout.minWidth = 20;
-
-        return toggleObj;
+        y -= h + gap;
     }
 
-    private void Update()
+    void MakeButton(RectTransform parent, ref float y,
+                    string label, float h, float gap, float indent,
+                    Color bgColor, System.Action onClick)
     {
-        // Toggle debug panel with F3 (using new Input System)
+        float panelW = parent.sizeDelta.x;
+        float btnW   = panelW - indent * 2;
+
+        var btnRt = MakeRect("Btn_" + label, parent);
+        PlaceChild(btnRt, indent, y, btnW, h);
+
+        var bgImg = btnRt.gameObject.AddComponent<Image>();
+        bgImg.color = bgColor;
+
+        var btn = btnRt.gameObject.AddComponent<Button>();
+        btn.targetGraphic = bgImg;
+        var cb = btn.colors;
+        cb.normalColor      = bgColor;
+        cb.highlightedColor = new Color(bgColor.r + 0.12f, bgColor.g + 0.12f, bgColor.b + 0.12f, bgColor.a + 0.1f);
+        cb.pressedColor     = new Color(bgColor.r - 0.08f, bgColor.g - 0.08f, bgColor.b - 0.08f, 1f);
+        cb.colorMultiplier  = 1f;
+        cb.fadeDuration     = 0.08f;
+        btn.colors          = cb;
+        btn.onClick.AddListener(() => onClick?.Invoke());
+
+        var txt = MakeText(btnRt, label, 12, TextAnchor.MiddleCenter, TextPri);
+        FullStretch(txt.rectTransform);
+
+        y -= h + gap;
+    }
+
+    void MakeDivider(RectTransform parent, float y, float indent)
+    {
+        float w = parent.sizeDelta.x - indent * 2;
+        var div = MakeRect("Divider", parent);
+        PlaceChild(div, indent, y, w, 1);
+        var img = div.gameObject.AddComponent<Image>();
+        img.color = new Color(1f, 1f, 1f, 0.08f);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Primitive helpers
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /// Create a RectTransform child with top-left anchor (for manual placement).
+    static RectTransform MakeRect(string name, Transform parent)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        var rt = go.AddComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = new Vector2(0, 1); // top-left
+        rt.pivot = new Vector2(0, 1);
+        return rt;
+    }
+
+    /// Position a child rect relative to parent's top-left corner.
+    static void PlaceChild(RectTransform rt, float x, float y, float w, float h)
+    {
+        rt.anchoredPosition = new Vector2(x, y);
+        rt.sizeDelta = new Vector2(w, h);
+    }
+
+    /// Stretch a rect to fill its parent completely.
+    static void FullStretch(RectTransform rt)
+    {
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = rt.offsetMax = Vector2.zero;
+    }
+
+    /// Set all four anchors to the same point.
+    static void Anchor(RectTransform rt, float xMin, float yMin, float xMax, float yMax)
+    {
+        rt.anchorMin = new Vector2(xMin, yMin);
+        rt.anchorMax = new Vector2(xMax, yMax);
+    }
+
+    Text MakeText(RectTransform parent, string content, int size,
+                  TextAnchor align, Color color)
+    {
+        var go = new GameObject("T");
+        go.transform.SetParent(parent, false);
+        var t = go.AddComponent<Text>();
+        t.font      = _font;
+        t.fontSize  = size;
+        t.color     = color;
+        t.alignment = align;
+        t.text      = content;
+        t.supportRichText = false;
+        return t;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Runtime
+    // ─────────────────────────────────────────────────────────────────────────
+
+    void Update()
+    {
+        // Toggle panel
         if (Keyboard.current != null && Keyboard.current.f3Key.wasPressedThisFrame)
+            SetPanel(!_panelOpen);
+
+        // FPS
+        _frames++;
+        _elapsed += Time.unscaledDeltaTime;
+        if (_elapsed >= 0.25f)
         {
-            _showDebugPanel = !_showDebugPanel;
-            if (_panelObject != null) _panelObject.SetActive(_showDebugPanel);
-        }
-
-        // FPS calculation
-        _framesAccumulated++;
-        _timeAccumulated += Time.unscaledDeltaTime;
-
-        if (_timeAccumulated >= fpsUpdateInterval)
-        {
-            _fps = _framesAccumulated / _timeAccumulated;
-            _framesAccumulated = 0;
-            _timeAccumulated = 0f;
-
-            if (_fpsText != null)
-            {
-                _fpsText.text = $"FPS: {_fps:F1}";
-            }
-        }
-
-        // Keep FPS text color from green -> yellow -> red based on performance
-        if (_fpsText != null)
-        {
-            if (_fps >= 55f) _fpsText.color = Color.green;
-            else if (_fps >= 30f) _fpsText.color = Color.yellow;
-            else _fpsText.color = Color.red;
+            _fps     = _frames / _elapsed;
+            _frames  = 0;
+            _elapsed = 0f;
+            UpdateFpsLabel();
         }
     }
 
-    private void OnSkipLevelClicked()
+    void UpdateFpsLabel()
     {
-        Debug.Log("[DebugHUD] Skipping to next level...");
+        if (_fpsLabel == null) return;
+        _fpsLabel.text  = $"FPS {_fps:F0}";
+        _fpsLabel.color = _fps >= 55f ? FpsGood : _fps >= 30f ? FpsWarn : FpsBad;
+    }
 
-        string currentScene = SceneManager.GetActiveScene().name;
-        GameProgressManager progress = GameProgressManager.Instance;
-
-        if (progress != null)
+    void SetPanel(bool open)
+    {
+        _panelOpen = open;
+        if (open)
         {
-            // Unlock the audio service first (in case it's locked by level complete)
-            AudioService.SetLock(false);
-
-            // Resume time if paused
-            if (PausePanelController.IsPaused)
-            {
-                Time.timeScale = 1f;
-                AudioListener.pause = false;
-            }
-
-            progress.CompleteCurrentLevel(currentScene);
+            _panel.SetActive(true);
+            _panelCg.alpha = 0f;
+            StartCoroutine(FadeTo(1f));
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible   = true;
         }
         else
         {
-            Debug.LogWarning("[DebugHUD] No GameProgressManager found. Reloading current scene as fallback.");
-            SceneManager.LoadScene(currentScene);
+            StartCoroutine(FadeTo(0f, deactivateAfter: true));
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible   = false;
         }
     }
 
-    private void OnSkipToBossClicked()
+    System.Collections.IEnumerator FadeTo(float target, bool deactivateAfter = false)
+    {
+        float start   = _panelCg.alpha;
+        float elapsed = 0f;
+        const float dur = 0.12f;
+        while (elapsed < dur)
+        {
+            elapsed      += Time.unscaledDeltaTime;
+            _panelCg.alpha = Mathf.Lerp(start, target, elapsed / dur);
+            yield return null;
+        }
+        _panelCg.alpha = target;
+        if (deactivateAfter) _panel.SetActive(false);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Actions
+    // ─────────────────────────────────────────────────────────────────────────
+
+    void OnSkipLevel()
+    {
+        if (PausePanelController.IsPaused) { Time.timeScale = 1f; AudioListener.pause = false; }
+
+        int killed = 0, prev = -1;
+        while (killed != prev)
+        {
+            prev = killed;
+            foreach (var e in FindObjectsByType<EnemyBase>(FindObjectsSortMode.None))
+                if (e != null && !e.IsDead) { e.ForceKill(); killed++; }
+        }
+        Debug.Log($"[DebugHUD] Killed {killed} enemies.");
+        SetPanel(false);
+    }
+
+    void OnSkipBoss()
     {
         if (EchoArenaController.Instance == null)
         {
-            Debug.LogWarning("[DebugHUD] EchoArenaController not found — not on Level 6 boss room.");
+            Debug.LogWarning("[DebugHUD] EchoArenaController not found.");
             return;
         }
-
-        _showDebugPanel = false;
-        if (_panelObject != null) _panelObject.SetActive(false);
-
+        SetPanel(false);
         EchoArenaController.Instance.SkipToBossEncounter();
     }
 
-    private void OnDestroy()
-    {
-        if (Instance == this) Instance = null;
-    }
+    void OnClose() => SetPanel(false);
+
+    void OnDestroy() { if (Instance == this) Instance = null; }
 }

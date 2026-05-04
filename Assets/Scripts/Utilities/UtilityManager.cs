@@ -66,15 +66,4 @@ public class UtilityManager : MonoBehaviour
 
     public BaseUtility GetCurrentUtility() => CurrentUtility;
     public string GetCurrentUtilityName() => CurrentUtility?.UtilityName ?? "None";
-
-    private void OnGUI()
-    {
-        if (CurrentUtility == null) return;
-
-        GUILayout.BeginArea(new Rect(10, 10, 300, 100));
-        GUILayout.Label($"Current: {CurrentUtility.UtilityName}", new GUIStyle(GUI.skin.label) { fontSize = 16 });
-        GUILayout.Label($"Uses: {CurrentUtility.CurrentUses}/{CurrentUtility.MaxUses}");
-        GUILayout.Label($"Cooldown: {(CurrentUtility.IsOnCooldown ? Mathf.RoundToInt(CurrentUtility.CooldownRemaining * 100) / 100f : 0)}s");
-        GUILayout.EndArea();
-    }
 }

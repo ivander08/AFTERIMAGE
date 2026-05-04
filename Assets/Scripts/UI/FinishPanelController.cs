@@ -261,6 +261,7 @@ public class FinishPanelController : MonoBehaviour
         _canvasGroup.alpha = 0f;
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         StartCoroutine(AnimatePanelRevealRoutine());

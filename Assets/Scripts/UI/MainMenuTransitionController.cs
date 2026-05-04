@@ -7,6 +7,7 @@ public class MainMenuTransitionController : MonoBehaviour
     [SerializeField] private RectTransform mainMenuContainer;
     [SerializeField] private RectTransform aboutContainer;
     [SerializeField] private Light mainMenuPointLight;
+    [SerializeField] private RectTransform settingsContainer;
 
     [Header("Transition")]
     [SerializeField] private float slideDuration = 0.35f;
@@ -20,6 +21,8 @@ public class MainMenuTransitionController : MonoBehaviour
     private Vector3 _aboutVisiblePosition;
     private Vector3 _aboutHiddenPosition;
     private float _mainMenuLightVisibleIntensity;
+    private Vector3 _settingsVisiblePosition;
+    private Vector3 _settingsHiddenPosition;
 
     private Coroutine _transitionRoutine;
     private bool _isTransitioning;
@@ -40,6 +43,13 @@ public class MainMenuTransitionController : MonoBehaviour
     {
         if (mainMenuContainer == null || aboutContainer == null)
             return;
+
+        if (settingsContainer != null)
+        {
+            settingsContainer.gameObject.SetActive(true);
+            settingsContainer.localPosition = _settingsHiddenPosition;
+            if (disableHiddenPanel) settingsContainer.gameObject.SetActive(false);
+        }
 
         CachePositionsIfNeeded();
 
@@ -94,6 +104,42 @@ public class MainMenuTransitionController : MonoBehaviour
         StartTransition(
             fromPanel: aboutContainer,
             fromTarget: _aboutHiddenPosition,
+            toPanel: mainMenuContainer,
+            toTarget: _mainVisiblePosition,
+            disableFromPanelOnComplete: disableHiddenPanel
+        );
+    }
+
+    public void ShowSettings()
+    {
+        if (_isTransitioning) return;
+        if (mainMenuContainer == null || settingsContainer == null) return;
+
+        CachePositionsIfNeeded();
+        EnsurePanelEnterStart(settingsContainer, _settingsHiddenPosition);
+        settingsContainer.SetAsLastSibling();
+
+        StartTransition(
+            fromPanel: mainMenuContainer,
+            fromTarget: _mainHiddenPosition,
+            toPanel: settingsContainer,
+            toTarget: _settingsVisiblePosition,
+            disableFromPanelOnComplete: disableHiddenPanel
+        );
+    }
+
+    public void ShowMainMenuFromSettings()
+    {
+        if (_isTransitioning) return;
+        if (mainMenuContainer == null || settingsContainer == null) return;
+
+        CachePositionsIfNeeded();
+        EnsurePanelEnterStart(mainMenuContainer, _mainHiddenPosition);
+        mainMenuContainer.SetAsLastSibling();
+
+        StartTransition(
+            fromPanel: settingsContainer,
+            fromTarget: _settingsHiddenPosition,
             toPanel: mainMenuContainer,
             toTarget: _mainVisiblePosition,
             disableFromPanelOnComplete: disableHiddenPanel
@@ -194,6 +240,12 @@ public class MainMenuTransitionController : MonoBehaviour
         float safeAboutVerticalOffset = Mathf.Max(1f, aboutVerticalOffset);
         _mainHiddenPosition = _mainVisiblePosition + new Vector3(0f, 0f, -safeDepthOffset);
         _aboutHiddenPosition = _aboutVisiblePosition + new Vector3(0f, safeAboutVerticalOffset, 0f);
+
+        if (settingsContainer != null)
+        {
+            _settingsVisiblePosition = settingsContainer.localPosition;
+            _settingsHiddenPosition  = _settingsVisiblePosition + new Vector3(0f, safeAboutVerticalOffset, 0f);
+        }
 
         _hasCachedPositions = true;
     }

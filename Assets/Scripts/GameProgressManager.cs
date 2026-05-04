@@ -85,20 +85,22 @@ public class GameProgressManager : MonoBehaviour
 
     private LevelLoadoutConfig GetNextConfig(string currentSceneName)
     {
-        // If we just beat Level 0, the next config is index 0 (Level 1's config)
         if (currentSceneName == level0SceneName && loadoutConfigs.Length > 0)
             return loadoutConfigs[0];
 
-        // Otherwise, find the current level's config and return the one after it
-        for (int i = 0; i < loadoutConfigs.Length - 1; i++)
+        for (int i = 0; i < loadoutConfigs.Length; i++)  // ← full range
         {
             if (loadoutConfigs[i].levelSceneName == currentSceneName)
+            {
+                // Last config = true end of game
+                if (i + 1 >= loadoutConfigs.Length) return null;
                 return loadoutConfigs[i + 1];
+            }
         }
-        
-        return null; // End of game
-    }
 
+        return null;
+    }
+    
     private LevelLoadoutConfig GetConfigForScene(string sceneName)
     {
         foreach (var config in loadoutConfigs)

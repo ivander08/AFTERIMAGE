@@ -83017,7 +83017,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: fc0967800a0031444a7330c5e786c93e, type: 2}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: skipForDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: reticleObject
@@ -83041,7 +83041,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 8c3cba2200ceb8b42983ecd6eebf9000, type: 3}
     - target: {fileID: 8926923459952953735, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: nextLevelSceneName
-      value: Level5
+      value: Level6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
