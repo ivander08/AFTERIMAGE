@@ -1366,9 +1366,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   clickMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   hoverSound: {fileID: 8300000, guid: 9c4709e20c94777419c7539638293130, type: 3}
-  hoverVolume: 0.5
+  hoverVolume: 0.3
   clickSound: {fileID: 8300000, guid: 9c4709e20c94777419c7539638293130, type: 3}
-  clickVolume: 0.8
+  clickVolume: 0.3
   debugLog: 1
 --- !u!1 &2778614061361300269
 GameObject:
@@ -1513,9 +1513,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 1ac04c057ccc2cc489005ff71e27f181, type: 2}
   clickMaterial: {fileID: 2100000, guid: 1ac04c057ccc2cc489005ff71e27f181, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
-  hoverVolume: 0.2
+  hoverVolume: 0.3
   clickSound: {fileID: 8300000, guid: 7491189ef4351af4b949aa210e63e433, type: 3}
-  clickVolume: 0.2
+  clickVolume: 0.3
   debugLog: 1
 --- !u!1 &2798289225978869865
 GameObject:
@@ -3311,9 +3311,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 97355fa929aed4b4783ae76fb12c7869, type: 2}
   clickMaterial: {fileID: 2100000, guid: 97355fa929aed4b4783ae76fb12c7869, type: 2}
   hoverSound: {fileID: 8300000, guid: 9c4709e20c94777419c7539638293130, type: 3}
-  hoverVolume: 0.5
+  hoverVolume: 0.3
   clickSound: {fileID: 8300000, guid: 9c4709e20c94777419c7539638293130, type: 3}
-  clickVolume: 0.8
+  clickVolume: 0.3
   debugLog: 1
 --- !u!1 &5000202940651257475
 GameObject:
@@ -4083,9 +4083,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 1ac04c057ccc2cc489005ff71e27f181, type: 2}
   clickMaterial: {fileID: 2100000, guid: 1ac04c057ccc2cc489005ff71e27f181, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
-  hoverVolume: 0.2
+  hoverVolume: 0.3
   clickSound: {fileID: 8300000, guid: 7491189ef4351af4b949aa210e63e433, type: 3}
-  clickVolume: 0.2
+  clickVolume: 0.3
   debugLog: 1
 --- !u!1 &5845557277639407086
 GameObject:

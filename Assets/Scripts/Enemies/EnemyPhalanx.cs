@@ -94,6 +94,10 @@ public class EnemyPhalanx : EnemyBase
         if (_animator != null) _animator.SetTrigger("dashTrigger");
         StartCoroutine(WaitForAttackAnimationEnd());
 
+        // Play slash sound
+        if (slashSound != null)
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+
         yield return new WaitForSeconds(attackWindup);
 
         if (ShouldAbortAttack(target))
@@ -140,7 +144,7 @@ public class EnemyPhalanx : EnemyBase
         // Play shield break sound
         if (shieldBreakSFX != null)
         {
-            AudioService.PlayClip2D(shieldBreakSFX, 0.08f, 1f);
+            AudioService.PlayClip2D(shieldBreakSFX, 0.5f, 1f);
         }
     }
 

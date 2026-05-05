@@ -5397,7 +5397,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 7
+  m_Speed: 5
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -5468,6 +5468,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 092603f930dee2d49b07952fd22d76b1, type: 3}
   - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
   - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
+  slashSound: {fileID: 8300000, guid: 76467c9191cbe634b9eaf3fa53130bc7, type: 3}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 39282063a81ecb54788d1c1d086cea30, type: 3}
   katanaHip: {fileID: 8156349250227861234}
   katanaHand: {fileID: 7504491716142477097}
@@ -5492,15 +5493,14 @@ MonoBehaviour:
   - {fileID: 6301176135403937174, guid: 2a55ce2ba521e0b4ab768480d85f4aa3, type: 3}
   dashSpeed: 20
   dashRange: 4
-  dashWindup: 0.1
-  dashCooldown: 0.375
+  dashWindup: 0.2
+  dashCooldown: 0.6
   dodgeCooldown: 2
   dodgeDistance: 2
   dodgeSpeed: 30
   enemyKunaiPrefab: {fileID: 2842522608422121543, guid: ffb69427c29749b4f8549b502e6e8acd, type: 3}
   throwPoint: {fileID: 3323269652665190598}
   dashSound: {fileID: 8300000, guid: e90f1e5fb8cebf74686e34a25073fb93, type: 3}
-  slashSound: {fileID: 8300000, guid: 76467c9191cbe634b9eaf3fa53130bc7, type: 3}
   throwSfx: {fileID: 8300000, guid: 607c97eeda612544d813be58aafe7762, type: 3}
   clashVfxPrefab: {fileID: 6207748249219978080, guid: acc62a0c75d06eb4a869aa873f6ea203, type: 3}
   clashSfx: {fileID: 8300000, guid: fcaf2e4ade78a5342ae5225388c89f2b, type: 3}

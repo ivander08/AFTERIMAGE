@@ -34,7 +34,6 @@ public class EnemyEcho : EnemyBase
     #region Inspector Fields — Audio
     [Header("Audio")]
     public AudioClip dashSound;
-    public AudioClip slashSound;
     public AudioClip throwSfx;
     #endregion
 
@@ -240,7 +239,7 @@ public class EnemyEcho : EnemyBase
 
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f);
+            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f, minDistance: 10f);
         }
 
         if (_agent != null && _agent.isOnNavMesh)
@@ -318,11 +317,11 @@ public class EnemyEcho : EnemyBase
         // Play dash SFX + slash SFX
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f);
+            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f, minDistance: 10f);
         }
         if (slashSound != null)
         {
-            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 6f);
         }
 
         // Begin dash
@@ -401,7 +400,7 @@ public class EnemyEcho : EnemyBase
         // Throw SFX
         if (throwSfx != null)
         {
-            AudioService.PlayClip(throwSfx, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+            AudioService.PlayClip(throwSfx, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 6f);
         }
 
         // Spawn the projectile
@@ -437,8 +436,8 @@ public class EnemyEcho : EnemyBase
         Debug.Log($"[Echo] Took {damage} damage — HP: {health}");
         OnHpChanged?.Invoke(health);
 
-        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f);
-        AudioService.PlayRandom(deathSounds, transform.position, 3f, 0.95f, 1.05f);
+        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f, minDistance: 10f);
+        AudioService.PlayRandom(deathSounds, transform.position, 3f, 0.95f, 1.05f, minDistance: 10f);
         CameraShakeService.Shake(0.4f);
 
         if (hitVfxPrefab != null)
@@ -493,7 +492,7 @@ public class EnemyEcho : EnemyBase
         // Clash SFX
         if (clashSfx != null)
         {
-            AudioService.PlayClip(clashSfx, transform.position, volume: 2f, pitch: 1f, minDistance: 3f);
+            AudioService.PlayClip(clashSfx, transform.position, volume: 2f, pitch: 1f, minDistance: 8f);
         }
 
         // ── BOTH KNOCKED BACK 4 units ──
@@ -546,7 +545,7 @@ public class EnemyEcho : EnemyBase
         // Play dodge SFX
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f);
+            AudioService.PlayClip(dashSound, transform.position, volume: 1.5f, pitch: 1f, minDistance: 10f);
         }
 
         // Calculate direction away from player

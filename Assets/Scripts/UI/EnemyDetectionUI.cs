@@ -59,11 +59,11 @@ public class EnemyDetectionUI : MonoBehaviour
 
         if (active)
         {
-            AudioService.PlayClip2D(highlightEnterSound, 0.05f);
+            AudioService.PlayClip2D(highlightEnterSound, 0.2f);
         }
         else
         {
-            AudioService.PlayClip2D(highlightExitSound, 0.05f);
+            AudioService.PlayClip2D(highlightExitSound, 0.2f);
         }
     }
 

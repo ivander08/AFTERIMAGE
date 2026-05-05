@@ -3871,7 +3871,6 @@ MonoBehaviour:
   player: {fileID: 899005363}
   rawCursor: {fileID: 1627842525}
   clampedCursor: {fileID: 1728259263}
-  maxDashDistance: 4
   groundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -117960,7 +117959,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 111127874}
@@ -118015,7 +118014,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127924,8 +127923,8 @@ Transform:
   m_GameObject: {fileID: 1728259262}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalPosition: {x: 0, y: 0, z: -0.06}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 111127874}
@@ -127979,7 +127978,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 5ddf9ebc061b5244c81032f4fe3742fb, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -136875,6 +136874,7 @@ MonoBehaviour:
   maxPatrolWait: 3
   deathSounds: []
   hitSounds: []
+  slashSound: {fileID: 0}
   deathVFXPrefab: {fileID: 0}
   katanaHip: {fileID: 0}
   katanaHand: {fileID: 0}
@@ -137260,7 +137260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AmbientAudioController
   startingAmbient: {fileID: 8300000, guid: 689d24a51bab0454693df0187b25ab79, type: 3}
-  targetVolume: 0.5
+  targetVolume: 0.35
   initialFadeInDuration: 9
 --- !u!4 &1859826352
 Transform:

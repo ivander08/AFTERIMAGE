@@ -17,4 +17,5 @@ MonoBehaviour:
   iconMaterial: {fileID: 2100000, guid: 37e6bfac36eb3d24f9e1cefe1b1b45e0, type: 2}
   slotCost: 2
   defaultCount: 1
-  description: HoloLure Description
+  description: Thrown decoy that distracts nearby enemies and forces them to target
+    it.

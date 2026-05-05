@@ -62,6 +62,10 @@ public class Room : MonoBehaviour
 
     public void PlayerEntered()
     {
+        int aliveCount = 0;
+        foreach (var e in _enemies) if (e != null && !e.IsDead) aliveCount++;
+        Debug.Log($"[Room] PlayerEntered: room={RoomName}, totalEnemies={_enemies.Count}, alive={aliveCount}, isCleared={_isCleared}, captionLocked={_captionLocked}");
+
         RoomManager.Instance.SetCurrentRoom(this);
         
         if (_roomCaption != null)
@@ -73,6 +77,7 @@ public class Room : MonoBehaviour
         {
             if (enemy != null && !enemy.IsDead)
             {
+                Debug.Log($"[Room]   Notifying enemy {enemy.name} (ID:{enemy.GetInstanceID()})");
                 enemy.NotifyPlayerEnteredRoom();
             }
         }
@@ -81,6 +86,7 @@ public class Room : MonoBehaviour
         {
             LockRoom();
             _isCombatActive = true;
+            Debug.Log($"[Room] Room locked for combat: {RoomName}");
         }
     }
 
@@ -139,6 +145,7 @@ public class Room : MonoBehaviour
         if (_enemies.All(e => e == null || e.IsDead))
         {
             _isCleared = true;
+            Debug.Log($"[Room] Room cleared: {RoomName}, unlocking doors");
             UnlockRoom();
             
             // Play completion caption if available

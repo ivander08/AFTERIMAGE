@@ -20,8 +20,6 @@ public class IaijutsuBreakAbility : MonoBehaviour
     [Header("Audio")]
     public AudioClip dashSound;
     public AudioClip finisherThudSound;
-    [Range(0f, 1f)] public float dashSoundVolume = 0.2f;
-    [Range(0f, 1f)] public float finisherThudVolume = 0.1f;
 
     private bool _usedThisLevel = false;
     private PlayerMovement _playerMovement;
@@ -108,7 +106,7 @@ public class IaijutsuBreakAbility : MonoBehaviour
         {
             if (dashSound != null)
             {
-                AudioService.PlayClip2D(dashSound, dashSoundVolume, 1f);
+                AudioService.PlayClip2D(dashSound, 0.6f, 1f);
             }
 
             yield return StartCoroutine(DashToPosition(targetPositions[i], dashSpeed));
@@ -130,7 +128,7 @@ public class IaijutsuBreakAbility : MonoBehaviour
 
         if (finisherThudSound != null)
         {
-            AudioService.PlayClip2D(finisherThudSound, finisherThudVolume, 1f);
+            AudioService.PlayClip2D(finisherThudSound, 0.6f, 1f);
         }
 
         if (highlightEnemies)

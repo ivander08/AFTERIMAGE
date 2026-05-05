@@ -11,6 +11,7 @@ public class UtilityManager : MonoBehaviour
     public BaseUtility[] availableUtilities;
 
     [SerializeField] private int _currentUtilityIndex = 0;
+    public AudioClip switchSfx;
     private PlayerHealth _playerHealth;
     private PlayerMovement _playerMovement;
     
@@ -51,11 +52,18 @@ public class UtilityManager : MonoBehaviour
         }
     }
 
-    public void SwitchToNextUtility()
+     public void SwitchToNextUtility()
     {
+        // Only play sound and switch if we actually have multiple utilities to cycle through
         if (availableUtilities == null || availableUtilities.Length <= 1) return;
 
         _currentUtilityIndex = (_currentUtilityIndex + 1) % availableUtilities.Length;
+
+        // Play the switch sound
+        if (switchSfx != null)
+        {
+            AudioService.PlayClip2D(switchSfx, 0.5f);
+        }
     }
 
     public bool UseCurrentUtility()

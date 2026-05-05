@@ -26,6 +26,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public AudioClip[] deathSounds;
     public AudioClip[] hitSounds;
+    public AudioClip slashSound;
     public GameObject deathVFXPrefab;
     protected NavMeshAgent _agent;
     protected Rigidbody _rb;
@@ -99,6 +100,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         _aggroStartTime = Time.time + realizationTime;
         _hasRealized = false;
         
+        Debug.Log($"[EnemyBase] NotifyPlayerEnteredRoom: {name} (ID:{GetInstanceID()}), room={_myRoom?.RoomName}, aggroStart={_aggroStartTime}, realizationTime={realizationTime}, onNavMesh={_agent?.isOnNavMesh}");
+
         if (_agent != null && _agent.isOnNavMesh)
         {
             _agent.isStopped = true;
@@ -128,9 +131,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         if (_isDead || _isStunned || _isKnockedBack || _currentTarget == null || IsPlayerDead) return;
 
-        if (CanAggro())
+        bool canAggro = CanAggro();
+        bool timeBeforeAggro = Time.time < _aggroStartTime;
+
+        if (canAggro)
         {
-            if (Time.time < _aggroStartTime)
+            if (timeBeforeAggro)
             {
                 if (_agent.isOnNavMesh) _agent.isStopped = true;
                 return;
@@ -138,6 +144,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
             if (!_hasRealized)
             {
+                Debug.Log($"[EnemyBase] Realized player: {name} (ID:{GetInstanceID()}), room={_myRoom?.RoomName}, currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isStopped={_agent?.isStopped}, onNavMesh={_agent?.isOnNavMesh}");
                 _hasRealized = true;
                 if (_agent.isOnNavMesh) _agent.isStopped = false;
             }
@@ -146,7 +153,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
-            HandlePatrol();
+            if (_myRoom != null && RoomManager.Instance?.CurrentRoom != _myRoom)
+            {
+                // Patrol because we're not in the current room
+                HandlePatrol();
+            }
         }
     }
 
@@ -232,7 +243,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (_isDead) return;
         health -= damage;
 
-        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f, minDistance: 1.5f);
+        AudioService.PlayRandom(hitSounds, transform.position, 3f, 0.95f, 1.05f, minDistance: 8f);
 
         CameraShakeService.Shake(0.4f);
 
@@ -256,7 +267,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         SetKatanaVisible(false);
         SetWalkingAnimation(false);
 
-        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f, minDistance: 1.5f);
+        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f, minDistance: 8f);
 
         if (deathVFXPrefab != null)
         {

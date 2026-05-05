@@ -383,7 +383,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 7
+  m_Speed: 5
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -451,6 +451,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6a8e7fa88c8f9c549b56f9498af15832, type: 3}
   - {fileID: 8300000, guid: fc21f9a36365a5d4aad4b774d8639a15, type: 3}
   hitSounds: []
+  slashSound: {fileID: 0}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 6526c2ab2c015a846b596d1c47500c9d, type: 3}
   katanaHip: {fileID: 0}
   katanaHand: {fileID: 0}
@@ -477,16 +478,12 @@ MonoBehaviour:
   firePoint: {fileID: 8803910493180491816}
   maxRange: 16
   attackCooldown: 0.8
-  attackWindup: 0.2
+  attackWindup: 0.3
   projectileCount: 5
   spreadAngle: 45
   projectileSpeed: 45
   aimSfx: {fileID: 8300000, guid: 5344824b2ad191f41bca1040e8ce944e, type: 3}
   fireSfx: {fileID: 8300000, guid: 703c47dd76511c448ac5467a88f24466, type: 3}
-  aimSfxVolume: 1
-  fireSfxVolume: 0.7
-  aimSfxMinDistance: 5
-  fireSfxMinDistance: 5
 --- !u!114 &5371361655515537536
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,6 +11,9 @@ public class LoadoutData : MonoBehaviour
     // What the player confirmed — passed into the game scene
     public List<LoadoutEntry> ConfirmedLoadout { get; private set; } = new();
 
+    // Tracks if we actually hit "Start" in the loadout scene
+    public bool HasConfirmedLoadout { get; private set; } = false;
+
     [System.Serializable]
     public class LoadoutEntry
     {
@@ -28,5 +31,6 @@ public class LoadoutData : MonoBehaviour
     public void SetLoadout(List<LoadoutEntry> entries)
     {
         ConfirmedLoadout = new List<LoadoutEntry>(entries);
+        HasConfirmedLoadout = true; // We purposefully saved a loadout
     }
 }

@@ -17,4 +17,4 @@ MonoBehaviour:
   iconMaterial: {fileID: 2100000, guid: 0b341d93194c26f46a779a3de2f27881, type: 2}
   slotCost: 2
   defaultCount: 1
-  description: Thunderclap Definition
+  description: Thrown explosive that stuns enemies in a radius and shatters shields.

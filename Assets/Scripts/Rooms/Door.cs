@@ -75,7 +75,7 @@ public class Door : MonoBehaviour
         AudioClip clipToPlay = doorMaterial == DoorMaterial.Wood ? woodBreakSound : metalBreakSound;
         if (clipToPlay != null)
         {
-            AudioService.PlayClip(clipToPlay, transform.position, 2f, 1f, minDistance: 1.5f);
+            AudioService.PlayClip2D(clipToPlay, 0.2f);
         }
 
         GameObject vfxToSpawn = doorMaterial == DoorMaterial.Wood ? woodBreakVfxPrefab : metalBreakVfxPrefab;
@@ -89,7 +89,9 @@ public class Door : MonoBehaviour
     {
         isLocked = true;
 
-        if (doorRenderer != null) 
+        Debug.Log($"[Door] Lock: {DoorName}, wasBroken={IsBroken}, colEnabled={_col?.enabled}, brokenTriggerEnabled={_brokenTrigger?.enabled}");
+
+        if (doorRenderer != null)
         {
             doorRenderer.enabled = true;
             doorMaterialInstance.color = Color.red;
@@ -97,10 +99,9 @@ public class Door : MonoBehaviour
 
         if (_col != null) _col.enabled = true;
 
-        if (_brokenTrigger != null)
-        {
-            _brokenTrigger.enabled = false;
-        }
+        // FIX: Don't disable _brokenTrigger — keeping it always-on prevents
+        // Unity from re-firing OnTriggerEnter when the room unlocks later.
+        // The DoorDashZone now checks IsLocked() to reject locked-door triggers.
     }
 
     public void Unlock()
@@ -112,14 +113,13 @@ public class Door : MonoBehaviour
             if (doorRenderer != null) doorRenderer.enabled = false;
             if (_col != null) _col.enabled = false;
             
-            if (_brokenTrigger != null)
-            {
-                _brokenTrigger.enabled = true;
-            }
+            // FIX: Don't re-enable _brokenTrigger here — it stays always-on
+            // to prevent Unity from re-firing OnTriggerEnter when unlocking.
+            // DoorDashZone.OnTriggerEnter now checks IsLocked() to filter.
         }
         else
         {
-            if (doorRenderer != null) 
+            if (doorRenderer != null)
             {
                 doorRenderer.enabled = true;
                 doorMaterialInstance.color = originalColor;

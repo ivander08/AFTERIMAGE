@@ -10229,7 +10229,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 6
+  m_Speed: 4
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -10300,6 +10300,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 092603f930dee2d49b07952fd22d76b1, type: 3}
   - {fileID: 8300000, guid: e7a32907dddc3124094541ba58bb928d, type: 3}
   - {fileID: 8300000, guid: 7944b27829fed6c43b1333b866433d70, type: 3}
+  slashSound: {fileID: 8300000, guid: 76467c9191cbe634b9eaf3fa53130bc7, type: 3}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 0d9496a63ab503346ae1b157db446fc4, type: 3}
   katanaHip: {fileID: 9088463740606359317}
   katanaHand: {fileID: 4220461190703981582}

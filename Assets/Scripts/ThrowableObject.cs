@@ -64,7 +64,7 @@ public class ThrowableObject : MonoBehaviour
         _targetEnemy = nearestEnemy;
         _hasBeenThrown = true;
 
-        AudioService.PlayRandom(throwSounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 2.5f);
+        AudioService.PlayRandom(throwSounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 4f);
 
     }
 
@@ -128,7 +128,7 @@ public class ThrowableObject : MonoBehaviour
                 return;
             }
 
-            AudioService.PlayRandom(hitEnemySounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 2.5f);
+            AudioService.PlayRandom(hitEnemySounds, transform.position, 1f, 0.95f, 1.05f, minDistance: 4f);
             if (hitEnemyVFXPrefab != null)
             {
                 Vector3 vfxPos = enemy.transform.position + Vector3.up * 0.5f;

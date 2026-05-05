@@ -12,7 +12,6 @@ public class ThunderClapProjectile : BaseProjectile
     public GameObject explosionVfx;
     [Header("Audio")]
     public AudioClip hitSfx;
-    public float hitSfxVolume = 1f;
 
     private Vector3 _startPosition;
     private bool _hasExploded = false;
@@ -22,7 +21,7 @@ public class ThunderClapProjectile : BaseProjectile
     {
         if (_didPlayHitSfx || hitSfx == null) return;
         _didPlayHitSfx = true;
-        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f, minDistance: 2f);
+        AudioService.PlayClip(hitSfx, transform.position, 1f, 1f, minDistance: 16f);
     }
 
     protected override void Awake()

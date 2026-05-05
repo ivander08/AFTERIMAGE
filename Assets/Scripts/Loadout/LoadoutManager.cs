@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,14 @@ public class LoadoutManager : MonoBehaviour
         [HideInInspector] public int utilityIndex = -1; // -1 = empty
     }
 
+    [Header("New Utility Announcement")]
+    public RectTransform newUtilityPanel;
+    public Image newUtilityImage;
+    public TextMeshProUGUI newUtilityNameText;
+    public TextMeshProUGUI newUtilityDescText; // Map to your ExplanationText
+    public Button newUtilityOkButton;
+    public AudioClip newUtilitySfx;
+
     private int _previewIndex = 0;
     private int[] _chosen; // count of each utility placed in tray
 
@@ -76,6 +85,105 @@ public class LoadoutManager : MonoBehaviour
 
         RefreshPreview();
         RefreshSlotsLeft();
+
+        // Check for new utility unlocks
+        CheckForNewUtilityUnlock();
+    }
+
+    // ── Unlock Logic ──────────────────────────────────────────────────────────
+
+    private void CheckForNewUtilityUnlock()
+    {
+        UtilityDefinition newlyUnlocked = null;
+        
+        // If this is the absolute first time entering loadout, silently mark all as seen
+        // so we don't bombard them with unlocks at the very beginning of the game.
+        bool isFirstTime = PlayerPrefs.GetInt("FirstTimeLoadoutSetup", 1) == 1;
+
+        foreach (var def in availableUtilities)
+        {
+            string prefKey = "SeenUtil_" + def.utilityName;
+            
+            if (PlayerPrefs.GetInt(prefKey, 0) == 0)
+            {
+                if (isFirstTime)
+                {
+                    PlayerPrefs.SetInt(prefKey, 1);
+                }
+                else if (newlyUnlocked == null)
+                {
+                    // Found a new one!
+                    newlyUnlocked = def;
+                }
+            }
+        }
+
+        PlayerPrefs.SetInt("FirstTimeLoadoutSetup", 0);
+
+        if (newlyUnlocked != null && newUtilityPanel != null)
+        {
+            ShowNewUtilityPanel(newlyUnlocked);
+        }
+        else if (newUtilityPanel != null)
+        {
+            newUtilityPanel.gameObject.SetActive(false);
+        }
+    }
+
+    private void ShowNewUtilityPanel(UtilityDefinition def)
+    {
+        // Populate UI
+        if (newUtilityImage != null)
+        {
+            newUtilityImage.sprite = def.icon;
+            newUtilityImage.material = def.iconMaterial;
+        }
+        if (newUtilityNameText != null) newUtilityNameText.text = def.utilityName;
+        if (newUtilityDescText != null) newUtilityDescText.text = def.description;
+
+        // Mark as seen
+        PlayerPrefs.SetInt("SeenUtil_" + def.utilityName, 1);
+
+        // Bind OK button
+        if (newUtilityOkButton != null)
+        {
+            newUtilityOkButton.onClick.RemoveAllListeners();
+            newUtilityOkButton.onClick.AddListener(HideNewUtilityPanel);
+        }
+
+        // Setup Slide-in
+        newUtilityPanel.gameObject.SetActive(true);
+        newUtilityPanel.anchoredPosition = new Vector2(newUtilityPanel.anchoredPosition.x, -2000f);
+
+        if (newUtilitySfx != null) AudioService.PlayClip2D(newUtilitySfx, 0.5f);
+
+        StartCoroutine(LerpPanel(newUtilityPanel, -2000f, 0f, false));
+    }
+
+    private void HideNewUtilityPanel()
+    {
+        if (newUtilityPanel != null)
+            StartCoroutine(LerpPanel(newUtilityPanel, 0f, -2000f, true));
+    }
+
+    private IEnumerator LerpPanel(RectTransform panel, float startY, float endY, bool hideAfter)
+    {
+        float elapsed = 0f;
+        float duration = 0.5f;
+        float x = panel.anchoredPosition.x;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float eased = 1f - Mathf.Pow(1f - t, 3f); // Smooth ease-out
+            
+            panel.anchoredPosition = new Vector2(x, Mathf.Lerp(startY, endY, eased));
+            yield return null;
+        }
+
+        panel.anchoredPosition = new Vector2(x, endY);
+        if (hideAfter) panel.gameObject.SetActive(false);
     }
 
     // ── Arrow navigation ──────────────────────────────────────────────────────

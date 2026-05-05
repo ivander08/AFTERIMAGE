@@ -48,7 +48,7 @@ public class DeathPanelController : MonoBehaviour
         // Play the UI sound immediately
         if (deathPanelAudioClip != null)
         {
-            AudioService.PlayClip2D(deathPanelAudioClip, 0.2f);
+            AudioService.PlayClip2D(deathPanelAudioClip, 1f);
         }
 
         StartCoroutine(FadeInRoutine());

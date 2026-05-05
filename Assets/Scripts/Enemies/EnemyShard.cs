@@ -71,6 +71,10 @@ public class EnemyShard : EnemyBase
         if (_animator != null) _animator.SetTrigger("dashTrigger");
         StartCoroutine(WaitForAttackAnimationEnd());
 
+        // Play slash sound
+        if (slashSound != null)
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+
         yield return new WaitForSeconds(attackWindup);
 
         if (ShouldAbortAttack(target))

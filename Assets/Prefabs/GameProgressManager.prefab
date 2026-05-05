@@ -68,16 +68,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
   mainMixer: {fileID: 24100000, guid: adb4c2af7e9309d42b5f963e91fa03e8, type: 2}
-  menuMusic: {fileID: 8300000, guid: 9d6f2b6af420853439a47907077d9331, type: 3}
-  level0Music: {fileID: 8300000, guid: d33be2df5e30442499d64ec059b88459, type: 3}
+  menuMusic: {fileID: 8300000, guid: 72c614c125eda8145bce2809d67b0d7b, type: 3}
+  level0Music: {fileID: 8300000, guid: ad110040577f5a94c85e809e3667916c, type: 3}
   levelMusicTracks:
-  - {fileID: 8300000, guid: 9cdc7adfe2ed3124280f3b06d4be6960, type: 3}
-  - {fileID: 8300000, guid: 1c29671f466a0ab4091c934fa1ff2adb, type: 3}
-  - {fileID: 8300000, guid: 4144d3bcbcb751f41bc0773ab4418311, type: 3}
-  - {fileID: 8300000, guid: 62b176e2fa5441a4583505b21c6b5717, type: 3}
-  - {fileID: 8300000, guid: 555a8b28670443244a60c3ec1cabd37c, type: 3}
-  - {fileID: 8300000, guid: a81151ad10dcdb74197eddb4c1dd8000, type: 3}
-  - {fileID: 8300000, guid: 6a78de338757f2643968ba0a4150ea58, type: 3}
+  - {fileID: 8300000, guid: 223e893c52301294e9f11e6e6d5a32f5, type: 3}
+  - {fileID: 8300000, guid: 0dfc415ea5ca76f4a96f8dec322aedaf, type: 3}
+  - {fileID: 8300000, guid: 189fd3e240ad82f468f97fa30a5057ba, type: 3}
+  - {fileID: 8300000, guid: a972a32cea5ea744696945e38ccb97d0, type: 3}
+  - {fileID: 8300000, guid: 3788a01990c2302439ebdacd0e9992e1, type: 3}
+  - {fileID: 8300000, guid: 630735526150a964890560eda801ca21, type: 3}
+  - {fileID: 8300000, guid: 22adb6241597451468b9d9b48bda1db5, type: 3}
+  - {fileID: 8300000, guid: 07e4f63c4ee98324bb4e2a40a6fd1f22, type: 3}
+  - {fileID: 8300000, guid: 5e87ba2d2ffe6da43a08b5dcbc37319e, type: 3}
+  - {fileID: 8300000, guid: b7f9a56ae6689bb4a9675ca8e0a0a13e, type: 3}
+  - {fileID: 8300000, guid: 5ec4f2bb7aa43b64ab447ddebd119dba, type: 3}
+  - {fileID: 8300000, guid: 5205930b0be49214a8a8705da35360d5, type: 3}
   fadeDuration: 1.5
-  maxMusicVolume: 0.035
-  level0MusicVolume: 0.07
+  maxMusicVolume: 0.1
+  level0MusicVolume: 0.8
+  mainMenuMusicVolume: 0.5

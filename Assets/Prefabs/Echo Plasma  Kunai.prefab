@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3b4f1e481770d4aa987ed19afed8cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPlasmaKunai
-  speed: 45
+  speed: 35
   lifetime: 3
   hitVfx: {fileID: 6207748249219978080, guid: d1fc77f0051031245892445ef3559ac4, type: 3}
   hitSfx: {fileID: 8300000, guid: 4cf741dcacb311d479e4e11699af4fb6, type: 3}

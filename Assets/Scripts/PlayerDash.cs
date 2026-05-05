@@ -122,7 +122,7 @@ public class PlayerDash : MonoBehaviour
         CalculateDashData();
         HandleCameraZoom();
 
-        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished)) return;
+        if (_movement != null && (_movement.isMovementLocked || CaptionManager.IsFrozen || TutorialUIManager.IsOpen || PreGamePanel.IsPlaying || FinishPanelController.IsFinished || PausePanelController.IsPaused)) return;
 
         if (Mouse.current == null || _isDashing) return;
 
@@ -204,12 +204,12 @@ public class PlayerDash : MonoBehaviour
 
         if (dashSound != null)
         {
-            AudioService.PlayClip2D(dashSound, 0.15f, 1f);
+            AudioService.PlayClip2D(dashSound, 0.8f, 1f);
         }
 
         if (isAttack && slashSound != null)
         {
-            AudioService.PlayClip2D(slashSound, 0.15f, 1.05f);
+            AudioService.PlayClip2D(slashSound, 0.8f, 1.05f);
         }
 
         if (isAttack && katanaHip != null && katanaHand != null)
@@ -239,13 +239,21 @@ public class PlayerDash : MonoBehaviour
 
         if (doorInPath != null && isAttack && !doorInPath.IsLocked())
         {
+            Debug.Log($"[PlayerDash] Breaking door and transitioning: door={doorInPath.DoorName}, isLocked={doorInPath.IsLocked()}, isBroken={doorInPath.IsBroken}");
             DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
             if (zone != null)
             {
+                // FIX: Fetch and ignore the solid door collider BEFORE breaking the door
+                // and locking the room, so we don't accidentally grab the broken trigger
+                doorCollider = doorInPath.GetComponent<Collider>();
+                if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, true);
+
                 doorInPath.Break();
                 CameraShakeService.Shake(0.5f);
                 zone.OnPlayerDashThrough();
                 
+                Debug.Log($"[PlayerDash] After transition: currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isDashing={_isDashing}");
+
                 Vector3 landingPos = zone.GetLandingPosition(transform.position);
                 Vector3 distVector = landingPos - transform.position;
 
@@ -253,9 +261,6 @@ public class PlayerDash : MonoBehaviour
                 
                 dashDir = distVector.normalized;
                 currentDashDistance = distVector.magnitude;
-
-                doorCollider = doorInPath.GetComponent<Collider>();
-                if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, true);
             }
         }
 
@@ -336,6 +341,7 @@ public class PlayerDash : MonoBehaviour
 
         if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, false);
         Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, false);
+        Debug.Log($"[PlayerDash] Dash ended. Layer collision restored. currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}");
 
         if (isAttack && !hitSuccess && !hitShield && doorInPath == null)
         {
@@ -381,7 +387,7 @@ public class PlayerDash : MonoBehaviour
                     
                     if (thudSound != null)
                     {
-                        AudioService.PlayClip2D(thudSound, 0.1f, 1f);
+                        AudioService.PlayClip2D(thudSound, 0.4f, 1f);
                     }
                 }
             }

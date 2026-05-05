@@ -102,7 +102,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 7
+  m_Speed: 5
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -170,6 +170,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6a8e7fa88c8f9c549b56f9498af15832, type: 3}
   - {fileID: 8300000, guid: fc21f9a36365a5d4aad4b774d8639a15, type: 3}
   hitSounds: []
+  slashSound: {fileID: 0}
   deathVFXPrefab: {fileID: 6207748249219978080, guid: 08f94da8a28446d4288a7cbc85864619, type: 3}
   katanaHip: {fileID: 0}
   katanaHand: {fileID: 0}
@@ -197,6 +198,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   tetherColor: {r: 1, g: 1, b: 1, a: 1}
+  tetherLineMaterial: {fileID: 0}
   tetherOutlineMaterial: {fileID: 2100000, guid: c44a58f7448058346a3bf8e8bae095f9, type: 2}
 --- !u!1 &3251939476083145171
 GameObject:

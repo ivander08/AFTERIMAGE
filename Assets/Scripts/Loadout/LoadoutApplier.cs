@@ -21,8 +21,8 @@ public class LoadoutApplier : MonoBehaviour
         var manager = GetComponent<UtilityManager>();
         List<LoadoutData.LoadoutEntry> loadoutToApply = null;
 
-        // 1. Determine which loadout to use
-        if (LoadoutData.Instance != null && LoadoutData.Instance.ConfirmedLoadout.Count > 0)
+        // 1. Determine which loadout to use by checking the new flag
+        if (LoadoutData.Instance != null && LoadoutData.Instance.HasConfirmedLoadout)
         {
             Debug.Log("[LoadoutApplier] Applying confirmed loadout from LoadoutScene.");
             loadoutToApply = LoadoutData.Instance.ConfirmedLoadout;

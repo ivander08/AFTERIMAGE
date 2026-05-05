@@ -10330,7 +10330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68698f955930f514f85f4cf5b8b4bea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
-  maxDashDistance: 4
+  maxDashDistance: 5
   dashSpeed: 40
   damageDelay: 0.05
   missPenalty: 0.8
@@ -10338,7 +10338,7 @@ MonoBehaviour:
   hitLayer:
     serializedVersion: 2
     m_Bits: 128
-  hitRadius: 1
+  hitRadius: 1.5
   damageAmount: 1
   cam: {fileID: 0}
   normalDistance: 45
@@ -10371,6 +10371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 1
   isDead: 0
+  isInvulnerable: 0
   deathSounds:
   - {fileID: 8300000, guid: e8bfff41a3ca1924ca291f1f3159d7e3, type: 3}
   - {fileID: 8300000, guid: 941dbbddc984e3f4dbcfe512fe74b1b8, type: 3}
@@ -10414,6 +10415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UtilityManager
   availableUtilities: []
   _currentUtilityIndex: 0
+  switchSfx: {fileID: 8300000, guid: 1f8cb94b1cb96a04b9a83fdaa956f2ba, type: 3}
 --- !u!114 &1411342950645316115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10434,8 +10436,6 @@ MonoBehaviour:
   highlightEnemies: 1
   dashSound: {fileID: 8300000, guid: e90f1e5fb8cebf74686e34a25073fb93, type: 3}
   finisherThudSound: {fileID: 8300000, guid: 12519c3ae9d6bd7408dbb32ad8177470, type: 3}
-  dashSoundVolume: 0.2
-  finisherThudVolume: 0.2
 --- !u!114 &5002848246264533411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10481,6 +10481,7 @@ MonoBehaviour:
     utilityPrefab: {fileID: 0}
   - definition: {fileID: 11400000, guid: ab8fad3b1770cb24b818db3e702d8d81, type: 2}
     utilityPrefab: {fileID: 0}
+  fallbackLoadout: []
 --- !u!82 &7921139763215271328
 AudioSource:
   m_ObjectHideFlags: 0

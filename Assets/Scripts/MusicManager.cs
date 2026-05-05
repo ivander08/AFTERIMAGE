@@ -21,6 +21,7 @@ public class MusicManager : MonoBehaviour
     public float fadeDuration = 1.5f;
     [Range(0f, 1f)] public float maxMusicVolume = 0.5f; // Cap the max volume for regular levels
     [Range(0f, 1f)] public float level0MusicVolume = 0.5f; // Separate volume for Level0
+    [Range(0f, 1f)] public float mainMenuMusicVolume = 0.5f;
 
     private AudioSource _audioSource;
     private string _currentTrackType = ""; // "Menu" or "Level"
@@ -79,7 +80,7 @@ public class MusicManager : MonoBehaviour
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
         if (mainMixer != null)
-            mainMixer.SetFloat("MasterVolume", Mathf.Log10(value) * 20 + 10);
+            mainMixer.SetFloat("MasterVolume", Mathf.Log10(value) * 20);
         PlayerPrefs.SetFloat("Pref_MasterVol", value);
     }
 
@@ -110,16 +111,21 @@ public class MusicManager : MonoBehaviour
     private IEnumerator PlayMenuMusicRoutine()
     {
         _currentTrackType = "Menu";
-
-        // Fade out whatever is playing
         yield return StartCoroutine(FadeOutRoutine());
 
-        // Play Menu Music
         if (menuMusic != null)
         {
             _audioSource.clip = menuMusic;
             _audioSource.Play();
-            yield return StartCoroutine(FadeInRoutine());
+            // Fade in to the menu-specific volume
+            float elapsed = 0f;
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                _audioSource.volume = Mathf.Lerp(0f, mainMenuMusicVolume, elapsed / fadeDuration);
+                yield return null;
+            }
+            _audioSource.volume = mainMenuMusicVolume;
         }
     }
 
@@ -199,7 +205,7 @@ public class MusicManager : MonoBehaviour
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
         if (mainMixer != null)
-            mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20 + 10);
+            mainMixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
         PlayerPrefs.SetFloat("Pref_MusicVol", value);
     }
 
@@ -207,7 +213,7 @@ public class MusicManager : MonoBehaviour
     {
         float value = Mathf.Clamp(sliderValue, 0.0001f, 1f);
         if (mainMixer != null)
-            mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20 + 10);
+            mainMixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20);
         PlayerPrefs.SetFloat("Pref_SFXVol", value);
     }
 

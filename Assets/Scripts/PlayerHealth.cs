@@ -16,12 +16,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public bool isDead = false;
     public bool isInvulnerable = false;
 
-    /// <summary>
-    /// When enabled, the player takes no damage.
-    /// Toggled via the DebugHUD in-game overlay (F3 key).
-    /// </summary>
-    public bool godMode { get; set; } = false;
-
     public void ResetHealth()
     {
         _currentHealth = maxHealth;
@@ -55,8 +49,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         if (isDead) return;
         if (isInvulnerable) return;
 
-        // God Mode: ignore all damage
-        if (godMode)
+        // Check global God Mode from DebugHUD (persists across levels)
+        if (DebugHUD.Instance != null && DebugHUD.Instance.GodModeEnabled)
         {
             Debug.Log("[GodMode] Damage ignored!");
             return;
@@ -80,12 +74,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         if (reticleObject != null) reticleObject.SetActive(false);
 
         // 1. Lock the audio service to stop enemies from making noise
-        AudioService.StopAllSFX();
+        // AudioService.StopAllSFX();
         AudioService.SetLock(true); 
 
         if (AmbientAudioController.Instance != null)
         {
-            AmbientAudioController.Instance.FadeToSilence(1.0f);
+            // AmbientAudioController.Instance.FadeToSilence(1.0f);
         }
 
         AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f);

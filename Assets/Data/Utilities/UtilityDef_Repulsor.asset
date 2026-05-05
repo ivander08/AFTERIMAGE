@@ -17,4 +17,4 @@ MonoBehaviour:
   iconMaterial: {fileID: 2100000, guid: 6abd19887906d824fb1ddd3125570355, type: 2}
   slotCost: 2
   defaultCount: 1
-  description: Repulsor Description
+  description: Radial shockwave that knocks back and stuns nearby enemies.

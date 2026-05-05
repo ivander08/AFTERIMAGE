@@ -31,7 +31,7 @@ public class RepulsorUtility : BaseUtility
         // ── SFX (2D — UI channel) ──
         if (activationSfx != null)
         {
-            AudioService.PlayClip2D(activationSfx, volume: 0.1f, pitch: 1f);
+            AudioService.PlayClip2D(activationSfx, volume: 0.6f, pitch: 1f);
         }
 
         // ── Physics ──

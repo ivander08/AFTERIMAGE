@@ -76,7 +76,7 @@ public class PausePanelController : MonoBehaviour
         _canvasGroup.blocksRaycasts = true;
         Cursor.visible = true; 
 
-        if (pauseSfx != null) AudioService.PlayClip2D(pauseSfx, 0.5f);
+        if (pauseSfx != null) AudioService.PlayClip2D(pauseSfx, 1f);
     }
 
     private void ResumeGame()
@@ -90,7 +90,7 @@ public class PausePanelController : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         Cursor.visible = false; 
 
-        if (unpauseSfx != null) AudioService.PlayClip2D(unpauseSfx, 0.5f);
+        if (unpauseSfx != null) AudioService.PlayClip2D(unpauseSfx, 1f);
     }
 
     private void ExitToMainMenu()

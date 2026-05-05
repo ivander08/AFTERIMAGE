@@ -15,7 +15,7 @@ public class PlasmaKunaiProjectile : BaseProjectile
     {
         if (_didPlayHitSfx || hitSfx == null) return;
         _didPlayHitSfx = true;
-        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f, minDistance: 2f);
+        AudioService.PlayClip(hitSfx, transform.position, hitSfxVolume, 1f, minDistance: 16f);
     }
 
     public override void OnHit(Collider other)

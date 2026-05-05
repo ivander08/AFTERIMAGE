@@ -43,7 +43,7 @@ public class MenuTextHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointer
         if (_button != null && !_button.interactable) return;
         
         _text.color = hoverColor;
-        if (hoverSound != null) AudioService.PlayClip2D(hoverSound, 0.2f);
+        if (hoverSound != null) AudioService.PlayClip2D(hoverSound, 1f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -57,6 +57,6 @@ public class MenuTextHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointer
         if (_button != null && !_button.interactable) return;
 
         _text.color = clickColor;
-        if (clickSound != null) AudioService.PlayClip2D(clickSound, 0.2f);
+        if (clickSound != null) AudioService.PlayClip2D(clickSound, 1f);
     }
 }

@@ -23,7 +23,12 @@ public class DoorDashZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Door door = GetComponent<Door>();
-            if (door != null && door.IsBroken)
+            // FIX: Added && !door.IsLocked() to prevent the "ghost backtracking" bug.
+            // When a room is cleared and Unlock() is called, the broken trigger is always
+            // active. If the player is standing inside it, Unity would fire OnTriggerEnter
+            // and reset CurrentRoom to the previous room — making enemies in the new room
+            // think the player isn't there (CanAggro() fails).
+            if (door != null && door.IsBroken && !door.IsLocked())
             {
                 TransitionToNextRoom();
             }
@@ -32,7 +37,7 @@ public class DoorDashZone : MonoBehaviour
 
     private void TransitionToNextRoom()
     {
-        if (Time.time - _lastTransitionTime < 0.5f) return; 
+        if (Time.time - _lastTransitionTime < 0.5f) return;
         _lastTransitionTime = Time.time;
 
         Door door = GetComponent<Door>();
@@ -41,12 +46,14 @@ public class DoorDashZone : MonoBehaviour
         Room currentRoom = RoomManager.Instance.CurrentRoom;
         Room destinationRoom = null;
 
-        if (door.roomA == currentRoom) 
+        if (door.roomA == currentRoom)
             destinationRoom = door.roomB;
-        else if (door.roomB == currentRoom) 
+        else if (door.roomB == currentRoom)
             destinationRoom = door.roomA;
-        else 
-            destinationRoom = door.roomA != null ? door.roomA : door.roomB; 
+        else
+            destinationRoom = door.roomA != null ? door.roomA : door.roomB;
+
+        Debug.Log($"[DoorDashZone] TransitionToNextRoom: door={door.DoorName}, currentRoom={currentRoom?.RoomName}, destinationRoom={destinationRoom?.RoomName}");
 
         if (destinationRoom != null && destinationRoom != currentRoom)
         {

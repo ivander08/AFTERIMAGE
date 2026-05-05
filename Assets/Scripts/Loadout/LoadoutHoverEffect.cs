@@ -17,9 +17,9 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     [Header("Audio")]
     public AudioClip hoverSound;
-    [Range(0f, 1f)] public float hoverVolume = 0.5f;
+    // [Range(0f, 1f)] public float hoverVolume = 0.5f;
     public AudioClip clickSound;
-    [Range(0f, 1f)] public float clickVolume = 0.8f;
+    // [Range(0f, 1f)] public float clickVolume = 0.8f;
 
     [Header("Debug")]
     public bool debugLog = true;
@@ -48,7 +48,7 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
         if (!_isClicking)
         {
             ApplyHover();
-            if (hoverSound != null) AudioService.PlayClip2D(hoverSound, hoverVolume);
+            if (hoverSound != null) AudioService.PlayClip2D(hoverSound, 1f);
         }
     }
 
@@ -66,7 +66,7 @@ public class LoadoutHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerE
         _isClicking = true;
         ApplyClick();
         
-        if (clickSound != null) AudioService.PlayClip2D(clickSound, clickVolume);
+        if (clickSound != null) AudioService.PlayClip2D(clickSound, 1f);
 
         CancelInvoke(nameof(ReturnToNormal));
         Invoke(nameof(ReturnToNormal), 0.1f);

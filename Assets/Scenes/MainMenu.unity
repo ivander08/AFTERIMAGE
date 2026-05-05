@@ -2967,9 +2967,7 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   clickMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
-  hoverVolume: 0.2
   clickSound: {fileID: 8300000, guid: 7491189ef4351af4b949aa210e63e433, type: 3}
-  clickVolume: 0.2
   debugLog: 1
 --- !u!1 &853348251
 GameObject:
@@ -3302,7 +3300,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -256, y: -179.5}
+  m_AnchoredPosition: {x: -229.21, y: -191.5}
   m_SizeDelta: {x: 1000, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &946625575
@@ -3567,9 +3565,7 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   clickMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
-  hoverVolume: 0.2
   clickSound: {fileID: 8300000, guid: 7491189ef4351af4b949aa210e63e433, type: 3}
-  clickVolume: 0.2
   debugLog: 1
 --- !u!114 &990084687
 MonoBehaviour:
@@ -11270,9 +11266,7 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   clickMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
-  hoverVolume: 0.2
   clickSound: {fileID: 8300000, guid: 7491189ef4351af4b949aa210e63e433, type: 3}
-  clickVolume: 0.2
   debugLog: 1
 --- !u!114 &1974578582
 MonoBehaviour:

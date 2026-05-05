@@ -24,10 +24,6 @@ public class EnemyScatter : EnemyBase
     [Header("Audio")]
     public AudioClip aimSfx;
     public AudioClip fireSfx;
-    public float aimSfxVolume = 1f;
-    public float fireSfxVolume = 1f;
-    public float aimSfxMinDistance = 8f;
-    public float fireSfxMinDistance = 5f;
 
     private float _lastAttackTime = -999f;
     private bool _isAttacking = false;
@@ -124,7 +120,7 @@ public class EnemyScatter : EnemyBase
 
         if (aimSfx != null)
         {
-            AudioService.PlayClip(aimSfx, transform.position, aimSfxVolume, 1f, -1f, aimSfxMinDistance, -1f);
+            AudioService.PlayClip(aimSfx, transform.position, 1f, 1f, -1f, 8f, -1f);
         }
 
         // Lock onto where the player is RIGHT NOW (with the 2.0f height adjustment)
@@ -158,7 +154,7 @@ public class EnemyScatter : EnemyBase
 
             if (fireSfx != null)
             {
-                AudioService.PlayClip(fireSfx, transform.position, fireSfxVolume, 1f, -1f, fireSfxMinDistance, -1f);
+                AudioService.PlayClip(fireSfx, transform.position, 1f, 1f, -1f, 8f, -1f);
             }
 
             FireSpreadProjectiles(lockedAimDirection);

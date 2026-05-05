@@ -75,7 +75,7 @@ public class EnemyRusher : EnemyBase
         // Play charge sound
         if (chargeSound != null)
         {
-            AudioService.PlayClip(chargeSound, transform.position, volume: 1.5f, minDistance: chargeSoundMinDistance);
+            AudioService.PlayClip(chargeSound, transform.position, volume: 1.5f, minDistance: 12f);
         }
         
         yield return new WaitForSeconds(chargeTime);
@@ -98,7 +98,7 @@ public class EnemyRusher : EnemyBase
         // Play dash movement sound
         if (dashSound != null)
         {
-            AudioService.PlayClip(dashSound, transform.position, volume: 2f, minDistance: dashSoundMinDistance);
+            AudioService.PlayClip(dashSound, transform.position, volume: 2f, minDistance: 18f);
         }
 
         float dashTimer = 0f;
