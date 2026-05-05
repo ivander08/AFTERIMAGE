@@ -24,18 +24,9 @@ public class PlasmaKunaiProjectile : BaseProjectile
         {
             Instantiate(hitVfx, transform.position, Quaternion.LookRotation(_lastHitNormal));
         }
-        
-        EnemyPhalanx phalanxParent = other.GetComponentInParent<EnemyPhalanx>();
-        
-        if (phalanxParent != null && other.gameObject != phalanxParent.gameObject)
-        {
-            phalanxParent.BreakShield();
-            PlayHitSfxOnce();
-            if (ScoreManager.Instance != null) ScoreManager.Instance.AddUtilityScore("Plasma Kunai");
-            Destroy(gameObject);
-            return;
-        }
 
+        // Just blindly apply damage! The EnemyPhalanx's new TakeDamage override
+        // will automatically absorb it if the player threw it from the front.
         if (other.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage(1);
@@ -43,7 +34,7 @@ public class PlasmaKunaiProjectile : BaseProjectile
             if (ScoreManager.Instance != null) ScoreManager.Instance.AddUtilityScore("Plasma Kunai");
             Destroy(gameObject);
         }
-        else if (!other.isTrigger) 
+        else if (!other.isTrigger)
         {
             PlayHitSfxOnce();
             Destroy(gameObject);

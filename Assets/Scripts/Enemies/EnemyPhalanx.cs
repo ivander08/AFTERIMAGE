@@ -96,7 +96,7 @@ public class EnemyPhalanx : EnemyBase
 
         // Play slash sound
         if (slashSound != null)
-            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 3f);
 
         yield return new WaitForSeconds(attackWindup);
 
@@ -159,11 +159,35 @@ public class EnemyPhalanx : EnemyBase
         }
         return baseForce;
     }
-
-    protected override void Die()
+public override void TakeDamage(int damage)
+{
+    if (_shieldActive)
     {
-        BreakShield();
-        base.Die();
+        // Find the player to determine attack direction
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Vector3 dirToPhalanx = (transform.position - player.transform.position).normalized;
+            float dot = Vector3.Dot(dirToPhalanx, transform.forward);
+            
+            // If the player throws a utility while standing in front of the Phalanx, break the shield.
+            if (dot < 0.2f)
+            {
+                BreakShield();
+                return;
+            }
+        }
     }
+    
+    // If flanked, or if the shield is already broken, die normally
+    base.TakeDamage(damage);
+}
+
+protected override void Die()
+{
+    BreakShield();
+    base.Die();
+}
+
 
 }

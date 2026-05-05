@@ -321,7 +321,7 @@ public class EnemyEcho : EnemyBase
         }
         if (slashSound != null)
         {
-            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 6f);
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 3f);
         }
 
         // Begin dash

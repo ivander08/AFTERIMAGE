@@ -67,7 +67,7 @@ public class EnemyGrunt : EnemyBase
 
         // Play slash sound
         if (slashSound != null)
-            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f));
+            AudioService.PlayClip(slashSound, transform.position, volume: 1.5f, pitch: Random.Range(0.95f, 1.05f), minDistance: 3f);
 
         yield return new WaitForSeconds(attackWindup);
 

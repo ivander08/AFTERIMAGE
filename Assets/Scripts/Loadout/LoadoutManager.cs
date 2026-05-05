@@ -47,6 +47,11 @@ public class LoadoutManager : MonoBehaviour
     public Button newUtilityOkButton;
     public AudioClip newUtilitySfx;
 
+    [Header("Are You Sure? (no utilities equipped)")]
+    public RectTransform areYouSurePanel;
+    public Button areYouSureYesButton;
+    public Button areYouSureNoButton;
+
     private int _previewIndex = 0;
     private int[] _chosen; // count of each utility placed in tray
 
@@ -63,6 +68,10 @@ public class LoadoutManager : MonoBehaviour
 
         availableUtilities = levelConfig.availableUtilities;
         _chosen = new int[availableUtilities.Length];
+
+        // Ensure the AreYouSure panel starts hidden
+        if (areYouSurePanel != null)
+            areYouSurePanel.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -84,6 +93,7 @@ public class LoadoutManager : MonoBehaviour
             ClearSlotVisual(i);
 
         RefreshPreview();
+        RefreshEmptySlotLabels();
         RefreshSlotsLeft();
 
         // Check for new utility unlocks
@@ -166,6 +176,41 @@ public class LoadoutManager : MonoBehaviour
             StartCoroutine(LerpPanel(newUtilityPanel, 0f, -2000f, true));
     }
 
+    // ── Are You Sure? Panel ─────────────────────────────────────────────────────
+
+    private void ShowAreYouSurePanel()
+    {
+        if (areYouSureYesButton != null)
+        {
+            areYouSureYesButton.onClick.RemoveAllListeners();
+            areYouSureYesButton.onClick.AddListener(OnAreYouSureYes);
+        }
+        if (areYouSureNoButton != null)
+        {
+            areYouSureNoButton.onClick.RemoveAllListeners();
+            areYouSureNoButton.onClick.AddListener(HideAreYouSurePanel);
+        }
+
+        areYouSurePanel.gameObject.SetActive(true);
+        areYouSurePanel.anchoredPosition = new Vector2(areYouSurePanel.anchoredPosition.x, -2000f);
+
+        // Play the same SFX as the new utility announcement
+        if (newUtilitySfx != null) AudioService.PlayClip2D(newUtilitySfx, 0.5f);
+
+        StartCoroutine(LerpPanel(areYouSurePanel, -2000f, 0f, false));
+    }
+
+    private void HideAreYouSurePanel()
+    {
+        if (areYouSurePanel != null)
+            StartCoroutine(LerpPanel(areYouSurePanel, 0f, -2000f, true));
+    }
+
+    private void OnAreYouSureYes()
+    {
+        StartGameInternal();
+    }
+
     private IEnumerator LerpPanel(RectTransform panel, float startY, float endY, bool hideAfter)
     {
         float elapsed = 0f;
@@ -241,16 +286,36 @@ public class LoadoutManager : MonoBehaviour
 
         RefreshSlotsLeft();
         RefreshTrayHighlights();
+        RefreshEmptySlotLabels();
     }
 
     // ── Start Game ────────────────────────────────────────────────────────────
 
     public void OnStartGame()
     {
-        var entries = new List<LoadoutData.LoadoutEntry>();
+        // Check if any utilities are actually equipped
+        bool hasAnyUtilities = false;
+        for (int i = 0; i < availableUtilities.Length; i++)
+        {
+            if (_chosen[i] > 0)
+            {
+                hasAnyUtilities = true;
+                break;
+            }
+        }
 
-        foreach(var entry in entries) 
-            Debug.Log($"[LoadoutManager] Exporting: {entry.definition.utilityName} x{entry.count}");
+        if (!hasAnyUtilities && areYouSurePanel != null)
+        {
+            ShowAreYouSurePanel();
+            return;
+        }
+
+        StartGameInternal();
+    }
+
+    private void StartGameInternal()
+    {
+        var entries = new List<LoadoutData.LoadoutEntry>();
 
         for (int i = 0; i < availableUtilities.Length; i++)
         {
@@ -288,6 +353,7 @@ public class LoadoutManager : MonoBehaviour
             previewName.text = def.utilityName;
 
         RefreshTrayHighlights();
+        RefreshEmptySlotLabels();
     }
 
     private void RefreshSlotsLeft()
@@ -344,6 +410,28 @@ public class LoadoutManager : MonoBehaviour
             if (slotBg != null)
                 slotBg.color = isActive ? new Color(0.2f, 0.8f, 0.8f, 1f)  // teal highlight
                                         : Color.white;
+        }
+    }
+
+    /// <summary>
+    /// Shows "Click Here" (white) on empty slots if the currently previewed utility
+    /// can fit. Shows "Unavailable" (red) if it doesn't fit.
+    /// </summary>
+    private readonly Color _unavailableRed = new Color(1f, 0f, 0f); // 255,0,0
+
+    private void RefreshEmptySlotLabels()
+    {
+        int remainingSlots = totalSlots - SlotsUsed();
+        int previewCost    = availableUtilities[_previewIndex].slotCost;
+        bool canFit        = remainingSlots >= previewCost;
+
+        for (int i = 0; i < traySlots.Length; i++)
+        {
+            if (traySlots[i].utilityIndex == -1 && traySlots[i].utilityText != null)
+            {
+                traySlots[i].utilityText.text  = canFit ? "Click Here" : "Unavailable";
+                traySlots[i].utilityText.color = canFit ? Color.white : _unavailableRed;
+            }
         }
     }
 

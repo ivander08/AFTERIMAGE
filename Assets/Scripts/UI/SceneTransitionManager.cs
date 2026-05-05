@@ -97,8 +97,8 @@ public class SceneTransitionManager : MonoBehaviour
             yield return null;
         }
 
-        // Optional: A tiny breathing room after loading before fading in
-        yield return new WaitForSeconds(0.2f);
+        // FIX: Use Realtime so it never gets stuck if timeScale hiccups during load
+        yield return new WaitForSecondsRealtime(0.2f);
 
         // Fade In (To Transparent)
         elapsed = 0f;

@@ -49,12 +49,8 @@ public class ThunderClapProjectile : BaseProjectile
     {
         if (_hasExploded) return;
         
-        EnemyPhalanx phalanxParent = other.GetComponentInParent<EnemyPhalanx>();
-        if (phalanxParent != null && other.gameObject != phalanxParent.gameObject)
-        {
-            Debug.Log($"[ThunderClap] Hit shield!");
-            phalanxParent.BreakShield();
-        }
+        // No manual shield check needed — the Phalanx's TakeDamage override
+        // handles directional shield logic automatically when damage is applied.
         
         Explode(other.gameObject);
     }
@@ -81,13 +77,6 @@ public class ThunderClapProjectile : BaseProjectile
         foreach (var hitCollider in hitColliders)
         {
             if (directHitObj != null && hitCollider.gameObject == directHitObj) continue;
-
-            EnemyPhalanx phalanxParent = hitCollider.GetComponentInParent<EnemyPhalanx>();
-            if (phalanxParent != null && hitCollider.gameObject != phalanxParent.gameObject)
-            {
-                Debug.Log($"[ThunderClap-Explode] Hit shield!");
-                phalanxParent.BreakShield();
-            }
 
             if (hitCollider.TryGetComponent(out EnemyBase enemy))
             {

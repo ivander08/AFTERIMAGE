@@ -275,16 +275,37 @@ public class PlayerDash : MonoBehaviour
             if (targets.Count > 0)
             {
                 RaycastHit firstHit = targets[0];
-                EnemyPhalanx phalanxParent = firstHit.collider.GetComponentInParent<EnemyPhalanx>();
                 
-                if (phalanxParent != null && firstHit.collider.gameObject != phalanxParent.gameObject)
+                // Safely grab the Phalanx whether we hit the child shield or the main body
+                EnemyPhalanx phalanx = firstHit.collider.GetComponentInParent<EnemyPhalanx>();
+                if (phalanx == null) phalanx = firstHit.collider.GetComponent<EnemyPhalanx>();
+                
+                if (phalanx != null && phalanx.HasShield())
                 {
-                    hitShield = true;
-                    Debug.Log($"[PlayerDash] Hit shield! Breaking and knocking back...");
-                    phalanxParent.BreakShield();
-                    currentDashDistance = firstHit.distance;
+                    // Directional Math: Vector from Player to Phalanx
+                    Vector3 dirToPhalanx = (phalanx.transform.position - transform.position).normalized;
                     
-                    StartCoroutine(RecoveryRoutine());
+                    // Compare that vector against where the Phalanx is currently facing.
+                    // A dot product less than ~0.2 means the player is attacking from the front/sides.
+                    // Greater than 0.2 means the player is flanking from behind.
+                    float dot = Vector3.Dot(dirToPhalanx, phalanx.transform.forward);
+                    
+                    if (dot < 0.2f)
+                    {
+                        hitShield = true;
+                        Debug.Log($"[PlayerDash] Frontal attack! Breaking shield and knocking back...");
+                        phalanx.BreakShield();
+                        currentDashDistance = firstHit.distance; // Stop dash early
+                        
+                        StartCoroutine(RecoveryRoutine());
+                    }
+                    else
+                    {
+                        // Flanked! Bypass the shield entirely
+                        hitSuccess = true;
+                        _lastDodgeTime = -99f;
+                        StartCoroutine(DealSequentialDamage(targets, dashDir));
+                    }
                 }
                 else
                 {

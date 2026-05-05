@@ -19328,7 +19328,6 @@ MonoBehaviour:
   player: {fileID: 2081267348}
   rawCursor: {fileID: 1643398773}
   clampedCursor: {fileID: 694253162}
-  maxDashDistance: 6
   groundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -96856,7 +96855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5444860971105641258, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
       propertyPath: level0MusicVolume
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

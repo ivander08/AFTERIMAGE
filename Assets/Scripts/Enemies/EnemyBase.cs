@@ -267,7 +267,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         SetKatanaVisible(false);
         SetWalkingAnimation(false);
 
-        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f, minDistance: 8f);
+        AudioService.PlayRandom(deathSounds, transform.position, 2f, 0.95f, 1.05f, minDistance: 12f);
 
         if (deathVFXPrefab != null)
         {

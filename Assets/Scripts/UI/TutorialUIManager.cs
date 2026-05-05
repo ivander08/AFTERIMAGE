@@ -60,7 +60,7 @@ public class TutorialUIManager : MonoBehaviour
         panelRoot.SetActive(true);
         if (showSound != null)
         {
-            _audioSource.PlayOneShot(showSound, 0.3f);
+            _audioSource.PlayOneShot(showSound, 0.8f);
         }
     }
 

@@ -25,4 +25,16 @@ public class MainMenuUI : MonoBehaviour
             effect.RefreshVisuals();
         }
     }
+
+    // ADDED: Call this from your Exit Button's OnClick event
+    public void QuitGame()
+    {
+        Debug.Log("Exiting Game...");
+        Application.Quit();
+        
+        // This ensures the play mode stops if you are testing in the Unity Editor
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+    }
 }
