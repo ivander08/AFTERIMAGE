@@ -17,6 +17,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
   - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
   - {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}
+  hasFlashback: 1
+  flashbackImage: {fileID: 21300000, guid: c52274ab8f4898143a5ec2c58878a084, type: 3}
+  flashbackAudio: {fileID: 8300000, guid: 5260a801cbd44224fa9282bdf339a4dd, type: 3}
+  flashbackTextAfter: Kazehiro..?
   dateText: 02 April 2174
   locationText: HelixGrid Data Center, East Osaka
   missionText: Erase the data linking Lumina, Aether, and Project Afterimage.
+  newlyUnlockedUtility: {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}

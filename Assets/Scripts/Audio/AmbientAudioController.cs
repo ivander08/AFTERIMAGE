@@ -35,14 +35,21 @@ public class AmbientAudioController : MonoBehaviour
         _sourceB.volume = 0f;
     }
 
-    private void Start()
+     private IEnumerator Start()
     {
+        // ADDED: Wait for the Flashback cutscene to finish entirely
+        while (FlashbackPanelController.IsPlaying)
+        {
+            yield return null;
+        }
+
+        // Now start the ambient audio at the exact same time PreGamePanel starts
         if (startingAmbient != null)
         {
             CrossfadeTo(startingAmbient, initialFadeInDuration);
         }
     }
-
+    
     public void CrossfadeTo(AudioClip newClip, float duration)
     {
         if (newClip == null) return;

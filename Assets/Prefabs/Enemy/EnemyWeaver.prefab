@@ -157,7 +157,7 @@ MonoBehaviour:
   detectRange: 30
   damage: 1
   isInvulnerable: 0
-  scoreValue: 100
+  scoreValue: 160
   showGizmos: 1
   realizationTime: 0.05
   patrolPoints: []
@@ -539,6 +539,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: b49f45935aa2544429d77364c4d3727c, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 44f42aecb9b0b0149a331aa79083246c, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

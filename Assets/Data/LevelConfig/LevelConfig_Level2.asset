@@ -16,6 +16,11 @@ MonoBehaviour:
   availableUtilities:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
   - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
+  hasFlashback: 1
+  flashbackImage: {fileID: 21300000, guid: a245b76353c7b734dba88d1ae1a7b074, type: 3}
+  flashbackAudio: {fileID: 8300000, guid: 5260a801cbd44224fa9282bdf339a4dd, type: 3}
+  flashbackTextAfter: ...My hands?
   dateText: 19 March 2174
   locationText: Lumina Bioengineering Lab, South Japan
   missionText: "Eliminate Lumina\u2019s attempt to replicate Subject Zero."
+  newlyUnlockedUtility: {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}

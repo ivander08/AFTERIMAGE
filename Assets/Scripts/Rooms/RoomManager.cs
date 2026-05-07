@@ -1,3 +1,4 @@
+// Assets/Scripts/Rooms/RoomManager.cs
 using UnityEngine;
 using System.Collections;
 
@@ -22,19 +23,30 @@ public class RoomManager : MonoBehaviour
         }
 
         Instance = this;
+        
+        // FIX: Instantly set the current room so early dashes know exactly where they are starting from
+        if (startingRoom != null)
+        {
+            CurrentRoom = startingRoom;
+        }
     }
 
     private IEnumerator Start()
     {
-        // Wait for PreGamePanel to finish if it's playing
         while (PreGamePanel.IsPlaying)
-        {
             yield return null;
-        }
 
-        if (startingRoom != null)
+        // Only enter the starting room if no dash has already moved us elsewhere
+        if (startingRoom != null && CurrentRoom == startingRoom)
         {
             startingRoom.PlayerEntered();
+        }
+        else if (CurrentRoom != null && CurrentRoom != startingRoom)
+        {
+            // Player fast-dashed into another room before PreGame finished.
+            // Re-notify that room's enemies to ensure aggro registered correctly.
+            Debug.Log($"[RoomManager] Start: player already in {CurrentRoom.RoomName}, re-notifying.");
+            CurrentRoom.ReNotifyAllEnemies();
         }
     }
 

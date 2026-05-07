@@ -57,7 +57,11 @@ public class PreGamePanel : MonoBehaviour
             yield break;
         }
 
-        // (Removed IsPlaying = true from here, it's now in Awake)
+        // ADDED: Wait for the Flashback sequence to finish
+        while (FlashbackPanelController.IsPlaying)
+        {
+            yield return null;
+        }
         
         if (reticleObject != null) reticleObject.SetActive(false);
 

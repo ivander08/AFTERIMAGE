@@ -31,12 +31,12 @@ public class SettingsController : MonoBehaviour
     }
 
     // ADD THIS
-    private void Start()
+     private void Start()
     {
-        // Now set values in Start — this triggers the +20dB math properly!
-        masterSlider.value = PlayerPrefs.GetFloat("Pref_MasterVol", 0.5f);
-        sfxSlider.value    = PlayerPrefs.GetFloat("Pref_SFXVol",    0.5f);
-        musicSlider.value  = PlayerPrefs.GetFloat("Pref_MusicVol",  0.5f);
+        // MODIFIED: Changed default fallback from 0.5f to 1.0f
+        masterSlider.value = PlayerPrefs.GetFloat("Pref_MasterVol", 1f);
+        sfxSlider.value    = PlayerPrefs.GetFloat("Pref_SFXVol",    1f);
+        musicSlider.value  = PlayerPrefs.GetFloat("Pref_MusicVol",  1f);
 
         _shadowsEnabled = PlayerPrefs.GetInt("Pref_Shadows", 1) == 1;
         ApplyShadows(_shadowsEnabled);

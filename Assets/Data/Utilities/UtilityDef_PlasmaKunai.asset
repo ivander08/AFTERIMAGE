@@ -17,4 +17,4 @@ MonoBehaviour:
   iconMaterial: {fileID: 2100000, guid: 0f4bdde6d23a2c44abf762342e15b07f, type: 2}
   slotCost: 1
   defaultCount: 1
-  description: Plasma Kunai Description
+  description: Thrown projectile that instantly kills enemies it hits.

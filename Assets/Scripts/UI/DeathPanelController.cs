@@ -75,10 +75,13 @@ public class DeathPanelController : MonoBehaviour
         }
     }
 
-    private void OnTryAgainClicked()
+     private void OnTryAgainClicked()
     {
         AudioService.SetLock(false); // Unlock for the next life
         PreGamePanel.SkipNextPreGame = true;
+        
+        // ADDED: Skip the cutscene on retry
+        FlashbackPanelController.SkipNextFlashback = true;
 
         // Boss fight retry — respawn in-place without scene reload
         if (EchoArenaController.IsBossActive && EchoArenaController.Instance != null)

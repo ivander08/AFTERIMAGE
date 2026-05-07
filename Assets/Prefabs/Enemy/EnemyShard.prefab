@@ -10834,7 +10834,7 @@ MonoBehaviour:
   detectRange: 30
   damage: 1
   isInvulnerable: 0
-  scoreValue: 100
+  scoreValue: 160
   showGizmos: 0
   realizationTime: 0.1
   patrolPoints: []

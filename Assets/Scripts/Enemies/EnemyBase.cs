@@ -144,7 +144,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
             if (!_hasRealized)
             {
-                Debug.Log($"[EnemyBase] Realized player: {name} (ID:{GetInstanceID()}), room={_myRoom?.RoomName}, currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isStopped={_agent?.isStopped}, onNavMesh={_agent?.isOnNavMesh}");
+                Debug.Log($"[EnemyBase] Realized player: {name}");
                 _hasRealized = true;
                 if (_agent.isOnNavMesh) _agent.isStopped = false;
             }
@@ -153,11 +153,15 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
-            if (_myRoom != null && RoomManager.Instance?.CurrentRoom != _myRoom)
+            if (_myRoom != null && RoomManager.Instance?.CurrentRoom == _myRoom && !_hasRealized)
             {
-                // Patrol because we're not in the current room
-                HandlePatrol();
+                Debug.Log($"[EnemyBase] Aggro recheck triggered for {name} — re-notifying");
+                NotifyPlayerEnteredRoom();
+                return;
             }
+
+            if (_myRoom != null && RoomManager.Instance?.CurrentRoom != _myRoom)
+                HandlePatrol();
         }
     }
 

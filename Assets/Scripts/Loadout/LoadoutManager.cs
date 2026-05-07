@@ -104,35 +104,10 @@ public class LoadoutManager : MonoBehaviour
 
     private void CheckForNewUtilityUnlock()
     {
-        UtilityDefinition newlyUnlocked = null;
-        
-        // If this is the absolute first time entering loadout, silently mark all as seen
-        // so we don't bombard them with unlocks at the very beginning of the game.
-        bool isFirstTime = PlayerPrefs.GetInt("FirstTimeLoadoutSetup", 1) == 1;
-
-        foreach (var def in availableUtilities)
+        // REPLACED: No more PlayerPrefs. Just check if the config dictates a new unlock.
+        if (levelConfig != null && levelConfig.newlyUnlockedUtility != null && newUtilityPanel != null)
         {
-            string prefKey = "SeenUtil_" + def.utilityName;
-            
-            if (PlayerPrefs.GetInt(prefKey, 0) == 0)
-            {
-                if (isFirstTime)
-                {
-                    PlayerPrefs.SetInt(prefKey, 1);
-                }
-                else if (newlyUnlocked == null)
-                {
-                    // Found a new one!
-                    newlyUnlocked = def;
-                }
-            }
-        }
-
-        PlayerPrefs.SetInt("FirstTimeLoadoutSetup", 0);
-
-        if (newlyUnlocked != null && newUtilityPanel != null)
-        {
-            ShowNewUtilityPanel(newlyUnlocked);
+            ShowNewUtilityPanel(levelConfig.newlyUnlockedUtility);
         }
         else if (newUtilityPanel != null)
         {
@@ -151,8 +126,7 @@ public class LoadoutManager : MonoBehaviour
         if (newUtilityNameText != null) newUtilityNameText.text = def.utilityName;
         if (newUtilityDescText != null) newUtilityDescText.text = def.description;
 
-        // Mark as seen
-        PlayerPrefs.SetInt("SeenUtil_" + def.utilityName, 1);
+        // REMOVED: PlayerPrefs.SetInt("SeenUtil_" + def.utilityName, 1);
 
         // Bind OK button
         if (newUtilityOkButton != null)
@@ -170,7 +144,7 @@ public class LoadoutManager : MonoBehaviour
         StartCoroutine(LerpPanel(newUtilityPanel, -2000f, 0f, false));
     }
 
-    private void HideNewUtilityPanel()
+     private void HideNewUtilityPanel()
     {
         if (newUtilityPanel != null)
             StartCoroutine(LerpPanel(newUtilityPanel, 0f, -2000f, true));

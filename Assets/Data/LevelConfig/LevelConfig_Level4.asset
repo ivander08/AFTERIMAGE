@@ -18,6 +18,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab8fad3b1770cb24b818db3e702d8d81, type: 2}
   - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
   - {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}
+  hasFlashback: 1
+  flashbackImage: {fileID: 21300000, guid: df6d408099d11b348a95ffad6ec108fd, type: 3}
+  flashbackAudio: {fileID: 8300000, guid: 5260a801cbd44224fa9282bdf339a4dd, type: 3}
+  flashbackTextAfter: ...The past... and this place... Aether..
   dateText: 16 April 2174
   locationText: Aether Administrative Office, Neo-Tokyo
   missionText: Silence the division that tried to bury the truth.
+  newlyUnlockedUtility: {fileID: 11400000, guid: ab8fad3b1770cb24b818db3e702d8d81, type: 2}

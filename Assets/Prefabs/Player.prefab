@@ -10330,7 +10330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68698f955930f514f85f4cf5b8b4bea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
-  maxDashDistance: 5
+  maxDashDistance: 5.5
   dashSpeed: 40
   damageDelay: 0.05
   missPenalty: 0.8

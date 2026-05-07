@@ -219,9 +219,10 @@ public class MusicManager : MonoBehaviour
 
     private void LoadSavedVolumes()
     {
-        float savedMaster = PlayerPrefs.GetFloat("Pref_MasterVol", 0.5f);
-        float savedMusic  = PlayerPrefs.GetFloat("Pref_MusicVol",  0.5f);
-        float savedSFX    = PlayerPrefs.GetFloat("Pref_SFXVol",    0.5f);
+        // MODIFIED: Changed default fallback from 0.5f to 1.0f
+        float savedMaster = PlayerPrefs.GetFloat("Pref_MasterVol", 1f);
+        float savedMusic  = PlayerPrefs.GetFloat("Pref_MusicVol",  1f);
+        float savedSFX    = PlayerPrefs.GetFloat("Pref_SFXVol",    1f);
 
         SetMasterVolume(savedMaster);
         SetMusicVolume(savedMusic);

@@ -15,6 +15,11 @@ MonoBehaviour:
   levelSceneName: Level1
   availableUtilities:
   - {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
+  hasFlashback: 1
+  flashbackImage: {fileID: 21300000, guid: 05a05a0100fadc64b8b14a1dc6ca013a, type: 3}
+  flashbackAudio: {fileID: 8300000, guid: 5260a801cbd44224fa9282bdf339a4dd, type: 3}
+  flashbackTextAfter: ...What was that..?
   dateText: 03 March 2174
   locationText: Lumina Corp Narcotics Facility, Neo-Kobe Underground
   missionText: "Destroy Lumina Corp\u2019s synthetic drug base."
+  newlyUnlockedUtility: {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}

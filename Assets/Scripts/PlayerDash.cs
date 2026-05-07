@@ -272,6 +272,13 @@ public class PlayerDash : MonoBehaviour
         if (isAttack)
         {
             List<RaycastHit> targets = GetSortedTargets(dashDir, currentDashDistance);
+
+            targets = targets.Where(hit => {
+                EnemyBase e = hit.collider.GetComponentInParent<EnemyBase>() 
+                            ?? hit.collider.GetComponent<EnemyBase>();
+                return e == null || e.MyRoom == RoomManager.Instance.CurrentRoom;
+            }).ToList();
+            
             if (targets.Count > 0)
             {
                 RaycastHit firstHit = targets[0];

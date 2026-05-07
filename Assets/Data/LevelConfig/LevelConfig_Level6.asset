@@ -18,6 +18,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab8fad3b1770cb24b818db3e702d8d81, type: 2}
   - {fileID: 11400000, guid: a9363567859e6f643bf9d7a7ce296bb8, type: 2}
   - {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}
+  hasFlashback: 1
+  flashbackImage: {fileID: 21300000, guid: 5d76bfa5d9fca6449870d0839ed83253, type: 3}
+  flashbackAudio: {fileID: 8300000, guid: 5260a801cbd44224fa9282bdf339a4dd, type: 3}
+  flashbackTextAfter: That's.. Kazehiro now. Aether's toy..
   dateText: 01 May 2174
   locationText: Echo Development Center, Unknown Sector
   missionText: Kill Echo, the final shadow of Project Afterimage.
