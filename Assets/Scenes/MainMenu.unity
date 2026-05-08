@@ -2970,12 +2970,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66fccfd5134e6b4f86993cc5851d1d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadoutHoverEffect
-  useColorSwap: 0
-  normalColor: {r: 1, g: 0.6, b: 0, a: 1}
-  hoverColor: {r: 0.2, g: 0.8, b: 1, a: 1}
+  useColorSwap: 1
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 1, g: 0.88661844, b: 0.19999999, a: 1}
   clickColor: {r: 1, g: 1, b: 1, a: 1}
-  useMaterialSwap: 1
-  normalMaterial: {fileID: 2100000, guid: ae272f109c01f8148a64f9007d410753, type: 2}
+  useMaterialSwap: 0
+  normalMaterial: {fileID: 2100000, guid: 707b07ec01eca864f8fe66343079d89f, type: 2}
   hoverMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   clickMaterial: {fileID: 2100000, guid: 02ab143c179f79540ac290ae3c124653, type: 2}
   hoverSound: {fileID: 8300000, guid: 67dd765179bd16f448f1aa224ff9b166, type: 3}
@@ -3194,8 +3194,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enabled
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e06d9ab29333f2b40ad96907ac98a35e, type: 2}
+  m_sharedMaterial: {fileID: 4394485110432721198, guid: e06d9ab29333f2b40ad96907ac98a35e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4165,8 +4165,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1455802580}
-        m_TargetAssemblyTypeName: GameProgressManager, Assembly-CSharp
+      - m_Target: {fileID: 398306462}
+        m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: StartNewGame
         m_Mode: 1
         m_Arguments:
@@ -4527,8 +4527,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1455802580}
-        m_TargetAssemblyTypeName: GameProgressManager, Assembly-CSharp
+      - m_Target: {fileID: 398306462}
+        m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: ContinueGame
         m_Mode: 1
         m_Arguments:
@@ -5248,17 +5248,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442755911}
   m_CullTransparentMesh: 1
---- !u!114 &1455802580 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2621225813188299674, guid: 74db6b9d65bfd594db49e725071b32b1, type: 3}
-  m_PrefabInstance: {fileID: 2490727749925306080}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf9077d63c54ae4cbec23e8e50163cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameProgressManager
 --- !u!1 &1460884130
 GameObject:
   m_ObjectHideFlags: 0

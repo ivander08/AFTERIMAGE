@@ -13,7 +13,7 @@ public class SettingsController : MonoBehaviour
     public Button shadowButton;
     public TMPro.TextMeshProUGUI shadowButtonText;
 
-    private bool _shadowsEnabled = true;
+    private bool _shadowsEnabled = false;
     private float _originalShadowDistance;
     private UniversalRenderPipelineAsset _urpAsset;
 
@@ -38,7 +38,7 @@ public class SettingsController : MonoBehaviour
         sfxSlider.value    = PlayerPrefs.GetFloat("Pref_SFXVol",    1f);
         musicSlider.value  = PlayerPrefs.GetFloat("Pref_MusicVol",  1f);
 
-        _shadowsEnabled = PlayerPrefs.GetInt("Pref_Shadows", 1) == 1;
+        _shadowsEnabled = PlayerPrefs.GetInt("Pref_Shadows", 0) == 1;
         ApplyShadows(_shadowsEnabled);
         RefreshShadowLabel();
     }

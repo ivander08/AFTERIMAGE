@@ -26,7 +26,21 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
-    // ADDED: Call this from your Exit Button's OnClick event
+    // Call this from your New Game Button's OnClick event
+    public void StartNewGame()
+    {
+        if (GameProgressManager.Instance != null)
+            GameProgressManager.Instance.StartNewGame();
+    }
+
+    // Call this from your Continue Button's OnClick event
+    public void ContinueGame()
+    {
+        if (GameProgressManager.Instance != null)
+            GameProgressManager.Instance.ContinueGame();
+    }
+
+    // Call this from your Exit Button's OnClick event
     public void QuitGame()
     {
         Debug.Log("Exiting Game...");

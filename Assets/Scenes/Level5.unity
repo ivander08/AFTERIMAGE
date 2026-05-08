@@ -150621,7 +150621,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.data[0].count
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.data[1].count
@@ -150646,7 +150646,7 @@ PrefabInstance:
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.data[0].definition
       value: 
-      objectReference: {fileID: 11400000, guid: 753820b3309b32b44a4a81e6a7650ad7, type: 2}
+      objectReference: {fileID: 11400000, guid: 91fd8c81633081c4b8cf5b3e81c8e199, type: 2}
     - target: {fileID: 827129541977426819, guid: 5b539eb06ae978546a83e5ac54e8de70, type: 3}
       propertyPath: fallbackLoadout.Array.data[1].definition
       value: 

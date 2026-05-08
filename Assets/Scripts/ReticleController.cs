@@ -11,7 +11,7 @@ public class ReticleController : MonoBehaviour
     public Transform rawCursor;
     public Transform clampedCursor;
     
-    private float maxDashDistance = 5.5f;
+    private float maxDashDistance = 6f;
     public LayerMask groundMask;
     public LayerMask environmentMask;
 

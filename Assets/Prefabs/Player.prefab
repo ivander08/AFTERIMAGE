@@ -10330,15 +10330,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68698f955930f514f85f4cf5b8b4bea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
-  maxDashDistance: 5.5
+  maxDashDistance: 6
   dashSpeed: 40
   damageDelay: 0.05
-  missPenalty: 0.8
+  missPenalty: 0.3
   slowMotionFactor: 0.6
   hitLayer:
     serializedVersion: 2
     m_Bits: 128
-  hitRadius: 1.5
+  hitRadius: 2.5
   damageAmount: 1
   cam: {fileID: 0}
   normalDistance: 45

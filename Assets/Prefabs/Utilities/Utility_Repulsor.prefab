@@ -50,8 +50,8 @@ MonoBehaviour:
   maxUses: 3
   _currentUses: 0
   radius: 16
-  pushForce: 50
-  stunDuration: 1
+  pushForce: 60
+  stunDuration: 1.5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
