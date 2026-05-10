@@ -31,7 +31,6 @@ public class Door : MonoBehaviour
     private Material doorMaterialInstance;
     private Color originalColor;
     private Collider _col;
-    private Collider _brokenTrigger;
 
     private void Awake()
     {
@@ -59,12 +58,11 @@ public class Door : MonoBehaviour
 
         if (doorRenderer != null) doorRenderer.enabled = false;
         
-        if (_col != null) 
+        // Reuse the existing collider as a trigger instead of creating a new tiny BoxCollider.
+        // This guarantees the trigger matches the door mesh size exactly.
+        if (_col != null)
         {
-            _col.enabled = false; 
-
-            _brokenTrigger = gameObject.AddComponent<BoxCollider>();
-            _brokenTrigger.isTrigger = true;
+            _col.isTrigger = true;
         }
 
         PlayBreakEffects();
@@ -89,7 +87,12 @@ public class Door : MonoBehaviour
     {
         isLocked = true;
 
-        Debug.Log($"[Door] Lock: {DoorName}, wasBroken={IsBroken}, colEnabled={_col?.enabled}, brokenTriggerEnabled={_brokenTrigger?.enabled}");
+        if (IsBroken)
+        {
+            // Broken doors stay invisible and non-solid.
+            // Just flag as locked so DoorDashZone rejects the trigger.
+            return;
+        }
 
         if (doorRenderer != null)
         {
@@ -98,10 +101,6 @@ public class Door : MonoBehaviour
         }
 
         if (_col != null) _col.enabled = true;
-
-        // FIX: Don't disable _brokenTrigger — keeping it always-on prevents
-        // Unity from re-firing OnTriggerEnter when the room unlocks later.
-        // The DoorDashZone now checks IsLocked() to reject locked-door triggers.
     }
 
     public void Unlock()
@@ -111,11 +110,12 @@ public class Door : MonoBehaviour
         if (IsBroken)
         {
             if (doorRenderer != null) doorRenderer.enabled = false;
-            if (_col != null) _col.enabled = false;
-            
-            // FIX: Don't re-enable _brokenTrigger here — it stays always-on
-            // to prevent Unity from re-firing OnTriggerEnter when unlocking.
-            // DoorDashZone.OnTriggerEnter now checks IsLocked() to filter.
+            // Keep the collider enabled as a trigger so the player can walk through.
+            if (_col != null)
+            {
+                _col.enabled = true;
+                _col.isTrigger = true;
+            }
         }
         else
         {
@@ -125,7 +125,11 @@ public class Door : MonoBehaviour
                 doorMaterialInstance.color = originalColor;
             }
             
-            if (_col != null) _col.enabled = true;
+            if (_col != null)
+            {
+                _col.enabled = true;
+                _col.isTrigger = false;
+            }
         }
     }
 

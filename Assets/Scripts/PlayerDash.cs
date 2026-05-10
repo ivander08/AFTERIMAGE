@@ -83,6 +83,8 @@ public class PlayerDash : MonoBehaviour
     int _enemyLayer;
     
     private readonly HashSet<EnemyBase> _highlightedEnemies = new HashSet<EnemyBase>();
+    private Door _cachedDoorInPath;
+    private float doorDetectionRadius = 0.5f;
 
     #endregion
 
@@ -163,11 +165,11 @@ public class PlayerDash : MonoBehaviour
             _dashDistance = maxDashDistance;
         }
 
-        Door doorInPath = GetDoorInDashPath(_dashDirection, _dashDistance);
+        _cachedDoorInPath = GetDoorInDashPath(_dashDirection, _dashDistance);
 
-        if (doorInPath != null && !doorInPath.IsLocked())
+        if (_cachedDoorInPath != null && !_cachedDoorInPath.IsLocked())
         {
-            DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+            DoorDashZone zone = _cachedDoorInPath.GetComponent<DoorDashZone>();
             if (zone != null)
             {
                 Vector3 landingPos = zone.GetLandingPosition(transform.position);
@@ -234,8 +236,8 @@ public class PlayerDash : MonoBehaviour
         Vector3 dashDir = _dashDirection;
         float currentDashDistance = _dashDistance;
         
-        Door doorInPath = GetDoorInDashPath(dashDir, currentDashDistance);
-        Collider doorCollider = null;
+        Door doorInPath = _cachedDoorInPath;
+        _cachedDoorInPath = null;
 
         if (doorInPath != null && isAttack && !doorInPath.IsLocked())
         {
@@ -243,11 +245,6 @@ public class PlayerDash : MonoBehaviour
             DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
             if (zone != null)
             {
-                // FIX: Fetch and ignore the solid door collider BEFORE breaking the door
-                // and locking the room, so we don't accidentally grab the broken trigger
-                doorCollider = doorInPath.GetComponent<Collider>();
-                if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, true);
-
                 doorInPath.Break();
                 CameraShakeService.Shake(0.5f);
                 zone.OnPlayerDashThrough();
@@ -367,7 +364,6 @@ public class PlayerDash : MonoBehaviour
             }
         }
 
-        if (doorCollider != null) Physics.IgnoreCollision(_cc, doorCollider, false);
         Physics.IgnoreLayerCollision(_playerLayer, _enemyLayer, false);
         Debug.Log($"[PlayerDash] Dash ended. Layer collision restored. currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}");
 
@@ -530,15 +526,22 @@ public class PlayerDash : MonoBehaviour
 
     Door GetDoorInDashPath(Vector3 dir, float dist)
     {
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, hitRadius, dir, Mathf.Max(dist, 2f));
+        // Start cast from player position (no backward offset — that caused detecting doors behind you).
+        // Use narrow doorDetectionRadius (0.5f) to avoid false positives from nearby doors.
+        // Track closest door to avoid returning a door behind another door.
+        float castDist = Mathf.Max(dist, 2f);
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, doorDetectionRadius, dir, castDist);
+        Door closestDoor = null;
+        float closestDist = float.MaxValue;
         foreach (var hit in hits)
         {
-            if (hit.collider.TryGetComponent(out Door door) && !door.IsBroken)
+            if (hit.collider.TryGetComponent(out Door door) && !door.IsBroken && hit.distance < closestDist)
             {
-                return door;
+                closestDoor = door;
+                closestDist = hit.distance;
             }
         }
-        return null;
+        return closestDoor;
     }
 
     #endregion

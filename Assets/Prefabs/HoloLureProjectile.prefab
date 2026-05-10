@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f4bec205b3efd48a5ea9a43684420f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoloLureProjectile
-  speed: 50
+  speed: 70
   lifetime: 3
   lureDevicePrefab: {fileID: 6155569945303488007, guid: 91316634ee945c944808e9acda890bb8, type: 3}
   hitVfx: {fileID: 6207748249219978080, guid: e7f4e988e3bd687498cf5c8e80c042ed, type: 3}

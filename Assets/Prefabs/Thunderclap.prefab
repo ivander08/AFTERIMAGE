@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fce1cf4f77d6f4daa8a7d6563adebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StunGrenadeProjectile
-  speed: 50
+  speed: 70
   lifetime: 3
   explosionRadius: 5
   maxRange: 100

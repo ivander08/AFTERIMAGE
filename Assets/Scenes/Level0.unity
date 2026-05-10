@@ -1699,6 +1699,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -16139,6 +16143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -25527,6 +25535,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -27043,6 +27055,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -27443,6 +27459,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -31528,6 +31548,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -36898,6 +36922,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -53811,6 +53839,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -79657,6 +79689,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -91270,6 +91306,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -93346,6 +93386,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -101788,6 +101832,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyGrunt (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
       value: 0
@@ -102415,6 +102463,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -103094,6 +103146,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -105925,6 +105981,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
@@ -111016,6 +111076,10 @@ PrefabInstance:
     - target: {fileID: 5348637495010054305, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: m_Name
       value: EnemyGrunt (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6206268114121032970, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7964251493535444457, guid: 102bfe345a2f04045b16530a60d519c3, type: 3}
       propertyPath: indicatorColor.b
