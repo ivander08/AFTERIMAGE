@@ -238,26 +238,50 @@ public class PlayerDash : MonoBehaviour
         
         Door doorInPath = _cachedDoorInPath;
         _cachedDoorInPath = null;
+        Vector3? doorLandingPos = null;
 
         if (doorInPath != null && isAttack && !doorInPath.IsLocked())
         {
-            Debug.Log($"[PlayerDash] Breaking door and transitioning: door={doorInPath.DoorName}, isLocked={doorInPath.IsLocked()}, isBroken={doorInPath.IsBroken}");
-            DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
-            if (zone != null)
+            // Verify the path to the door is clear before breaking it.
+            // Prevents phantom breaks when the door is detected through a wall or gap.
+            Vector3 playerPos = transform.position;
+            playerPos.y = 0;
+            Vector3 doorPos = doorInPath.transform.position;
+            doorPos.y = 0;
+            Vector3 dirToDoor = (doorPos - playerPos).normalized;
+            float distToDoor = Vector3.Distance(playerPos, doorPos);
+            bool pathBlocked = false;
+            if (Physics.Raycast(playerPos, dirToDoor, out RaycastHit pathHit, distToDoor, environmentMask))
             {
-                doorInPath.Break();
-                CameraShakeService.Shake(0.5f);
-                zone.OnPlayerDashThrough();
-                
-                Debug.Log($"[PlayerDash] After transition: currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isDashing={_isDashing}");
+                // Ignore the door itself — only block if something else is in the way
+                pathBlocked = !pathHit.collider.TryGetComponent(out Door hitDoor) || hitDoor != doorInPath;
+            }
 
-                Vector3 landingPos = zone.GetLandingPosition(transform.position);
-                Vector3 distVector = landingPos - transform.position;
+            if (!pathBlocked)
+            {
+                Debug.Log($"[PlayerDash] Breaking door: {doorInPath.DoorName}");
+                DoorDashZone zone = doorInPath.GetComponent<DoorDashZone>();
+                if (zone != null)
+                {
+                    doorInPath.Break();
+                    CameraShakeService.Shake(0.5f);
+                    zone.OnPlayerDashThrough();
+                    
+                    Debug.Log($"[PlayerDash] After transition: currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isDashing={_isDashing}");
 
-                distVector.y = 0;
-                
-                dashDir = distVector.normalized;
-                currentDashDistance = distVector.magnitude;
+                    Vector3 landingPos = zone.GetLandingPosition(transform.position);
+                    doorLandingPos = landingPos; // Store for snap check later
+                    Vector3 distVector = landingPos - transform.position;
+
+                    distVector.y = 0;
+                    
+                    dashDir = distVector.normalized;
+                    currentDashDistance = distVector.magnitude;
+                }
+            }
+            else
+            {
+                Debug.Log($"[PlayerDash] Path to door blocked — skipping break: {doorInPath.DoorName}");
             }
         }
 
@@ -361,6 +385,20 @@ public class PlayerDash : MonoBehaviour
                 
                 elapsed += Time.deltaTime;
                 yield return null;
+            }
+        }
+
+        // Snap safety net: if the door was broken but the player never made it to the
+        // landing zone (e.g. hugged a wall and got stuck), teleport them there.
+        if (doorLandingPos.HasValue && doorInPath != null && doorInPath.IsBroken)
+        {
+            Vector3 snapTarget = doorLandingPos.Value;
+            snapTarget.y = transform.position.y; // Keep current height
+            float snapDist = Vector3.Distance(transform.position, snapTarget);
+            if (snapDist > 1.5f) // Player got stuck — snap them
+            {
+                Debug.Log($"[PlayerDash] Stuck outside door — snapping to landing zone (dist={snapDist})");
+                _cc.Move(snapTarget - transform.position);
             }
         }
 
