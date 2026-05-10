@@ -87,20 +87,19 @@ public class Door : MonoBehaviour
     {
         isLocked = true;
 
-        if (IsBroken)
-        {
-            // Broken doors stay invisible and non-solid.
-            // Just flag as locked so DoorDashZone rejects the trigger.
-            return;
-        }
-
+        // Trap mechanic: broken doors become solid + red during combat.
+        // When the room is cleared, Unlock() opens them again.
         if (doorRenderer != null)
         {
             doorRenderer.enabled = true;
             doorMaterialInstance.color = Color.red;
         }
 
-        if (_col != null) _col.enabled = true;
+        if (_col != null)
+        {
+            _col.enabled = true;
+            _col.isTrigger = false;
+        }
     }
 
     public void Unlock()

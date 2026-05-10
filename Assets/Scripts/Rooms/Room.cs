@@ -75,10 +75,20 @@ public class Room : MonoBehaviour
 
         if (!_captionLocked && !_isCleared && _enemies.Count > 0 && !_isCombatActive)
         {
-            LockRoom();
+            // Delay locking by 0.15s so the player has time to physically enter
+            // the room before the broken door seals behind them.
+            StartCoroutine(DelayedLockRoom());
             _isCombatActive = true;
             Debug.Log($"[Room] Room locked for combat: {RoomName}");
         }
+    }
+
+    private System.Collections.IEnumerator DelayedLockRoom()
+    {
+        yield return new WaitForSeconds(0.15f);
+        // Don't lock if the room was cleared before the timer expired
+        // (e.g. player killed all enemies faster than 0.15s)
+        if (!_isCleared) LockRoom();
     }
 
     // NEW: call this to re-notify all living enemies (used by the aggro recheck)
