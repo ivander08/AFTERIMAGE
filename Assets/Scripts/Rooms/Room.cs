@@ -75,8 +75,12 @@ public class Room : MonoBehaviour
 
         if (!_captionLocked && !_isCleared && _enemies.Count > 0 && !_isCombatActive)
         {
-            // Delay locking by 0.15s so the player has time to physically enter
-            // the room before the broken door seals behind them.
+            // Set the locked flag immediately so OnTriggerEnter is blocked.
+            // The collider/visual changes happen after 0.15s via DelayedLockRoom.
+            if (_entryDoor != null) _entryDoor.MarkLocked();
+            foreach (var door in _doors)
+                if (door != null && door.IsBroken) door.MarkLocked();
+
             StartCoroutine(DelayedLockRoom());
             _isCombatActive = true;
             Debug.Log($"[Room] Room locked for combat: {RoomName}");

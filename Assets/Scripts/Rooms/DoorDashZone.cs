@@ -15,7 +15,9 @@ public class DoorDashZone : MonoBehaviour
 
     public void OnPlayerDashThrough()
     {
-        TransitionToNextRoom();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 playerPos = player != null ? player.transform.position : transform.position;
+        TransitionToNextRoom(playerPos);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,21 +25,16 @@ public class DoorDashZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Door door = GetComponent<Door>();
-            // FIX: Added && !door.IsLocked() to prevent the "ghost backtracking" bug.
-            // When a room is cleared and Unlock() is called, the broken trigger is always
-            // active. If the player is standing inside it, Unity would fire OnTriggerEnter
-            // and reset CurrentRoom to the previous room — making enemies in the new room
-            // think the player isn't there (CanAggro() fails).
             if (door != null && door.IsBroken && !door.IsLocked())
             {
-                TransitionToNextRoom();
+                TransitionToNextRoom(other.transform.position);
             }
         }
     }
 
-    private void TransitionToNextRoom()
+    private void TransitionToNextRoom(Vector3 playerPos)
     {
-        if (Time.time - _lastTransitionTime < 0.5f) return;
+        if (Time.time - _lastTransitionTime < 0.3f) return;
         _lastTransitionTime = Time.time;
 
         Door door = GetComponent<Door>();
@@ -51,7 +48,26 @@ public class DoorDashZone : MonoBehaviour
         else if (door.roomB == currentRoom)
             destinationRoom = door.roomA;
         else
-            destinationRoom = door.roomA != null ? door.roomA : door.roomB;
+        {
+            // Ghost entry: entered from a non-connected room.
+            // If one room is cleared and the other has enemies, go to the uncleared one.
+            bool aCleared = door.roomA != null && door.roomA.IsCleared;
+            bool bCleared = door.roomB != null && door.roomB.IsCleared;
+            
+            if (aCleared != bCleared)
+            {
+                destinationRoom = aCleared ? door.roomB : door.roomA;
+            }
+            else
+            {
+                // Both same state — pick by approach direction
+                Vector3 dirFromDoor = (playerPos - transform.position).normalized;
+                dirFromDoor.y = 0;
+                Vector3 dirToA = (door.roomA.transform.position - transform.position).normalized;
+                dirToA.y = 0;
+                destinationRoom = Vector3.Dot(dirFromDoor, dirToA) > 0 ? door.roomB : door.roomA;
+            }
+        }
 
         Debug.Log($"[DoorDashZone] TransitionToNextRoom: door={door.DoorName}, currentRoom={currentRoom?.RoomName}, destinationRoom={destinationRoom?.RoomName}");
 

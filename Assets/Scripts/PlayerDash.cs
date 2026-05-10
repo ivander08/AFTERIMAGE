@@ -270,7 +270,7 @@ public class PlayerDash : MonoBehaviour
                     Debug.Log($"[PlayerDash] After transition: currentRoom={RoomManager.Instance?.CurrentRoom?.RoomName}, isDashing={_isDashing}");
 
                     Vector3 landingPos = zone.GetLandingPosition(transform.position);
-                    doorLandingPos = landingPos; // Store for snap check later
+                    doorLandingPos = landingPos;
                     Vector3 distVector = landingPos - transform.position;
 
                     distVector.y = 0;
@@ -388,16 +388,15 @@ public class PlayerDash : MonoBehaviour
             }
         }
 
-        // Snap safety net: if the door was broken but the player never made it to the
-        // landing zone (e.g. hugged a wall and got stuck), teleport them there.
+        // Snap safety net
         if (doorLandingPos.HasValue && doorInPath != null && doorInPath.IsBroken)
         {
             Vector3 snapTarget = doorLandingPos.Value;
-            snapTarget.y = transform.position.y; // Keep current height
+            snapTarget.y = transform.position.y;
             float snapDist = Vector3.Distance(transform.position, snapTarget);
-            if (snapDist > 1.5f) // Player got stuck — snap them
+            if (snapDist > 1.5f)
             {
-                Debug.Log($"[PlayerDash] Stuck outside door — snapping to landing zone (dist={snapDist})");
+                Debug.Log($"[PlayerDash] Stuck outside door — snapping (dist={snapDist})");
                 _cc.Move(snapTarget - transform.position);
             }
         }

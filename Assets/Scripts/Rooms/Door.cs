@@ -132,5 +132,12 @@ public class Door : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Immediately set the locked flag without changing visuals/colliders.
+    /// Use this before DelayedLockRoom() to prevent OnTriggerEnter ghost transitions
+    /// during the 0.15s window before the door becomes physically solid.
+    /// </summary>
+    public void MarkLocked() => isLocked = true;
+
     public bool IsLocked() => isLocked;
 }
