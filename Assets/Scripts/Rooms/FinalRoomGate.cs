@@ -26,8 +26,8 @@ public class FinalRoomGate : MonoBehaviour
 
     private IEnumerator Start()
     {
-        // Force-lock immediately and keep it red until conditions are met
-        _door.Lock();
+        // REPLACED: Use the override lock so adjacent rooms can't force it open
+        _door.SetOverrideLock(true);
 
         while (!_unlocked)
         {
@@ -36,7 +36,11 @@ public class FinalRoomGate : MonoBehaviour
             if (AreAllOtherRoomsCleared())
             {
                 _unlocked = true;
+                
+                // Remove the override lock before unlocking
+                _door.SetOverrideLock(false);
                 _door.Unlock();
+                
                 Debug.Log("[FinalRoomGate] All rooms cleared — final room door unlocked.");
             }
         }

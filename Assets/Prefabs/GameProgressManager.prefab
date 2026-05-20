@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2732053605660567652}
   - component: {fileID: 2621225813188299674}
   - component: {fileID: 5444860971105641258}
+  - component: {fileID: 7719198140859480110}
   m_Layer: 0
   m_Name: GameProgressManager
   m_TagString: Untagged
@@ -87,3 +88,15 @@ MonoBehaviour:
   maxMusicVolume: 0.25
   level0MusicVolume: 1
   mainMenuMusicVolume: 0.5
+--- !u!114 &7719198140859480110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495235798381840005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303e02a015ed13343aeb84ca3ed63a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenshotCapture

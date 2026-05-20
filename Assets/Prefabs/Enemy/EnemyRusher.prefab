@@ -9899,7 +9899,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 5
+  m_Speed: 6
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 3600
@@ -9995,13 +9995,13 @@ MonoBehaviour:
   - {fileID: 6301176135403937174, guid: 2a55ce2ba521e0b4ab768480d85f4aa3, type: 3}
   dashRange: 7
   dashSpeed: 40
-  chargeTime: 0.2
+  chargeTime: 0.18
   dashDuration: 0.15
-  cooldown: 1
+  cooldown: 0.8
   chargeSound: {fileID: 8300000, guid: 394fdc4c21bea3444844cb7810009ec6, type: 3}
   dashSound: {fileID: 8300000, guid: 7c7796b64f2b19141b405786a9eddd53, type: 3}
-  chargeSoundMinDistance: 8
-  dashSoundMinDistance: 10
+  chargeSoundMinDistance: 16
+  dashSoundMinDistance: 12
 --- !u!114 &6391932741704358070
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32,6 +32,8 @@ public class Door : MonoBehaviour
     private Color originalColor;
     private Collider _col;
 
+    private bool _isOverrideLocked = false;
+
     private void Awake()
     {
         if (roomA != null) roomA.RegisterDoor(this);
@@ -47,6 +49,15 @@ public class Door : MonoBehaviour
         {
             doorMaterialInstance = doorRenderer.material;
             originalColor = doorMaterialInstance.color;
+        }
+    }
+
+    public void SetOverrideLock(bool state)
+    {
+        _isOverrideLocked = state;
+        if (state)
+        {
+            Lock();
         }
     }
 
@@ -104,6 +115,9 @@ public class Door : MonoBehaviour
 
     public void Unlock()
     {
+        // ADDED: Prevent adjacent rooms from unlocking this door if it's strictly overridden
+        if (_isOverrideLocked) return;
+
         isLocked = false;
 
         if (IsBroken)

@@ -397,7 +397,12 @@ public class PlayerDash : MonoBehaviour
             if (snapDist > 1.5f)
             {
                 Debug.Log($"[PlayerDash] Stuck outside door — snapping (dist={snapDist})");
-                _cc.Move(snapTarget - transform.position);
+                
+                // Temporarily disable the CharacterController to bypass physics collisions
+                // and force a true teleport into the room.
+                _cc.enabled = false;
+                transform.position = snapTarget;
+                _cc.enabled = true;
             }
         }
 
