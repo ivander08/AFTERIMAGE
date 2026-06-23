@@ -82657,7 +82657,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: ce76b761b3460364993856290c57759e, type: 2}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: skipForDebug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6486849938186669715, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: reticleObject
@@ -82669,7 +82669,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: ce76b761b3460364993856290c57759e, type: 2}
     - target: {fileID: 6532466749257859360, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: skipForDebug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7458357008085270496, guid: 84b609416f3b17947b4ca2d72677bffe, type: 3}
       propertyPath: m_Name

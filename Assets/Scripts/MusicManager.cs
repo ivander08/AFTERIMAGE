@@ -16,6 +16,7 @@ public class MusicManager : MonoBehaviour
     public AudioClip menuMusic;
     public AudioClip level0Music;
     public AudioClip[] levelMusicTracks;
+    public AudioClip elevatorMusic;
 
     [Header("Settings")]
     public float fadeDuration = 1.5f;
@@ -28,6 +29,7 @@ public class MusicManager : MonoBehaviour
     private string _lastSceneName = "";
     private Coroutine _musicRoutine;
     private bool _isPlayingLevel0Music = false; // Track if current music is Level0
+    private AudioClip _savedLevelTrack;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoInitialize()
@@ -168,29 +170,31 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOutRoutine()
+    private IEnumerator FadeOutRoutine(float durationOverride = -1f)
     {
+        float dur = durationOverride > 0f ? durationOverride : fadeDuration;
         float startVol = _audioSource.volume;
         float elapsed = 0f;
 
-        while (elapsed < fadeDuration)
+        while (elapsed < dur)
         {
-            elapsed += Time.unscaledDeltaTime; // Unscaled so it fades even if game is paused
-            _audioSource.volume = Mathf.Lerp(startVol, 0f, elapsed / fadeDuration);
+            elapsed += Time.unscaledDeltaTime;
+            _audioSource.volume = Mathf.Lerp(startVol, 0f, elapsed / dur);
             yield return null;
         }
         _audioSource.volume = 0f;
     }
 
-    private IEnumerator FadeInRoutine()
+    private IEnumerator FadeInRoutine(float durationOverride = -1f)
     {
+        float dur = durationOverride > 0f ? durationOverride : fadeDuration;
         float targetVolume = _isPlayingLevel0Music ? level0MusicVolume : maxMusicVolume;
         float elapsed = 0f;
 
-        while (elapsed < fadeDuration)
+        while (elapsed < dur)
         {
             elapsed += Time.unscaledDeltaTime;
-            _audioSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / fadeDuration);
+            _audioSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / dur);
             yield return null;
         }
         _audioSource.volume = targetVolume;
@@ -235,5 +239,36 @@ public class MusicManager : MonoBehaviour
     {
         if (_musicRoutine != null) StopCoroutine(_musicRoutine);
         _musicRoutine = StartCoroutine(FadeOutRoutine());
+    }
+
+    public void PlayEasterEggMusic()
+    {
+        if (elevatorMusic == null) return;
+        _savedLevelTrack = _audioSource.clip;
+        if (_musicRoutine != null) StopCoroutine(_musicRoutine);
+        _musicRoutine = StartCoroutine(PlayEasterEggRoutine());
+    }
+
+    public void ResumeLevelMusic()
+    {
+        if (_savedLevelTrack == null) return;
+        if (_musicRoutine != null) StopCoroutine(_musicRoutine);
+        _musicRoutine = StartCoroutine(ResumeLevelRoutine());
+    }
+
+    private IEnumerator PlayEasterEggRoutine()
+    {
+        yield return StartCoroutine(FadeOutRoutine(0.2f));
+        _audioSource.clip = elevatorMusic;
+        _audioSource.Play();
+        yield return StartCoroutine(FadeInRoutine(0.2f));
+    }
+
+    private IEnumerator ResumeLevelRoutine()
+    {
+        yield return StartCoroutine(FadeOutRoutine(0.2f));
+        _audioSource.clip = _savedLevelTrack;
+        _audioSource.Play();
+        yield return StartCoroutine(FadeInRoutine(0.2f));
     }
 }

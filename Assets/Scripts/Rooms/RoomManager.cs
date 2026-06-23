@@ -50,8 +50,19 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    private static bool IsLevel3() =>
+        UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level3";
+
     public void SetCurrentRoom(Room room)
     {
+        bool leavingEasterEgg = CurrentRoom != null && CurrentRoom.name == "Room_18" && IsLevel3();
+        bool enteringEasterEgg = room != null && room.name == "Room_18" && IsLevel3();
+
         CurrentRoom = room;
+
+        if (enteringEasterEgg && !leavingEasterEgg)
+            MusicManager.Instance?.PlayEasterEggMusic();
+        else if (!enteringEasterEgg && leavingEasterEgg)
+            MusicManager.Instance?.ResumeLevelMusic();
     }
 }
